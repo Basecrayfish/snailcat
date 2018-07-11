@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
 <repositories xmlns="" version="1.0">
-    <repo quality="experimental" status="official">
+    <repo quality="experimental" status="unofficial">
         <name>snailcat</name>
         <description>snailcat, an overlay with random stuff</description>
         <homepage>https://github.com/Basecrayfish/snailcat</homepage>
@@ -9,7 +9,6 @@
             <name>Calum</name>
             <email>calumac22@gmail.com</email>
         </owner>
-        <source type="git">git://github.com/Basecrayfish/snailcat.git</source>
         <source type="git">https://github.com/Basecrayfish/snailcat.git</source>
-        <feed>https://github.com/Basecrayfish/snailcat/commits/master.atom</feed>
-</repo>
+    </repo>
+</repositories>
