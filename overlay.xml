@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
 <repositories xmlns="" version="1.0">
-    <repo quality="experimental" status="unofficial">
+    <repo priority="50" quality="experimental" status="unofficial">
         <name>snailcat</name>
         <description>snailcat, an overlay with random stuff</description>
         <homepage>https://github.com/Basecrayfish/snailcat</homepage>
