@@ -20,6 +20,7 @@ RDEPEND="${DEPEND}"
 
 src_prepare() {
 	eapply "${FILESDIR}/misc-tweaks.patch"
+	eapply_user
 }
 
 src_compile() {
