@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/aircrack-ng/rtl8812au.git"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DEPEND=""
