@@ -20,6 +20,7 @@ RDEPEND="${DEPEND}"
 
 src_prepare() {
 	eapply "${FILESDIR}/misc-tweaks.patch"
+	eapply "${FILESDIR}/euro-default.patch"
 	eapply_user
 }
 

@@ -1,0 +1,13 @@
+diff --git a/os_dep/linux/os_intfs.c b/os_dep/linux/os_intfs.c
+index 48cb0c3..ccffec0 100644
+--- a/os_dep/linux/os_intfs.c
++++ b/os_dep/linux/os_intfs.c
+@@ -147,7 +147,7 @@ int rtw_wifi_spec = 0;
+ 
+ int rtw_special_rf_path = 0; //0: 2T2R ,1: only turn on path A 1T1R
+ 
+-int rtw_channel_plan = RT_CHANNEL_DOMAIN_MAX;
++int rtw_channel_plan = RT_CHANNEL_DOMAIN_ETSI;
+ 
+ #ifdef CONFIG_BT_COEXIST
+ int rtw_btcoex_enable = 1;
