@@ -12,14 +12,14 @@ MY_PN="${PN%%-*}"
 MY_P="${MY_PN}-${PV}"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/ValveSoftware/Proton.git"
+	EGIT_REPO_URI="https://github.com/ValveSoftware/wine.git"
 	EGIT_BRANCH="proton_3.7"
 	inherit git-r3
 	SRC_URI=""
 	#KEYWORDS=""
 else
 	MAJOR_V=$(get_version_component_range 1)
-	SRC_URI="https://github.com/ValveSoftware/Proton/archive/proton-${PV}.tar.gz"
+	SRC_URI="https://github.com/ValveSoftware/wine/archive/wine-${PV}.tar.gz"
 	KEYWORDS="-* ~amd64 ~x86 ~x86-fbsd"
 fi
 S="${WORKDIR}/${MY_P}"
