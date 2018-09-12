@@ -12,7 +12,7 @@ MY_PN="${PN%%-*}"
 MY_P="${MY_PN}-${PV}"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/aeikum/wine.git"
+	EGIT_REPO_URI="https://github.com/Basecrayfish/wine.git"
 	EGIT_BRANCH="wip-faudio"
 	inherit git-r3
 	SRC_URI=""
