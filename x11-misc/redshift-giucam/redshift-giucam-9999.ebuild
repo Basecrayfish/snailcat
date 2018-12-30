@@ -13,7 +13,7 @@ EGIT_REPO_URI="https://github.com/giucam/redshift"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~x86"
+KEYWORDS=""
 IUSE="ayatana geoclue gtk nls wayland"
 
 COMMON_DEPEND="
@@ -63,7 +63,6 @@ src_configure() {
 		\
 		$(use_enable gtk gui) \
 		--with-systemduserunitdir="$(systemd_get_userunitdir)" \
-		--disable-apparmor \
 		--disable-quartz \
 		--disable-ubuntu \
 		$(use_enable wayland)
