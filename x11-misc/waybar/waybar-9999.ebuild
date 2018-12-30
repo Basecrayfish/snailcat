@@ -11,7 +11,7 @@ EGIT_REPO_URI="https://github.com/Alexays/Waybar.git"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS=""
 IUSE="+netlink pulseaudio +tray"
 
 RDEPEND="sys-libs/libcap
