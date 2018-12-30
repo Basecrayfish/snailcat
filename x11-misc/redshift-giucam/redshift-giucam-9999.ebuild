@@ -3,10 +3,9 @@
 
 EAPI=6
 
-
 PYTHON_COMPAT=( python3_{4,5,6} )
 
-inherit systemd autotools eutils git-r3 gnome2-utils python-r1
+inherit systemd autotools eutils gnome2-utils git-r3 python-r1
 
 DESCRIPTION="A screen color temperature adjusting software"
 HOMEPAGE="http://jonls.dk/redshift/"
@@ -15,20 +14,29 @@ EGIT_REPO_URI="https://github.com/giucam/redshift"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64 ~arm64 ~x86"
-IUSE="ayatana geoclue gtk nls"
+IUSE="ayatana geoclue gtk nls wayland"
 
-COMMON_DEPEND=">=x11-libs/libX11-1.4
+COMMON_DEPEND="
+	>=x11-libs/libX11-1.4
 	x11-libs/libXxf86vm
 	x11-libs/libxcb
 	x11-libs/libdrm
 	ayatana? ( dev-libs/libappindicator:3[introspection] )
 	geoclue? ( app-misc/geoclue:2.0 dev-libs/glib:2 )
-	gtk? ( ${PYTHON_DEPS} )"
-RDEPEND="${COMMON_DEPEND}
-	gtk? ( dev-python/pygobject[${PYTHON_USEDEP}]
+	gtk? ( ${PYTHON_DEPS} )
+	wayland? (
+		dev-libs/wayland
+		dev-libs/wlroots
+	)"
+RDEPEND="
+	${COMMON_DEPEND}
+	gtk? (
+		dev-python/pygobject[${PYTHON_USEDEP}]
 		x11-libs/gtk+:3[introspection]
-		dev-python/pyxdg[${PYTHON_USEDEP}] )"
-DEPEND="${COMMON_DEPEND}
+		dev-python/pyxdg[${PYTHON_USEDEP}]
+	)"
+DEPEND="
+	${COMMON_DEPEND}
 	>=dev-util/intltool-0.50
 	nls? ( sys-devel/gettext )
 "
@@ -57,7 +65,8 @@ src_configure() {
 		--with-systemduserunitdir="$(systemd_get_userunitdir)" \
 		--disable-apparmor \
 		--disable-quartz \
-		--disable-ubuntu
+		--disable-ubuntu \
+		$(use_enable wayland)
 }
 
 _impl_specific_src_install() {
