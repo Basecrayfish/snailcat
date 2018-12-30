@@ -17,9 +17,8 @@ DEPEND="dev-lang/go"
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	einfo "${LDFLAGS}"
+	ewarn "IGNORING LDFLAGS: ${LDFLAGS}"
 	LDFLAGS=""
-	einfo "${LDFLAGS}"
 }
 
 src_compile() {
