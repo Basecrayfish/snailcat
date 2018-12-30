@@ -17,13 +17,8 @@ DEPEND="dev-lang/go"
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	ewarn "IGNORING LDFLAGS: ${LDFLAGS}"
+	ewarn "QA: LDFLAGS WAS IGNORED: ${LDFLAGS}"
 	LDFLAGS=""
-}
-
-src_compile() {
-	einfo "${MAKEOPTS} ${EXTRA_EMAKE}"
-	emake
 }
 
 src_install() {
