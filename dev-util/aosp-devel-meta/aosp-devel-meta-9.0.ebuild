@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,33 +9,27 @@ HOMEPAGE="https://source.android.com/source/initializing"
 LICENSE="metapackage"
 SLOT="9.0"
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="+ccache +repo"
 
 RDEPEND="
 	app-crypt/gnupg
 	app-arch/zip[-natspec]
 	app-arch/unzip
-	dev-java/icedtea:8
 	dev-libs/libxslt
 	dev-libs/libxml2
-	dev-util/android-tools
-	dev-util/ccache
+	dev-lang/python:2
+	ccache? ( dev-util/ccache )
 	dev-util/gperf
+	repo? ( dev-util/repo )
 	dev-vcs/git
-	media-libs/libsdl
 	media-libs/mesa
 	net-misc/curl
-	net-misc/rsync
-	sys-devel/bc
 	sys-devel/bison
 	sys-devel/flex
 	sys-devel/gcc[cxx]
+	sys-devel/make
 	sys-libs/ncurses:5[abi_x86_32,tinfo]
-	sys-libs/readline[abi_x86_32]
 	sys-libs/zlib[abi_x86_32]
-	sys-process/schedtool
-	sys-fs/squashfs-tools
 	x11-base/xorg-proto
 	x11-libs/libX11
-	x11-libs/wxGTK:3.0
 "

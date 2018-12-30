@@ -17,4 +17,11 @@ RDEPEND="
 	dev-util/aosp-devel-meta:9.0
 	media-gfx/imagemagick
 	media-gfx/pngcrush
+	media-libs/libsdl
+	net-misc/rsync
+	sys-devel/bc
+	sys-libs/readline[abi_x86_32]
+	sys-process/schedtool
+	sys-fs/squashfs-tools
+	x11-libs/wxGTK:3.0
 "
