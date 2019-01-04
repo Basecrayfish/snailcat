@@ -17,7 +17,7 @@ RDEPEND="
 	app-arch/unzip
 	dev-libs/libxslt
 	dev-libs/libxml2
-	dev-lang/python:2
+	dev-lang/python:2.7
 	ccache? ( dev-util/ccache )
 	dev-util/gperf
 	repo? ( dev-util/repo )
