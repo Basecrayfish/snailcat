@@ -25,7 +25,7 @@ DEPEND="
 	media-libs/opus
 	pulseaudio? ( media-sound/pulseaudio )
 	alsa? ( media-libs/alsa-lib )
-	ffmpeg? ( media-libs/ffmpeg )
+	ffmpeg? ( >=media-video/ffmpeg-4.0.2 )
 	vaapi? (
 		x11-libs/libva
 		wayland? ( x11-libs/libva[wayland] )
@@ -39,30 +39,38 @@ src_prepare() {
 
 	# Disable unwanted components
 	if ! use pulseaudio; then
-		sed -i -e '/PKGCONFIG += libpulse/d' src/app/app.pro || die
+		sed -i -e '/PKGCONFIG += libpulse/d' soundio/soundio.pro || die
+		sed -i -e '/packagesExist(libpulse)/,/^    }/d' soundio/soundio.pro || die
 	fi
 	if ! use alsa; then
-		sed -i -e '/PKGCONFIG += alsa/d' src/app/app.pro || die
+		sed -i -e '/PKGCONFIG += alsa/d' app/app.pro || die
+		sed -i -e '/packagesExist(alsa)/,/^    }/d' app/app.pro || die
 	fi
 	if ! use ffmpeg; then
-		sed -i -e '/packagesExist(libavcodec)/,/^    }/d' src/app/app.pro || die
+		sed -i -e '/packagesExist(libavcodec)/,/^    }/d' app/app.pro || die
 	else
 		if ! use vaapi; then
-			sed -i -e '/packagesExist(libva)/,/^        }/d' src/app/app.pro || die
+			sed -i -e '/packagesExist(libva)/,/^        }/d' app/app.pro || die
 		else
 			if ! use wayland; then
-				sed -i -e '/CONFIG += libva-wayland/d' src/app/app.pro || die
+				sed -i -e '/CONFIG += libva-wayland/d' app/app.pro || die
 			fi
 		fi
 		if ! use vdpau; then
-			sed -i -e '/CONFIG += libvdpau' src/app/app/pro || die
+			sed -i -e '/CONFIG += libvdpau/d' app/app.pro || die
 		fi
 	fi
 	if use steamlink; then
 		ewarn steamlink support is currently unavailable in this ebuild
+	else
+		sed -i -e '/qtCompileTest(SLVideo)/d' moonlight-qt.pro || die
 	fi
 }
 
 src_configure() {
 	eqmake5
+}
+
+src_install() {
+	emake install INSTALL_ROOT="${D}"
 }
