@@ -403,6 +403,7 @@ multilib_src_configure() {
 		$(use_with threads pthread)
 		$(use_with scanner sane)
 		$(use_with sdl)
+		$(use_with tiff)
 		$(use_enable test tests)
 		$(use_with truetype freetype)
 		$(use_with udev)
