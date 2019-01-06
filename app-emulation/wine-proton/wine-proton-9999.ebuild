@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -13,7 +13,7 @@ MY_P="${MY_PN}-${PV}"
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/ValveSoftware/wine.git"
-	EGIT_BRANCH="proton_3.7"
+	EGIT_BRANCH="proton_3.16"
 	inherit git-r3
 	SRC_URI=""
 	#KEYWORDS=""
@@ -35,12 +35,13 @@ SRC_URI="${SRC_URI}
 
 LICENSE="LGPL-2.1"
 SLOT="${PV}"
-IUSE="+abi_x86_32 +abi_x86_64 +alsa capi cups custom-cflags dos elibc_glibc +fontconfig +gecko gphoto2 gsm gssapi gstreamer +jpeg kerberos kernel_FreeBSD +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap +png prelink pulseaudio +realtime +run-exes samba scanner sdl selinux +ssl test +threads +truetype udev +udisks v4l vkd3d vulkan +X +xcomposite xinerama +xml"
+IUSE="+abi_x86_32 +abi_x86_64 +alsa capi cups custom-cflags dos elibc_glibc +faudio +fontconfig +gecko gphoto2 gsm gssapi gstreamer +jpeg kerberos kernel_FreeBSD +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap +png prelink pulseaudio +realtime +run-exes samba scanner sdl selinux +ssl test tiff +threads +truetype udev +udisks v4l vkd3d vulkan +X +xcomposite xinerama +xml"
 REQUIRED_USE="|| ( abi_x86_32 abi_x86_64 )
 	X? ( truetype )
 	elibc_glibc? ( threads )
 	osmesa? ( opengl )
-	test? ( abi_x86_32 )" # osmesa-opengl #286560 # X-truetype #551124
+	test? ( abi_x86_32 )
+	vkd3d? ( vulkan )" # osmesa-opengl #286560 # X-truetype #551124
 
 # FIXME: the test suite is unsuitable for us; many tests require net access
 # or fail due to Xvfb's opengl limitations.
@@ -58,6 +59,7 @@ COMMON_DEPEND="
 	alsa? ( media-libs/alsa-lib[${MULTILIB_USEDEP}] )
 	capi? ( net-libs/libcapi[${MULTILIB_USEDEP}] )
 	cups? ( net-print/cups:=[${MULTILIB_USEDEP}] )
+	faudio? ( media-libs/faudio[${MULTILIB_USEDEP}] )
 	fontconfig? ( media-libs/fontconfig:=[${MULTILIB_USEDEP}] )
 	gphoto2? ( media-libs/libgphoto2:=[${MULTILIB_USEDEP}] )
 	gsm? ( media-sound/gsm:=[${MULTILIB_USEDEP}] )
@@ -117,6 +119,7 @@ RDEPEND="${COMMON_DEPEND}
 	)
 	samba? ( >=net-fs/samba-3.0.25[winbind] )
 	selinux? ( sec-policy/selinux-wine )
+	tiff? ( media-libs/tiff )
 	udisks? ( sys-fs/udisks:2 )"
 
 # tools/make_requests requires perl
@@ -373,6 +376,7 @@ multilib_src_configure() {
 		$(use_with cups)
 		$(use_with ncurses curses)
 		$(use_with udisks dbus)
+		$(use_with faudio)
 		$(use_with fontconfig)
 		$(use_with ssl gnutls)
 		$(use_enable gecko mshtml)
@@ -465,14 +469,14 @@ multilib_src_install_all() {
 	fi
 
 	# Remove wineconsole if neither backend is installed #551124
-	#if ! use X && ! use ncurses; then
-	#	rm "${D%/}${MY_PREFIX}"/bin/wineconsole* || die
-	#	rm "${D%/}${MY_MANDIR}"/man1/wineconsole* || die
-		#rm_wineconsole() {
-		#	rm "${D%/}${MY_PREFIX}/$(get_libdir)"/wine/{,fakedlls/}wineconsole.exe* || die
-		#}
-		#multilib_foreach_abi rm_wineconsole
-	#fi
+	if ! use X && ! use ncurses; then
+		rm "${D%/}${MY_PREFIX}"/bin/wineconsole* || die
+		rm "${D%/}${MY_MANDIR}"/man1/wineconsole* || die
+		rm_wineconsole() {
+			rm "${D%/}${MY_PREFIX}/$(get_libdir)"/wine/{,fakedlls/}wineconsole.exe* || die
+		}
+		multilib_foreach_abi rm_wineconsole
+	fi
 
 	use abi_x86_32 && pax-mark psmr "${D%/}${MY_PREFIX}"/bin/wine{,-preloader} #255055
 	use abi_x86_64 && pax-mark psmr "${D%/}${MY_PREFIX}"/bin/wine64{,-preloader}
@@ -495,8 +499,8 @@ multilib_src_install_all() {
 
 pkg_postinst() {
 	eselect wine register ${P}
-	if [[ ${PN} == "wine-vanilla" ]]; then
-		eselect wine register --vanilla ${P} || die
+	if [[ ${PN} == "wine-proton" ]]; then
+		eselect wine register --proton ${P} || die
 	fi
 
 	eselect wine update --all --if-unset || die
@@ -519,8 +523,8 @@ pkg_postinst() {
 
 pkg_prerm() {
 	eselect wine deregister ${P}
-	if [[ ${PN} == "wine-vanilla" ]]; then
-		eselect wine deregister --vanilla ${P} || die
+	if [[ ${PN} == "wine-proton" ]]; then
+		eselect wine deregister --proton ${P} || die
 	fi
 
 	eselect wine update --all --if-unset || die
