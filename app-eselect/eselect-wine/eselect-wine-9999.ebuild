@@ -28,6 +28,7 @@ RDEPEND="app-admin/eselect
 S=${WORKDIR}
 
 src_install() {
+	cp "${S}"/eselect-wine-"${PV}"/wine.eselect "${DISTDIR}"/wine.eselect-"${PV}"
 	keepdir /etc/eselect/wine
 
 	insinto /usr/share/eselect/modules

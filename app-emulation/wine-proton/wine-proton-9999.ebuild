@@ -12,7 +12,7 @@ MY_PN="${PN%%-*}"
 MY_P="${MY_PN}-${PV}"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/ValveSoftware/wine.git"
+	EGIT_REPO_URI="https://github.com/Basecrayfish/wine.git"
 	EGIT_BRANCH="proton_3.16"
 	inherit git-r3
 	SRC_URI=""
@@ -291,7 +291,6 @@ src_unpack() {
 }
 
 src_prepare() {
-
 	eapply_bin(){
 		local patch
 		for patch in ${PATCHES_BIN[@]}; do
