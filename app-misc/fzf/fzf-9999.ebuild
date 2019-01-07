@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit eutils git-r3
+inherit eutils flag-o-matic git-r3
 
 DESCRIPTION="A command-line fuzzy finder written in Go"
 HOMEPAGE="https://github.com/junegunn/fzf"
@@ -17,8 +17,8 @@ DEPEND="dev-lang/go"
 RDEPEND="${DEPEND}"
 
 src_configure() {
-	ewarn "QA: LDFLAGS WAS IGNORED: ${LDFLAGS}"
-	LDFLAGS=""
+	default
+	filter-flags -Wl,--as-needed
 }
 
 src_install() {
