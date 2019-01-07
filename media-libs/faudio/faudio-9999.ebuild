@@ -15,8 +15,8 @@ KEYWORDS=""
 IUSE="+ffmpeg"
 
 DEPEND="
-	media-libs/libsdl2[${MULTILIB_USEDEP}]
-	ffmpeg? ( media-video/ffmpeg[${MULTILIB_USEDEP}] )
+	>=media-libs/libsdl2-2.0.9[${MULTILIB_USEDEP}]
+	ffmpeg? ( >=media-video/ffmpeg-4.0.2[${MULTILIB_USEDEP}] )
 "
 RDEPEND="${DEPEND}"
 BDEPEND=""
