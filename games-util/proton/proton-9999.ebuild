@@ -31,7 +31,7 @@ src_configure() {
 	./configure.sh --no-steam-runtime
 }
 
-src_install() {
+src_compile() {
 	emake
 	emake dist
 }
