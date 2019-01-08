@@ -3,12 +3,12 @@
 
 EAPI=7
 
-inherit git-r3 cmake-multilib
+inherit git-r3
 
 DESCRIPTION=""
 HOMEPAGE=""
 EGIT_REPO_URI="https://github.com/Basecrayfish/Proton"
-EGIT_SUBMODULES="openvr"
+EGIT_SUBMODULES=( openvr fonts/liberation-fonts )
 
 LICENSE="ValveProtonLicense"
 SLOT="0"
@@ -16,7 +16,7 @@ KEYWORDS=""
 IUSE=""
 
 COMMON_DEPEND="
-	app-emulation/wine-proton
+	app-emulation/wine-proton[faudio]
 	app-emulation/dxvk
 "
 
@@ -28,14 +28,10 @@ RDEPEND="${COMMON_DEPEND}"
 BDEPEND=""
 
 src_configure() {
-	cmake-multilib_src_configure
-}
-
-src_compile() {
-	make
+	./configure.sh --no-steam-runtime
 }
 
 src_install() {
-	ewarn WIP Manual installation required
-	die
+	emake
+	emake dist
 }
