@@ -1,2 +1,12 @@
-16a17
-> 	proton
+diff --git a/wine.eselect b/wine.eselect
+index d39eef9..59ce528 100644
+--- a/wine.eselect
++++ b/wine.eselect
+@@ -14,6 +14,7 @@ VARIANTS=(
+ 	staging
+ 	d3d9
+ 	any
++	proton
+ )
+ 
+ ################################################################################
