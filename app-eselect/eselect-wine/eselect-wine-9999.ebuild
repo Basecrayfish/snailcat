@@ -7,7 +7,7 @@ DESCRIPTION="Manage active wine version"
 HOMEPAGE="https://bitbucket.org/NP-Hardass/eselect-wine"
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="https://github.com/Basecrayfish/eselect-wine"
+	EGIT_REPO_URI="https://bitbucket.org/NP-Hardass/eselect-wine.git"
 	EGIT_BRANCH="master"
 	inherit git-r3
 	SRC_URI=""
@@ -26,6 +26,11 @@ RDEPEND="app-admin/eselect
 	!!app-emulation/wine:0"
 
 S=${WORKDIR}
+
+src_prepare() {
+	eapply "${FILESDIR}/00_steam-proton.patch"
+	default
+}
 
 src_install() {
 	cp "${S}"/eselect-wine-"${PV}"/wine.eselect "${DISTDIR}"/wine.eselect-"${PV}"
