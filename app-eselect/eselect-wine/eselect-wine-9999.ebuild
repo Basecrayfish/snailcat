@@ -28,7 +28,7 @@ RDEPEND="app-admin/eselect
 S=${WORKDIR}
 
 src_prepare() {
-	eapply "${FILESDIR}/00_steam-proton.patch"
+	epatch wine.eselect "${FILESDIR}/00_steam-proton.patch"
 	default
 }
 
