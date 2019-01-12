@@ -27,10 +27,7 @@ RDEPEND="app-admin/eselect
 
 S=${WORKDIR}
 
-src_prepare() {
-	epatch wine.eselect "${FILESDIR}/00_steam-proton.patch"
-	default
-}
+PATCHES=( "${FILESDIR}/00_steam-proton.patch" )
 
 src_install() {
 	cp "${S}"/eselect-wine-"${PV}"/wine.eselect "${DISTDIR}"/wine.eselect-"${PV}"
