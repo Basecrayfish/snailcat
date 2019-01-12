@@ -1,7 +1,7 @@
-diff --git a/wine.eselect b/wine.eselect
+diff --git a/eselect-wine-9999/wine.eselect b/eselect-wine-9999/wine.eselect
 index d39eef9..59ce528 100644
---- a/wine.eselect
-+++ b/wine.eselect
+--- a/eselect-wine-9999/wine.eselect
++++ b/eselect-wine-9999/wine.eselect
 @@ -14,6 +14,7 @@ VARIANTS=(
  	staging
  	d3d9

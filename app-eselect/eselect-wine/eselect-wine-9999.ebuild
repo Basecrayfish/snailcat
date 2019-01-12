@@ -27,7 +27,7 @@ RDEPEND="app-admin/eselect
 
 S=${WORKDIR}
 
-PATCHES=( "${FILESDIR}/00_steam-proton.patch" )
+PATCHES=( "${FILESDIR}/${P}-proton.patch" )
 
 src_install() {
 	cp "${S}"/eselect-wine-"${PV}"/wine.eselect "${DISTDIR}"/wine.eselect-"${PV}"
