@@ -15,7 +15,7 @@ KEYWORDS=""
 IUSE="+netlink pulseaudio +tray"
 
 RDEPEND="sys-libs/libcap
-	dev-libs/libfmt
+	>=dev-libs/libfmt-5.3.0
 	dev-libs/libinput
 	dev-libs/wayland
 	dev-cpp/gtkmm:3.0
