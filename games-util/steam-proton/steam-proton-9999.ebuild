@@ -18,6 +18,7 @@ IUSE=""
 COMMON_DEPEND="
 	app-emulation/wine-proton[faudio]
 	app-emulation/dxvk
+	media-fonts/liberation-fonts[fontforge]
 "
 
 DEPEND="${COMMON_DEPEND}
