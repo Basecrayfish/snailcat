@@ -8,8 +8,7 @@ inherit git-r3 webapp
 DESCRIPTION="The RSS feed for websites missing it"
 HOMEPAGE="https://github.com/RSS-Bridge/rss-bridge"
 
-LICENSE=""
-SLOT="0"
+LICENSE="Unlicense"
 KEYWORDS=""
 IUSE=""
 
