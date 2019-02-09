@@ -18,6 +18,9 @@ RDEPEND="
 "
 
 pkg_setup() {
+	einfo "${PN}"
+	einfo "${PVR}"
+	einfo "${WEBAPP_CONFIG}"
 	webapp_pkg_setup
 }
 
