@@ -24,7 +24,7 @@ src_install() {
 	insinto "${MY_HTDOCSDIR}"
 	doins -r .
 
-	webapp_serverowned -R "${MY_HTDOCSDIR}"/.cache/
+	webapp_serverowned -R "${MY_HTDOCSDIR}"/cache/
 
 	webapp_src_install
 }
