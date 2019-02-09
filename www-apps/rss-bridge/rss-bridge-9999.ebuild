@@ -18,11 +18,6 @@ RDEPEND="
 		virtual/httpd-php
 "
 
-pkg_setup() {
-	touch whitelist.txt
-	webapp_pkg_setup
-}
-
 src_install() {
 	webapp_src_preinst
 
@@ -30,6 +25,8 @@ src_install() {
 	doins -r .
 
 	webapp_serverowned -R "${MY_HTDOCSDIR}"/cache/
+
+	touch "${MY_HTDOCSDIR}"/whitelist.txt
 	webapp_serverowned "${MY_HTDOCSDIR}"/whitelist.txt
 	webapp_configfile "${MY_HTDOCSDIR}"/whitelist.txt
 
