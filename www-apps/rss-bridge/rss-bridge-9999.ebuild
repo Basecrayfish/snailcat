@@ -16,7 +16,10 @@ RDEPEND="
 		>=dev-lang/php-5.6.40[ssl,xml,unicode,simplexml,curl,json]
 		virtual/httpd-php
 "
-need_httpd
+
+pkg_setup() {
+	webapp_pkg_setup
+}
 
 src_install() {
 	webapp_src_preinst
