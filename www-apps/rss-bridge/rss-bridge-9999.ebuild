@@ -18,6 +18,11 @@ RDEPEND="
 		virtual/httpd-php
 "
 
+pkg_setup() {
+	touch whitelist.txt
+	webapp_pkg_setup
+}
+
 src_install() {
 	webapp_src_preinst
 
