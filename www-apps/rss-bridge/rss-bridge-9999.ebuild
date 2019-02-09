@@ -25,6 +25,8 @@ src_install() {
 	doins -r .
 
 	webapp_serverowned -R "${MY_HTDOCSDIR}"/cache/
+	webapp_serverowned "${MY_HTDOCSDIR}"/whitelist.txt
+	webapp_configfile "${MY_HTDOCSDIR}"/whitelist.txt
 
 	webapp_src_install
 }
