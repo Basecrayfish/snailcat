@@ -26,7 +26,7 @@ COMMON_DEPEND="
 	gtk? ( ${PYTHON_DEPS} )
 	wayland? (
 		dev-libs/wayland
-		gui-wm/wlroots
+		gui-libs/wlroots
 	)"
 RDEPEND="
 	${COMMON_DEPEND}
