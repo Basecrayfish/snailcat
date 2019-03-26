@@ -19,7 +19,7 @@ RDEPEND="sys-libs/libcap
 	dev-libs/libinput
 	dev-libs/wayland
 	dev-cpp/gtkmm:3.0
-	dev-libs/wlroots
+	gui-wm/wlroots
 	tray? ( dev-libs/libdbusmenu[gtk3] )
 	dev-libs/jsoncpp
 	dev-libs/libsigc++
