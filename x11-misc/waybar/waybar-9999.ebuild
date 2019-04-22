@@ -12,7 +12,7 @@ EGIT_REPO_URI="https://github.com/Alexays/Waybar.git"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS=""
-IUSE="+netlink pulseaudio +tray"
+IUSE="+netlink mpd pulseaudio +tray"
 
 RDEPEND="sys-libs/libcap
 	>=dev-libs/libfmt-5.3.0
@@ -25,6 +25,7 @@ RDEPEND="sys-libs/libcap
 	dev-libs/libsigc++
 	netlink? ( dev-libs/libnl )
 	pulseaudio? ( media-sound/pulseaudio )
+	mpd? ( media-libs/libmpdclient )
 "
 DEPEND="${RDEPEND}
 	dev-libs/wayland-protocols
@@ -35,6 +36,7 @@ src_configure() {
 		-Dlibnl=$(usex netlink enabled disabled)
 		-Dpulseaudio=$(usex pulseaudio enabled disabled)
 		-Ddbusmenu-gtk=$(usex tray enabled disabled)
+		-Dmpd=$(usex mpd enabled disabled)
 	)
 	meson_src_configure
 }
