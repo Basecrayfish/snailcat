@@ -10,7 +10,7 @@ DESCRIPTION="The iconic font"
 HOMEPAGE="https://fontawesome.com"
 SRC_URI="https://github.com/FortAwesome/${MY_PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
-LICENSE="CC-BY-3.0 OFL-1.1"
+LICENSE="CC-BY-4.0 OFL-1.1 MIT"
 SLOT="0/5"
 KEYWORDS="~amd64 ~arm ~arm64 ~x86"
 IUSE="+otf +ttf"
@@ -24,9 +24,9 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 src_install() {
 	if use otf; then
-		FONT_S="${S}/use-on-desktop" FONT_SUFFIX="otf" font_src_install
+		FONT_S="${S}/otfs" FONT_SUFFIX="otf" font_src_install
 	fi
 	if use ttf; then
-		FONT_S="${S}/web-fonts-with-css/webfonts" FONT_SUFFIX="ttf" font_src_install
+		FONT_S="${S}/webfonts" FONT_SUFFIX="ttf" font_src_install
 	fi
 }
