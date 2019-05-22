@@ -16,6 +16,7 @@ IUSE="+netlink mpd pulseaudio +tray"
 
 RDEPEND="sys-libs/libcap
 	>=dev-libs/libfmt-5.3.0
+	dev-libs/spdlog
 	dev-libs/libinput
 	dev-libs/wayland
 	dev-cpp/gtkmm:3.0
