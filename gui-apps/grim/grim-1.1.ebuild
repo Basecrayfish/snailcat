@@ -3,11 +3,11 @@
 
 EAPI=7
 
-inherit meson git-r3
+inherit meson
 
 DESCRIPTION="Grab images from a Wayland compositor"
 HOMEPAGE="https://wayland.emersion.fr/grim"
-EGIT_REPO_URI="https://github.com/emersion/grim.git"
+SRC_URI="https://github.com/emersion/${PN}/archive/v${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
