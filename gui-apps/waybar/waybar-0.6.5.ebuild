@@ -1,13 +1,13 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 2019 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="Highly customizable Wayland Polybar like bar"
 HOMEPAGE="https://github.com/Alexays/Waybar"
-EGIT_REPO_URI="https://github.com/Alexays/Waybar.git"
+SRC_URI="https://github.com/Alexays/Waybar/archive/${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
