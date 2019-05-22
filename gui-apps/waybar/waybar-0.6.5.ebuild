@@ -32,6 +32,11 @@ DEPEND="${RDEPEND}
 	dev-libs/wayland-protocols
 "
 
+src_unpack() {
+	unpack ${PV}.tar.gz
+	mv Waybar-${PV} ${P}
+}
+
 src_configure() {
 	local emesonargs=(
 		-Dlibnl=$(usex netlink enabled disabled)
