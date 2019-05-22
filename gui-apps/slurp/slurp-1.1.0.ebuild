@@ -3,11 +3,11 @@
 
 EAPI=7
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="Select a region in a Wayland compositor"
 HOMEPAGE="https://wayland.emersion.fr/slurp"
-EGIT_REPO_URI="https://github.com/emersion/slurp.git"
+SRC_URI="https://github.com/emersion/${PN}/archive/v${PV}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
