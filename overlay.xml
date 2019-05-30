@@ -6,8 +6,8 @@
         <description>snailcat, an overlay with random stuff</description>
         <homepage>https://github.com/Basecrayfish/snailcat</homepage>
         <owner type="person">
-            <name>Calum</name>
             <email>calumac22@gmail.com</email>
+            <name>Calum</name>
         </owner>
         <source type="git">https://github.com/Basecrayfish/snailcat.git</source>
     </repo>
