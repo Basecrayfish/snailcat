@@ -1,0 +1,34 @@
+# Kernel interfaces and IPC
+USE="acl acpi -consolekit dbus -policykit sockets threads -udisks dbus udev"
+# Compiler and options
+USE="${USE} clang jumbo-build"
+# Filesystems
+USE="${USE} btrfs fat udf ntfs fam"
+# Dynamic lib options
+USE="${USE} system-harfbuzz system-icu system-jpeg system-jsoncpp system-libevent system-libvpx system-llvm system-sqlite"
+# File compression and crypto formats
+USE="${USE} bzip2 crypt"
+# Language binding support
+USE="${USE} cxx python rust"
+# HW media support
+USE="${USE} bluetooth bluray aacs bdplus cdda cdr dvd dvdr mtp nas usb"
+# Media libs
+USE="${USE} gallium glamor alsa ffmpeg hwaccel jack -pulseaudio"
+# Media API support
+USE="${USE} egl gles gles2 gles3 openal opencl opengl vulkan"
+# Media API emulation support
+USE="${USE} vkd3d"
+# Desktop GUI API support
+USE="${USE} sdl qt5 gtk"
+# Desktop display server and WM support
+USE="${USE} -sddm wayland X xorg xwayland dri dri3 vdpau"
+# Multimedia file format and lib support
+USE="${USE} a52 aac drm flac frei0r fribidi gif jpeg libaom libcaca libdrm mp3 mp4 mpeg ogg opus rubberband pdf png vpx webp x264 x265 gme dts exif lcms mad mng svg tiff vorbis xml xv xvid"
+# Application features
+USE="${USE} npm handbook musicbrainz jit git tmux vim zsh zsh-completion ssl libressl bash-completion gimp mozilla firefox chromium -facedetect mpd branding cups encode ldap libnotify ppds startup-notification"
+# Database support
+USE="${USE} sqlite postgres"
+# Mail options
+USE="${USE} imap maildir -mbox"
+# Text display
+USE="${USE} cairo fonts droidsansmono fontconfig spell steamfonts offensive truetype pango unicode xcb"
