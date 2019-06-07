@@ -1,9 +1,9 @@
 # Kernel interfaces and IPC
-USE="acl acpi -consolekit dbus -policykit sockets threads -udisks dbus udev"
+USE="acl acpi -consolekit dbus -policykit sockets threads -udisks udev"
 # Compiler and options
 USE="${USE} clang jumbo-build"
 # Filesystems
-USE="${USE} btrfs fat udf ntfs fam"
+USE="${USE} btrfs fat udf fam"
 # Dynamic lib options
 USE="${USE} system-harfbuzz system-icu system-jpeg system-jsoncpp system-libevent system-libvpx system-llvm system-sqlite"
 # File compression and crypto formats
@@ -11,9 +11,9 @@ USE="${USE} bzip2 crypt"
 # Language binding support
 USE="${USE} cxx python rust"
 # HW media support
-USE="${USE} bluetooth bluray aacs bdplus cdda cdr dvd dvdr mtp nas usb"
+USE="${USE} aacs bluetooth cdr dvd dvdr mtp nas"
 # Media libs
-USE="${USE} gallium glamor alsa ffmpeg hwaccel jack -pulseaudio"
+USE="${USE} -gallium glamor alsa ffmpeg hwaccel jack -pulseaudio"
 # Media API support
 USE="${USE} egl gles gles2 gles3 openal opencl opengl vulkan"
 # Media API emulation support
@@ -21,11 +21,11 @@ USE="${USE} vkd3d"
 # Desktop GUI API support
 USE="${USE} sdl qt5 gtk gtk3"
 # Desktop display server and WM support
-USE="${USE} -sddm wayland X xorg xwayland dri dri3 vdpau"
+USE="${USE} -sddm wayland X xorg xwayland dri dri3 vaapi"
 # Multimedia file format and lib support
 USE="${USE} a52 aac drm flac frei0r fribidi gif jpeg libaom libcaca libdrm mp3 mp4 mpeg ogg opus rubberband pdf png vpx webp x264 x265 gme dts exif lcms mad mng svg tiff vorbis xml xv xvid"
 # Application features
-USE="${USE} npm handbook musicbrainz jit git tmux vim zsh zsh-completion ssl libressl bash-completion gimp mozilla firefox chromium -facedetect mpd branding cups encode ldap libnotify ppds startup-notification"
+USE="${USE} npm handbook musicbrainz jit git tmux vim zsh zsh-completion ssl libressl bash-completion gimp mozilla firefox -facedetect mpd branding cups encode ldap libnotify ppds startup-notification"
 # Database support
 USE="${USE} sqlite postgres"
 # Mail options

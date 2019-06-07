@@ -1,0 +1,104 @@
+# Fix for cross compile? (Obselete?)
+app-accessibility/at-spi2-core -introspection
+
+# Adds cmdline utils for working with GnuGP
+app-crypt/gnupg tools
+
+# Enables only used portions of powerline (To be phased out for bullettrain etc)
+app-misc/powerline -rc tmux man fonts -vim -i3bar -zsh
+
+# MOVE TO BASETWEAKS OR DITCH LAYMAN
+# Adds a hook in portage sync to update overlays with the main sync
+app-portage/layman sync-plugin-portage
+
+# Required for something??
+app-text/xmlto text
+
+# Unknown requirement
+dev-db/postgresql kerberos
+
+# Useful security wise but unknown requirement
+dev-db/sqlite secure-delete
+
+# Needed for suspend?
+dev-libs/libgcrypt static-libs
+dev-libs/libgpg-error static-libs
+
+# Unknown
+dev-libs/libpcre2 pcre16
+
+# Unknown (Firefox/libreoffice?)
+dev-libs/libxml2 icu
+
+# Needed for suspend?
+dev-libs/lzo static-libs
+
+# Unknown
+dev-libs/xmlsec nss
+
+# Unknown
+dev-lua/lpeg luajit
+dev-lua/mpack luajit
+
+# Unknown application requirement
+dev-python/PyQt5 multimedia
+
+# ff/libreo?
+dev-qt/qtcore icu
+
+# Unknown
+dev-qt/qtmultimedia widgets
+
+# Enables sway components (Swaybar may be obselete)
+gui-wm/sway swaybar swaymsg swaygrab swaybg
+
+# Fonts to patch with powerline support
+media-fonts/powerline-fonts robotomono hack sourcecodepro anonymouspro terminus_pcf
+
+# Unknown
+media-libs/gexiv2 introspection
+
+# Firefox thingy?
+media-libs/harfbuzz icu
+
+# Unknown
+media-libs/libpng apng
+
+# Vibration support????
+media-libs/libsdl2 haptic
+
+# Needed for some app (Firefox??)
+media-libs/libvpx postproc svc
+
+# Unknown
+media-libs/opus custom-modes
+
+# Needed for global cxx flag
+net-nds/openldap sasl
+
+# Provides extra WiFi capabilities
+net-wireless/wpa_supplicant fasteap p2p eap-sim
+
+# Something to do with automounting /boot?
+sys-boot/grub mount
+
+# Improves the toolchain linker somehow
+sys-devel/llvm gold
+
+# Allows user to pull in required firm only
+sys-kernel/linux-firmware savedconfig
+
+# Needed by something
+sys-libs/ncurses tinfo
+
+# Needed by something
+sys-libs/zlib minizip
+
+# Dont remember
+sys-power/hibernate-script vim-syntax
+
+# Makes it look like dev version??
+www-client/firefox bindist
+
+# Dont remember
+x11-libs/libxcb xkb
