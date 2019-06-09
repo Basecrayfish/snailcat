@@ -2,3 +2,4 @@
 # multilib packages
 amd64		basetweaks/flamingargon		dev
 amd64		basetweaks/anthill		dev
+amd64		steam				dev

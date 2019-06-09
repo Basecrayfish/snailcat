@@ -1,0 +1,28 @@
+# Kernel interfaces and IPC
+USE="acl acpi -consolekit dbus -policykit sockets threads -udisks dbus udev"
+# Filesystems
+USE="${USE} btrfs fat ntfs fam"
+# Dynamic lib options
+USE="${USE} system-harfbuzz system-icu system-jpeg system-jsoncpp system-libevent system-libvpx system-sqlite"
+# File compression and crypto formats
+USE="${USE} bzip2 crypt"
+# HW media support
+USE="${USE} bluetooth usb"
+# Media libs
+USE="${USE} gallium glamor alsa ffmpeg hwaccel jack -pulseaudio"
+# Media API support
+USE="${USE} egl gles gles2 gles3 openal opencl opengl vulkan"
+# Media API emulation support
+USE="${USE} vkd3d"
+# Desktop GUI API support
+USE="${USE} sdl qt5 gtk gtk3"
+# Desktop display server and WM support
+USE="${USE} wayland X xorg xwayland dri dri3 vdpau"
+# Multimedia file format and lib support
+USE="${USE} a52 aac drm flac frei0r fribidi gif jpeg libaom libcaca libdrm mp3 mp4 mpeg ogg opus rubberband pdf png vpx webp x264 x265 dts exif lcms mad mng svg tiff vorbis xml xv xvid"
+# Application features
+USE="${USE} jit ssl -facedetect encode ldap libnotify ppds startup-notification"
+# Database support
+USE="${USE} sqlite postgres"
+# Text display
+USE="${USE} cairo fonts droidsansmono liberationmono fontforge fontconfig spell steamfonts offensive truetype pango unicode xcb"
