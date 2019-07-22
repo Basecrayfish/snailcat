@@ -32,6 +32,6 @@ RDEPEND=""
 BDEPEND=""
 
 src_install() {
-	mv bullettrain-go-core bullettrain-go
-	dobin bullettrain-go
+	mv bullettrain-go-core bullettrain
+	dobin bullettrain
 }
