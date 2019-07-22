@@ -164,12 +164,10 @@ HOMEPAGE="https://github.com/cardoe/cargo-ebuild"
 SRC_URI="$(cargo_crate_uris ${CRATES})
 https://github.com/Basecrayfish/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz
 "
-RESTRICT="mirror"
-
 
 LICENSE="MIT Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="~amd64"
 IUSE=""
 
 RDEPEND=""
