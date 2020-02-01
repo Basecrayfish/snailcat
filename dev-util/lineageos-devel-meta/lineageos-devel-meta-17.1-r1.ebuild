@@ -7,7 +7,7 @@ DESCRIPTION="Meta package providing LineageOS build environment"
 HOMEPAGE="https://lineageos.org"
 
 LICENSE="metapackage"
-SLOT="16.0"
+SLOT="17.1"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
