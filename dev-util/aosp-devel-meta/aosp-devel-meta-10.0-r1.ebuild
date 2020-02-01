@@ -7,7 +7,7 @@ DESCRIPTION="Meta package providing AOSP build environment"
 HOMEPAGE="https://source.android.com/source/initializing"
 
 LICENSE="metapackage"
-SLOT="9.0"
+SLOT="10.0"
 KEYWORDS="~amd64 ~x86"
 IUSE="+ccache +repo"
 
