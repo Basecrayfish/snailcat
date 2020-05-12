@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 0500587..8c95e08 100644
+--- a/Makefile
++++ b/Makefile
+@@ -14,7 +14,7 @@ TAG_NAME := $(shell git tag -l --contains HEAD)
+ SHA := $(shell git rev-parse HEAD)
+ VERSION := $(if $(TAG_NAME),$(TAG_NAME),$(SHA))
+ 
+-default: clean generate-dns checks test build
++default: clean generate-dns build
+ 
+ clean:
+ 	@echo BIN_OUTPUT: ${BIN_OUTPUT}
