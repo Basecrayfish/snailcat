@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6,7} )
+PYTHON_COMPAT=( python3_{6,7,8} )
 
 inherit bash-completion-r1 check-reqs estack flag-o-matic llvm multiprocessing multilib-build python-any-r1 rust-toolchain toolchain-funcs
 
@@ -38,7 +38,7 @@ LLVM_TARGET_USEDEPS=${ALL_LLVM_TARGETS[@]/%/?}
 
 LICENSE="|| ( MIT Apache-2.0 ) BSD-1 BSD-2 BSD-4 UoI-NCSA"
 
-IUSE="clippy cpu_flags_x86_sse2 debug doc libressl miri nightly parallel-compiler rls rustfmt system-bootstrap system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
+IUSE="clippy cpu_flags_x86_sse2 debug doc libressl llvm-libunwind miri nightly parallel-compiler rls rustfmt system-bootstrap system-llvm wasm ${ALL_LLVM_TARGETS[*]}"
 
 # Please keep the LLVM dependency block separate. Since LLVM is slotted,
 # we need to *really* make sure we're not pulling more than one slot
@@ -46,28 +46,33 @@ IUSE="clippy cpu_flags_x86_sse2 debug doc libressl miri nightly parallel-compile
 
 # How to use it:
 # 1. List all the working slots (with min versions) in ||, newest first.
-# 2. Update the := to specify *max* version, e.g. < 10.
-# 3. Specify LLVM_MAX_SLOT, e.g. 9.
+# 2. Update the := to specify *max* version, e.g. < 11.
+# 3. Specify LLVM_MAX_SLOT, e.g. 10.
 LLVM_DEPEND="
 	|| (
+		sys-devel/llvm:10[${LLVM_TARGET_USEDEPS// /,}]
 		sys-devel/llvm:9[${LLVM_TARGET_USEDEPS// /,}]
-		wasm? ( =sys-devel/lld-9* )
-		=sys-devel/lld-9*
 	)
-	<sys-devel/llvm-10:=
+	<sys-devel/llvm-11:=
+	wasm? ( sys-devel/lld )
 "
-LLVM_MAX_SLOT=9
+LLVM_MAX_SLOT=10
 
-BOOTSTRAP_DEPEND="|| ( >=dev-lang/rust-1.$(($(ver_cut 2) - 1)).0-r1 >=dev-lang/rust-bin-1.$(($(ver_cut 2) - 1)) )"
+BOOTSTRAP_DEPEND="|| ( >=dev-lang/rust-1.$(($(ver_cut 2) - 1)) >=dev-lang/rust-bin-1.$(($(ver_cut 2) - 1)) )"
 
+# libgit2 should be at least same as bungled into libgit-sys #707746
 COMMON_DEPEND="
+	>=dev-libs/libgit2-0.99:=
 	net-libs/libssh2:=
 	net-libs/http-parser:=
 	net-misc/curl:=[ssl]
 	sys-libs/zlib:=
 	!libressl? ( dev-libs/openssl:0= )
 	libressl? ( dev-libs/libressl:0= )
-	elibc_musl? ( sys-libs/llvm-libunwind )
+	elibc_musl? (
+		llvm-libunwind? ( sys-libs/llvm-libunwind )
+		!llvm-libunwind? ( sys-libs/libunwind )
+	)
 	system-llvm? (
 		${LLVM_DEPEND}
 	)
@@ -104,10 +109,18 @@ QA_FLAGS_IGNORED="
 	usr/lib/rustlib/.*/lib/lib.*.so
 "
 
-QA_SONAME="usr/lib.*/librustc_macros.*.so"
+QA_SONAME="
+	usr/lib.*/lib.*.so
+	usr/lib.*/librustc_macros.*.s
+"
+
+# tests need a bit more work, currently they are causing multiple
+# re-compilations and somewhat fragile.
+RESTRICT="test"
 
 PATCHES=(
-	"${FILESDIR}"/1.40.0-add-soname.patch
+	"${FILESDIR}"/0012-Ignore-broken-and-non-applicable-tests.patch
+	"${FILESDIR}"/1.44.0-libressl.patch
 )
 
 S="${WORKDIR}/${MY_P}-src"
@@ -134,9 +147,9 @@ pkg_setup() {
 	pre_build_checks
 	python-any-r1_pkg_setup
 
-	# use bundled for now, #707746
-	# will need dev-libs/libgit2 slotted dep if re-enabled
-	#export LIBGIT2_SYS_USE_PKG_CONFIG=1
+	# required to link agains system libs, otherwise
+	# crates use bundled sources and compile own static version
+	export LIBGIT2_SYS_USE_PKG_CONFIG=1
 	export LIBSSH2_SYS_USE_PKG_CONFIG=1
 	export PKG_CONFIG_ALLOW_CROSS=1
 
@@ -158,6 +171,9 @@ src_prepare() {
 		"${WORKDIR}/${rust_stage0}"/install.sh --disable-ldconfig \
 			--destdir="${rust_stage0_root}" --prefix=/ || die
 	fi
+	if use llvm-libunwind; then
+		eapply "${FILESDIR}"/1.43.1-musl-llvm-libunwind.patch
+	fi
 
 	default
 }
@@ -174,7 +190,7 @@ src_configure() {
 	fi
 	rust_targets="${rust_targets#,}"
 
-	local extended="true" tools="\"cargo\","
+	local tools="\"cargo\","
 	if use clippy; then
 		tools="\"clippy\",$tools"
 	fi
@@ -202,6 +218,7 @@ src_configure() {
 		optimize = $(toml_usex !debug)
 		release-debuginfo = $(toml_usex debug)
 		assertions = $(toml_usex debug)
+		ninja = true
 		targets = "${LLVM_TARGETS// /;}"
 		experimental-targets = ""
 		link-shared = $(toml_usex system-llvm)
@@ -217,9 +234,12 @@ src_configure() {
 		python = "${EPYTHON}"
 		locked-deps = true
 		vendor = true
-		extended = ${extended}
+		extended = true
 		tools = [${tools}]
 		verbose = 2
+		sanitizers = false
+		profiler = false
+		cargo-native-static = false
 		[install]
 		prefix = "${EPREFIX}/usr"
 		libdir = "lib"
@@ -229,12 +249,20 @@ src_configure() {
 		optimize = true
 		debug = $(toml_usex debug)
 		debug-assertions = $(toml_usex debug)
+		debuginfo-level-rustc = 0
+		backtrace = true
+		incremental = false
 		default-linker = "$(tc-getCC)"
 		parallel-compiler = $(toml_usex parallel-compiler)
 		channel = "$(usex nightly nightly stable)"
 		rpath = false
-		lld = true
+		verbose-tests = true
+		optimize-tests = $(toml_usex !debug)
+		codegen-tests = true
+		dist-src = false
+		lld = $(usex system-llvm false $(toml_usex wasm))
 		backtrace-on-ice = true
+		jemalloc = false
 		[dist]
 		src-tarball = false
 	EOF
@@ -266,7 +294,6 @@ src_configure() {
 			EOF
 		fi
 	done
-
 	if use wasm; then
 		cat <<- EOF >> "${S}"/config.toml
 			[target.wasm32-unknown-unknown]
@@ -279,8 +306,24 @@ src_configure() {
 }
 
 src_compile() {
-	env $(cat "${S}"/config.env)\
+	env $(cat "${S}"/config.env) RUST_BACKTRACE=1\
 		"${EPYTHON}" ./x.py build -vv --config="${S}"/config.toml -j$(makeopts_jobs) || die
+}
+
+src_test() {
+	env $(cat "${S}"/config.env) RUST_BACKTRACE=1\
+		"${EPYTHON}" ./x.py test -vv --config="${S}"/config.toml -j$(makeopts_jobs) --no-doc --no-fail-fast \
+		src/test/codegen \
+		src/test/codegen-units \
+		src/test/compile-fail \
+		src/test/incremental \
+		src/test/mir-opt \
+		src/test/pretty \
+		src/test/run-fail \
+		src/test/run-make \
+		src/test/run-make-fulldeps \
+		src/test/ui \
+		src/test/ui-fulldeps || die
 }
 
 src_install() {
@@ -322,15 +365,18 @@ src_install() {
 	fi
 
 	dodoc COPYRIGHT
+	rm "${ED}/usr/share/doc/${P}"/*.old || die
+	rm "${ED}/usr/share/doc/${P}/LICENSE-APACHE" || die
+	rm "${ED}/usr/share/doc/${P}/LICENSE-MIT" || die
 
 	# note: eselect-rust adds EROOT to all paths below
 	cat <<-EOF > "${T}/provider-${P}"
+		/usr/bin/cargo
 		/usr/bin/rustdoc
 		/usr/bin/rust-gdb
 		/usr/bin/rust-gdbgui
 		/usr/bin/rust-lldb
 	EOF
-	echo /usr/bin/cargo >> "${T}/provider-${P}"
 	if use clippy; then
 		echo /usr/bin/clippy-driver >> "${T}/provider-${P}"
 		echo /usr/bin/cargo-clippy >> "${T}/provider-${P}"
@@ -356,10 +402,6 @@ pkg_postinst() {
 
 	elog "Rust installs a helper script for calling GDB and LLDB,"
 	elog "for your convenience it is installed under /usr/bin/rust-{gdb,lldb}-${PV}."
-
-	ewarn "cargo is now installed from dev-lang/rust{,-bin} instead of dev-util/cargo."
-	ewarn "This might have resulted in a dangling symlink for /usr/bin/cargo on some"
-	ewarn "systems. This can be resolved by calling 'sudo eselect rust set ${P}'."
 
 	if has_version app-editors/emacs; then
 		elog "install app-emacs/rust-mode to get emacs support for rust."
