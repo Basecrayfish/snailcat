@@ -45,4 +45,7 @@ src_install() {
 
 	mkdir -p "${ED}"/usr/bin || die
 	cp --no-dereference ar nm ranlib readelf readobj strip c++ cc cpp "${ED}"/usr/bin || die
+	if use lld; then
+		cp --no-dereference ld "${ED}"/usr/bin || die
+	fi
 }
