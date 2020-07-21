@@ -22,10 +22,12 @@ HOMEPAGE="https://landley.net/code/toybox/"
 # The source code does not explicitly say that it's BSD, but the author has repeatedly said it
 LICENSE="BSD-2"
 SLOT="0"
-IUSE=""
+IUSE="make-symlinks make-hardlinks"
+REQUIRED_USE="make-symlinks? ( !make-hardlinks )"
 
 PATCHES=(
-	"${FILESDIR}/${PN}"-0.8.3-Remove-Os.patch
+	"${FILESDIR}/${PN}"-0.8.3-remove-Os.patch
+	"${FILESDIR}/${PN}"-0.8.3-hardlink-install.patch
 )
 
 src_prepare() {
@@ -57,5 +59,11 @@ src_test() {
 
 src_install() {
 	save_config .config
-	newbin generated/unstripped/toybox toybox
+	if use make-symlinks; then
+		PREFIX="${ED}" emake install
+	elif use make-hardlinks; then
+		PREFIX="${ED}" emake install_hardlink
+	else
+		newbin generated/unstripped/toybox toybox
+	fi
 }

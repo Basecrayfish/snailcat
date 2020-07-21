@@ -1,0 +1,14 @@
+diff --git a/Makefile b/Makefile
+index 7c7971d..69366fc 100644
+--- a/Makefile
++++ b/Makefile
+@@ -51,6 +51,9 @@ install_airlock:
+ install:
+ 	scripts/install.sh --long --symlink --force
+ 
++install_hardlink:
++	scripts/install.sh --long --force
++
+ uninstall_flat:
+ 	scripts/install.sh --uninstall
+ 
