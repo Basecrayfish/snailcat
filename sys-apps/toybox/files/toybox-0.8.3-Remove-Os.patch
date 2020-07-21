@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index 0b6501fc..5d907006 100755
+--- a/configure
++++ b/configure
+@@ -16,7 +16,7 @@ fi
+ [ -z "$CFLAGS" ] && CFLAGS="-Wall -Wundef -Wno-char-subscripts -Werror=implicit-function-declaration"
+ # Required for our expected ABI. we're 8-bit clean thus "char" must be unsigned.
+ CFLAGS="$CFLAGS -funsigned-char"
+-[ -z "$OPTIMIZE" ] && OPTIMIZE="-Os -ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables -fno-strict-aliasing"
++[ -z "$OPTIMIZE" ] && OPTIMIZE="-ffunction-sections -fdata-sections -fno-asynchronous-unwind-tables -fno-strict-aliasing"
+ # set ASAN=1 to enable "address sanitizer" and debuggable backtraces
+ [ -z "$ASAN" ] || { CFLAGS="$CFLAGS -O1 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=address"; NOSTRIP=1; }
+ 
