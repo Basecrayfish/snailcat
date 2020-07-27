@@ -36,6 +36,10 @@ src_install() {
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-readelf readelf || die
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-readobj readobj || die
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-strip strip || die
+	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-objdump objdump || die
+	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-dlltool dlltool || die
+	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-mt mt || die
+	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/llvm-strings strings || die
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/x86_64-gentoo-linux-musl-clang++-10 c++ || die
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/x86_64-gentoo-linux-musl-clang-10 cc || die
 	ln -s "${ESYSROOT}"/usr/lib/llvm/10/bin/x86_64-gentoo-linux-musl-clang-cpp-10 cpp || die
@@ -44,8 +48,8 @@ src_install() {
 	fi
 
 	mkdir -p "${ED}"/usr/bin || die
-	cp --no-dereference ar nm ranlib readelf readobj strip c++ cc cpp "${ED}"/usr/bin || die
+	cp -d ar nm ranlib readelf readobj strip objdump dlltool mt strings c++ cc cpp "${ED}"/usr/bin || die
 	if use lld; then
-		cp --no-dereference ld "${ED}"/usr/bin || die
+		cp -d ld "${ED}"/usr/bin || die
 	fi
 }
