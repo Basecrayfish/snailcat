@@ -28,6 +28,7 @@ REQUIRED_USE="make-symlinks? ( !make-hardlinks )"
 PATCHES=(
 	"${FILESDIR}/${PN}"-0.8.3-remove-Os.patch
 	"${FILESDIR}/${PN}"-0.8.3-hardlink-install.patch
+	"${FILESDIR}/${PN}"-0.8.3-ls-gnu-mdate-fix.patch
 )
 
 src_prepare() {

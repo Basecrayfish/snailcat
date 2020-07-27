@@ -1,0 +1,13 @@
+diff --git a/toys/posix/ls.c b/toys/posix/ls.c
+index d9cd90bd..0d0ab433 100644
+--- a/toys/posix/ls.c
++++ b/toys/posix/ls.c
+@@ -445,7 +445,7 @@ static void listfiles(int dirfd, struct dirtree *indir)
+ 
+       // print time, always in --time-style=long-iso
+       tm = localtime(&(st->st_mtime));
+-      strftime(tmp, sizeof(tmp), " %F %H:%M", tm);
++      strftime(tmp, sizeof(tmp), " %b %F %H:%M", tm);
+       if (TT.l>1) {
+         char *s = tmp+strlen(tmp);
+ 
