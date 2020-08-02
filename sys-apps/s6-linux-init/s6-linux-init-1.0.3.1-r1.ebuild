@@ -10,21 +10,36 @@ SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="nsss +pic +shared-libs static static-libs +sysv-utils utmps"
+IUSE="nsss pie +shared-libs static static-libs +static-pic +sysv-utils utmps"
 
-REQUIRED_USE="static? ( static-libs )"
+REQUIRED_USE="static? ( static-libs )
+	pie? ( static static-libs !shared-libs !static-pic )" # Only static-pie is supported
 
-RDEPEND=">=dev-lang/execline-2.5.3.0:=[static-libs?]
+STATIC_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[static-libs]
 	>=dev-libs/skalibs-2.9.1.0:=[static-libs?]
-	>=sys-apps/s6-2.9.0.1:=[static-libs?]
+	>=sys-apps/s6-2.9.0.1:=[static-libs]
+	nsss? ( >=dev-libs/nsss-0.0.2.2:=[static-libs] )
+	utmps? ( >=dev-libs/utmps-0.0.3.2:=[static-libs] )
+"
+
+SHARED_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[shared-libs]
+	>=dev-libs/skalibs-2.9.1.0:=[shared-libs]
+	>=sys-apps/s6-2.9.0.1:=[shared-libs]
+	nsss? ( >=dev-libs/nsss-0.0.2.2:=[shared-libs] )
+	utmps? ( >=dev-libs/utmps-0.0.3.2:=[shared-libs] )
+"
+
+RDEPEND="!static? ( ${SHARED_LIB_DEPEND} )
+	shared-libs? ( ${SHARED_LIB_DEPEND} )
+"
+
+DEPEND="${RDEPEND}
+	static? ( ${STATIC_LIB_DEPEND} )
 	sysv-utils? (
 		!sys-apps/systemd[sysv-utils]
 		!sys-apps/sysvinit
 	)
-	nsss? ( >=dev-libs/nsss-0.0.2.2:=[static-libs?] )
-	utmps? ( >=dev-libs/utmps-0.0.3.2:=[static-libs?] )
 "
-DEPEND="${RDEPEND}"
 
 HTML_DOCS=( doc/. )
 
@@ -37,6 +52,13 @@ src_prepare() {
 }
 
 src_configure() {
+	if use pie ; then
+		filter-flags -fpic -fPIC
+		append-cflags -fpie
+		append-cxxflags -fpie
+		append-ldflags -static-pie
+	fi
+
 	econf \
 		--bindir=/bin \
 		--dynlibdir=/usr/$(get_libdir) \
@@ -49,7 +71,7 @@ src_configure() {
 		$(use_enable nsss) \
 		$(use_enable utmps) \
 		$(use_enable shared-libs shared) \
-		$(use_enable pic all-pic) \
+		$(use_enable static-pic all-pic) \
 		$(use_enable static allstatic) \
 		$(use_enable static static-libc) \
 		$(use_enable static-libs static)
