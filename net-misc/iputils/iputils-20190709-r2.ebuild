@@ -27,7 +27,7 @@ HOMEPAGE="https://wiki.linuxfoundation.org/networking/iputils"
 
 LICENSE="BSD GPL-2+ rdisc"
 SLOT="0"
-IUSE="+arping caps clockdiff doc gcrypt idn ipv6 libressl nettle nls rarpd rdisc SECURITY_HAZARD ssl static tftpd tracepath traceroute6"
+IUSE="+arping caps clockdiff doc gcrypt idn ipv6 libressl nettle nls pie rarpd rdisc SECURITY_HAZARD ssl static tftpd tracepath traceroute6"
 
 BDEPEND="virtual/pkgconfig"
 
@@ -90,7 +90,19 @@ src_prepare() {
 }
 
 src_configure() {
-	use static && append-ldflags -static
+	if use pie ; then
+		filter-flags -fpic -fPIC
+		append-cflags -fpie
+		append-cxxflags -fpie
+	fi
+
+	if use static ; then
+		if use pie ; then
+			append-ldflags -static-pie
+		else
+			append-ldflags -static
+		fi
+	fi
 
 	local emesonargs=(
 		-DUSE_CAP="$(usex caps true false)"
