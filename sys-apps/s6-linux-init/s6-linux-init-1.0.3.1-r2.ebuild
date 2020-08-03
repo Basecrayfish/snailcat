@@ -21,7 +21,7 @@ STATIC_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[static-libs]
 	>=dev-libs/skalibs-2.9.1.0:=[static-libs?]
 	>=sys-apps/s6-2.9.0.1:=[static-libs]
 	nsss? ( >=dev-libs/nsss-0.0.2.2:=[static-libs] )
-	utmps? ( >=dev-libs/utmps-0.0.3.2:=[static-libs] )
+	utmps? ( >=sys-apps/utmps-0.0.3.2:=[static-libs] )
 "
 
 SHARED_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[shared-libs]
