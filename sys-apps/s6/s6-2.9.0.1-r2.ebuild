@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit flag-o-matic
+
 DESCRIPTION="skarnet.org's small and secure supervision software suite"
 HOMEPAGE="https://www.skarnet.org/software/s6/"
 SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
