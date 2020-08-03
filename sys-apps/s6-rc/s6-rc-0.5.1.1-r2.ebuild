@@ -28,7 +28,9 @@ SHARED_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[shared-libs]
 "
 
 RDEPEND="!static? ( ${SHARED_LIB_DEPEND} )
-	shared-libs? ( ${SHARED_LIB_DEPEND} )"
+	shared-libs? ( ${SHARED_LIB_DEPEND} )
+	>=dev-lang/execline-2.5.3.0:=
+	>=sys-apps/s6-2.9.0.1:="
 
 DEPEND="${RDEPEND}
 	static? ( ${STATIC_LIB_DEPEND} )"
