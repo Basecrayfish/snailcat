@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit flag-o-matic
+
 DESCRIPTION="Generates an init binary for s6-based init systems"
 HOMEPAGE="https://www.skarnet.org/software/s6-linux-init/"
 SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
