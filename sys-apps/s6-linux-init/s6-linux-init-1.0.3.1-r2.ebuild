@@ -71,6 +71,7 @@ src_configure() {
 		--with-dynlib=/usr/$(get_libdir) \
 		--with-lib=/usr/$(get_libdir)/s6 \
 		--with-lib=/usr/$(get_libdir)/skalibs \
+		--with-lib=/usr/$(get_libdir)/utmps \
 		--with-sysdeps=/usr/$(get_libdir)/skalibs \
 		$(use_enable nsss) \
 		$(use_enable utmps) \
