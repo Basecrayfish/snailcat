@@ -32,7 +32,9 @@ DESCRIPTION="Light, fast and simple C library focused on standards-conformance a
 HOMEPAGE="http://www.musl-libc.org/"
 LICENSE="MIT LGPL-2 GPL-2"
 SLOT="0"
-IUSE="headers-only"
+IUSE="headers-only utmps"
+
+DEPEND="utmps? ( sys-apps/utmps[static-libs] )"
 
 QA_SONAME="/usr/lib/libc.so"
 QA_DT_NEEDED="/usr/lib/libc.so"
@@ -60,9 +62,20 @@ pkg_setup() {
 	fi
 }
 
+src_prepare() {
+	use utmps && PATCHES+=( "${FILESDIR}/${PN}-1.1.24-utmps-fix.patch" )
+
+	default
+}
+
 src_configure() {
 	tc-getCC ${CTARGET}
 	just_headers && export CC=true
+
+	if use utmps ; then
+		append-cflags -I/usr/include
+		append-ldflags -L${sysroot}/usr/lib/utmps
+	fi
 
 	local sysroot
 	is_crosscompile && sysroot=/usr/${CTARGET}
