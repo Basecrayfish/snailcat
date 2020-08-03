@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit flag-o-matic
+
 DESCRIPTION="Service manager for the s6 supervision suite"
 HOMEPAGE="https://www.skarnet.org/software/s6-rc/"
 SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
