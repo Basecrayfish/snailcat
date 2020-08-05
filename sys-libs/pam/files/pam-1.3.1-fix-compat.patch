@@ -1,0 +1,12 @@
+diff --git a/modules/pam_lastlog/pam_lastlog.c b/modules/pam_lastlog/pam_lastlog.c
+index a135c9f..1c55d79 100644
+--- a/modules/pam_lastlog/pam_lastlog.c
++++ b/modules/pam_lastlog/pam_lastlog.c
+@@ -10,6 +10,7 @@
+ 
+ #include "config.h"
+ 
++#include <paths.h>
+ #include <fcntl.h>
+ #include <time.h>
+ #include <errno.h>
