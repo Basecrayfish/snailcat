@@ -34,10 +34,12 @@ LICENSE="MIT LGPL-2 GPL-2"
 SLOT="0"
 IUSE="headers-only utmps"
 
-DEPEND="utmps? ( sys-apps/utmps[static-libs] )"
+DEPEND="utmps? ( sys-apps/utmps[static-libs,static-pic] )"
 
 QA_SONAME="/usr/lib/libc.so"
 QA_DT_NEEDED="/usr/lib/libc.so"
+
+PATCHES=( "${FILESDIR}"/${PN}-1.1.24-r2-utmps-symbols.patch )
 
 is_crosscompile() {
 	[[ ${CHOST} != ${CTARGET} ]]
@@ -63,7 +65,10 @@ pkg_setup() {
 }
 
 src_prepare() {
-	use utmps && PATCHES+=( "${FILESDIR}/${PN}-1.1.24-utmps-fix.patch" )
+	if use utmps ; then
+		rm ${S}/src/legacy/utmpx.c
+		rm ${S}/include/utmpx.h
+	fi
 
 	default
 }
@@ -74,7 +79,7 @@ src_configure() {
 
 	if use utmps ; then
 		append-cflags -I/usr/include
-		append-ldflags -L${sysroot}/usr/lib/utmps
+		append-ldflags -Wl,--whole-archive ${sysroot}/usr/lib/skalibs/libskarnet.a ${sysroot}/usr/lib/utmps/libutmps.a -Wl,--no-whole-archive
 	fi
 
 	local sysroot
