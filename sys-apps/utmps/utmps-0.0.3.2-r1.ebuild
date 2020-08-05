@@ -12,10 +12,9 @@ SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="nsss pie +shared-libs static static-libs +static-pic"
+IUSE="nsss +shared-libs static static-libs +static-pic"
 
-REQUIRED_USE="static? ( static-libs )
-	pie? ( static static-libs !shared-libs !static-pic )" # Currently, only static-pie is supported
+REQUIRED_USE="static? ( static-libs )"
 
 STATIC_LIB_DEPEND=">=dev-libs/skalibs-2.9.1.0:=[static-libs]
 	nsss? ( >=dev-libs/nsss-0.0.2.2:=[static-libs] )
@@ -31,6 +30,8 @@ RDEPEND="!static? ( ${SHARED_LIB_DEPEND} )
 DEPEND="${RDEPEND}
 	static? ( ${STATIC_LIB_DEPEND} )"
 
+PATCHES=( "${FILESDIR}"/${PN}-0.0.3.2-utmp.h-duplicate.patch )
+
 HTML_DOCS=( doc/. )
 
 src_prepare() {
@@ -42,13 +43,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use pie ; then
-		filter-flags -fpic -fPIC
-		append-cflags -fpie
-		append-cxxflags -fpie
-		append-ldflags -static-pie
-	fi
-
 	econf \
 		--bindir=/bin \
 		--dynlibdir=/usr/$(get_libdir) \

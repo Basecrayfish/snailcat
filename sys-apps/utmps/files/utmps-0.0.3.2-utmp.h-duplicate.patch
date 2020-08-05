@@ -1,0 +1,117 @@
+diff --git a/src/utmps/endutxent.c b/src/utmps/endutxent.c
+index bc93778..43d7261 100644
+--- a/src/utmps/endutxent.c
++++ b/src/utmps/endutxent.c
+@@ -8,3 +8,8 @@ void endutxent (void)
+ {
+   utmps_end(&utmps_here) ;
+ }
++
++void endutent (void)
++{
++  utmps_end(&utmps_here) ;
++}
+diff --git a/src/utmps/getutxent.c b/src/utmps/getutxent.c
+index 688630f..e517ba5 100644
+--- a/src/utmps/getutxent.c
++++ b/src/utmps/getutxent.c
+@@ -10,3 +10,10 @@ struct utmpx *getutxent (void)
+   if (!utmps_getent(&utmps_here, &utmps_utmpx_here, 0, 0)) return 0 ;
+   return &utmps_utmpx_here ;
+ }
++
++struct utmpx *getutent (void)
++{
++  if (!utmps_here_maybe_init()) return 0 ;
++  if (!utmps_getent(&utmps_here, &utmps_utmpx_here, 0, 0)) return 0 ;
++  return &utmps_utmpx_here ;
++}
+diff --git a/src/utmps/getutxid.c b/src/utmps/getutxid.c
+index b6e66ab..8eae638 100644
+--- a/src/utmps/getutxid.c
++++ b/src/utmps/getutxid.c
+@@ -10,3 +10,10 @@ struct utmpx *getutxid (struct utmpx const *b)
+   if (!utmps_getid(&utmps_here, (unsigned short)b->ut_type, b->ut_id, &utmps_utmpx_here, 0, 0)) return 0 ;
+   return &utmps_utmpx_here ;
+ }
++
++struct utmpx *getutid (struct utmpx const *b)
++{
++  if (!utmps_here_maybe_init()) return 0 ;
++  if (!utmps_getid(&utmps_here, (unsigned short)b->ut_type, b->ut_id, &utmps_utmpx_here, 0, 0)) return 0 ;
++  return &utmps_utmpx_here ;
++}
+diff --git a/src/utmps/getutxline.c b/src/utmps/getutxline.c
+index daff189..07aefbf 100644
+--- a/src/utmps/getutxline.c
++++ b/src/utmps/getutxline.c
+@@ -10,3 +10,10 @@ struct utmpx *getutxline (struct utmpx const *b)
+   if (!utmps_getline(&utmps_here, b->ut_line, &utmps_utmpx_here, 0, 0)) return 0 ;
+   return &utmps_utmpx_here ;
+ }
++
++struct utmpx *getutline (struct utmpx const *b)
++{
++  if (!utmps_here_maybe_init()) return 0 ;
++  if (!utmps_getline(&utmps_here, b->ut_line, &utmps_utmpx_here, 0, 0)) return 0 ;
++  return &utmps_utmpx_here ;
++}
+diff --git a/src/utmps/pututxline.c b/src/utmps/pututxline.c
+index f60931d..c4f8eee 100644
+--- a/src/utmps/pututxline.c
++++ b/src/utmps/pututxline.c
+@@ -12,3 +12,12 @@ struct utmpx *pututxline (struct utmpx const *b)
+   here = *b ;
+   return &here ;
+ }
++
++struct utmpx *pututline (struct utmpx const *b)
++{
++  static struct utmpx here ; /* POSIX says we can't use utmps_utmpx_here */
++  if (!utmps_here_maybe_init()) return 0 ;
++  if (!utmps_putline(&utmps_here, b, 0, 0)) return 0 ;
++  here = *b ;
++  return &here ;
++}
+diff --git a/src/utmps/setutxent.c b/src/utmps/setutxent.c
+index b6d4913..7dd3f8b 100644
+--- a/src/utmps/setutxent.c
++++ b/src/utmps/setutxent.c
+@@ -9,3 +9,9 @@ void setutxent (void)
+   if (!utmps_here_maybe_init()) return ;
+   utmps_rewind(&utmps_here, 0, 0) ;
+ }
++
++void setutent (void)
++{
++  if (!utmps_here_maybe_init()) return ;
++  utmps_rewind(&utmps_here, 0, 0) ;
++}
+diff --git a/src/utmps/updwtmpx.c b/src/utmps/updwtmpx.c
+index 0166448..3ed8fc6 100644
+--- a/src/utmps/updwtmpx.c
++++ b/src/utmps/updwtmpx.c
+@@ -8,3 +8,9 @@ void updwtmpx (char const *file, struct utmpx const *b)
+   (void)file ;
+   utmps_updwtmpx(UTMPS_WTMPD_PATH, b, 0, 0) ;
+ }
++
++void updwtmp (char const *file, struct utmpx const *b)
++{
++  (void)file ;
++  utmps_updwtmpx(UTMPS_WTMPD_PATH, b, 0, 0) ;
++}
+diff --git a/src/utmps/utmpxname.c b/src/utmps/utmpxname.c
+index 650f0a4..e4d1bf9 100644
+--- a/src/utmps/utmpxname.c
++++ b/src/utmps/utmpxname.c
+@@ -22,3 +22,9 @@ int utmpxname (char const *file)
+   (void)file ;
+   return (errno = ENOSYS, -1) ;
+ }
++
++int utmpname (char const *file)
++{
++  (void)file ;
++  return (errno = ENOSYS, -1) ;
++}
