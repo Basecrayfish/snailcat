@@ -39,7 +39,7 @@ DEPEND="utmps? ( sys-apps/utmps[static-libs,static-pic] )"
 QA_SONAME="/usr/lib/libc.so"
 QA_DT_NEEDED="/usr/lib/libc.so"
 
-PATCHES=( "${FILESDIR}"/${PN}-1.1.24-r2-utmps-symbols.patch )
+PATCHES=( "${FILESDIR}"/${PN}-1.1.24-skarnet-objs.patch )
 
 is_crosscompile() {
 	[[ ${CHOST} != ${CTARGET} ]]
@@ -68,6 +68,13 @@ src_prepare() {
 	if use utmps ; then
 		rm ${S}/src/legacy/utmpx.c
 		rm ${S}/include/utmpx.h
+		mkdir -p ${S}/obj/skalibs
+		cd ${S}/obj/skalibs
+		ar -x /usr/lib/skalibs/libskarnet.a
+		mkdir -p ${S}/obj/utmps
+		cd ${S}/obj/utmps
+		ar -x /usr/lib/utmps/libutmps.a
+		cd ${S}
 	fi
 
 	default
@@ -79,7 +86,6 @@ src_configure() {
 
 	if use utmps ; then
 		append-cflags -I/usr/include
-		append-ldflags -Wl,--whole-archive ${sysroot}/usr/lib/skalibs/libskarnet.a ${sysroot}/usr/lib/utmps/libutmps.a -Wl,--no-whole-archive
 	fi
 
 	local sysroot
