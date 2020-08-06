@@ -12,7 +12,7 @@ SRC_URI="https://www.skarnet.org/software/${PN}/${P}.tar.gz"
 LICENSE="ISC"
 SLOT="0/$(ver_cut 1-2)"
 KEYWORDS="~amd64 ~arm ~x86"
-IUSE="nsss pie +shared-libs static static-libs +static-pic +sysv-utils utmps"
+IUSE="pie +shared-libs static static-libs +static-pic +sysv-utils utmps"
 
 REQUIRED_USE="static? ( static-libs )
 	pie? ( static static-libs !shared-libs !static-pic )" # Only static-pie is supported
@@ -20,14 +20,12 @@ REQUIRED_USE="static? ( static-libs )
 STATIC_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[static-libs]
 	>=dev-libs/skalibs-2.9.1.0:=[static-libs?]
 	>=sys-apps/s6-2.9.0.1:=[static-libs]
-	nsss? ( >=dev-libs/nsss-0.0.2.2:=[static-libs] )
 	utmps? ( >=sys-apps/utmps-0.0.3.2:=[static-libs] )
 "
 
 SHARED_LIB_DEPEND=">=dev-lang/execline-2.5.3.0:=[shared-libs]
 	>=dev-libs/skalibs-2.9.1.0:=[shared-libs]
 	>=sys-apps/s6-2.9.0.1:=[shared-libs]
-	nsss? ( >=dev-libs/nsss-0.0.2.2:=[shared-libs] )
 	utmps? ( >=dev-libs/utmps-0.0.3.2:=[shared-libs] )
 "
 
@@ -73,7 +71,7 @@ src_configure() {
 		--with-lib=/usr/$(get_libdir)/skalibs \
 		--with-lib=/usr/$(get_libdir)/utmps \
 		--with-sysdeps=/usr/$(get_libdir)/skalibs \
-		$(use_enable nsss) \
+		--disable-nsss \
 		$(use_enable utmps) \
 		$(use_enable shared-libs shared) \
 		$(use_enable static-pic all-pic) \
