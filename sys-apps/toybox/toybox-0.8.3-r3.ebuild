@@ -3,7 +3,7 @@
 
 EAPI="7"
 
-inherit multiprocessing savedconfig toolchain-funcs
+inherit flag-o-matic multiprocessing savedconfig toolchain-funcs
 
 if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
@@ -22,7 +22,7 @@ HOMEPAGE="https://landley.net/code/toybox/"
 # The source code does not explicitly say that it's BSD, but the author has repeatedly said it
 LICENSE="BSD-2"
 SLOT="0"
-IUSE="make-symlinks make-hardlinks"
+IUSE="make-symlinks make-hardlinks pie static"
 REQUIRED_USE="make-symlinks? ( !make-hardlinks )"
 
 PATCHES=(
@@ -37,6 +37,17 @@ src_prepare() {
 }
 
 src_configure() {
+	filter-flags -flto* -fno-common -Wl,-z,relro -Wl,-z,now
+	if use pie ; then
+		filter-flags -fpic -fPIC
+		append-cflags -fpie
+		append-cxxflags -fpie
+		if use static ; then
+			append-ldflags -static-pie
+		fi
+	elif use static ; then
+		append-ldflags -static
+	fi
 	tc-export CC STRIP
 	export HOSTCC="$(tc-getBUILD_CC)"
 	if [ -f .config ]; then
