@@ -83,6 +83,7 @@ src_prepare() {
 src_configure() {
 	tc-getCC ${CTARGET}
 	just_headers && export CC=true
+	filter-flags -flto*
 
 	if use utmps ; then
 		append-cflags -I/usr/include
