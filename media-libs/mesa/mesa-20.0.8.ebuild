@@ -83,7 +83,10 @@ RDEPEND="
 		>=app-eselect/eselect-opengl-1.3.0
 	)
 	gallium? (
-		unwind? ( sys-libs/libunwind[${MULTILIB_USEDEP}] )
+		unwind? ( || (
+			sys-libs/libunwind[${MULTILIB_USEDEP}]
+			sys-libs/llvm-libunwind[${MULTILIB_USEDEP}]
+		) )
 		llvm? (
 			video_cards_radeonsi? (
 				virtual/libelf:0=[${MULTILIB_USEDEP}]
