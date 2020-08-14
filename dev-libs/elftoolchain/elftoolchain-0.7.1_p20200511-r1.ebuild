@@ -31,6 +31,8 @@ DEPEND="${RDEPEND}
 		sys-libs/obstack-standalone
 	)"
 
+PATCHES=( "${FILESDIR}"/${PN}-0.7.1-gelf_symshndx-allow-xndxdata-parameter-to-be-NULL.patch )
+
 src_prepare() {
 	cd ${S}
 	if ! use toolchain-progs; then
