@@ -50,13 +50,15 @@ IUSE="clippy cpu_flags_x86_sse2 debug doc libressl llvm-libunwind miri nightly p
 # 3. Specify LLVM_MAX_SLOT, e.g. 10.
 LLVM_DEPEND="
 	|| (
+		sys-devel/llvm:12[${LLVM_TARGET_USEDEPS// /,}]
+		sys-devel/llvm:11[${LLVM_TARGET_USEDEPS// /,}]
 		sys-devel/llvm:10[${LLVM_TARGET_USEDEPS// /,}]
 		sys-devel/llvm:9[${LLVM_TARGET_USEDEPS// /,}]
 	)
-	<sys-devel/llvm-11:=
+	<sys-devel/llvm-13:=
 	wasm? ( sys-devel/lld )
 "
-LLVM_MAX_SLOT=10
+LLVM_MAX_SLOT=12
 
 BOOTSTRAP_DEPEND="|| ( >=dev-lang/rust-1.$(($(ver_cut 2) - 1)) >=dev-lang/rust-bin-1.$(($(ver_cut 2) - 1)) )"
 
