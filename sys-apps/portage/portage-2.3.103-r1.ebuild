@@ -13,7 +13,7 @@ DESCRIPTION="Portage is the package management and distribution system for Gento
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
 
 LICENSE="GPL-2"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv s390 sparc x86"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv s390 sparc x86"
 SLOT="0"
 IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux xattr"
 
@@ -40,7 +40,7 @@ RDEPEND="
 		app-shells/bash:0[readline]
 		>=app-admin/eselect-1.2
 		rsync-verify? (
-			>=app-portage/gemato-14[${PYTHON_USEDEP}]
+			>=app-portage/gemato-14.4-r1[${PYTHON_USEDEP}]
 			>=app-crypt/openpgp-keys-gentoo-release-20180706
 			>=app-crypt/gnupg-2.2.4-r2[ssl(-)]
 		)
@@ -62,7 +62,7 @@ PDEPEND="
 		>=net-misc/rsync-2.6.4
 		userland_GNU? (
 			|| (
-				sys-apps/toybox
+				sys-apps/toybox[make-hardlinks]
 				>=sys-apps/coreutils-6.4
 			)
 		)
