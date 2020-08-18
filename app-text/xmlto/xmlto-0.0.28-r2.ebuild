@@ -20,7 +20,7 @@ RDEPEND=">=app-text/docbook-xsl-stylesheets-1.62.0-r1
 	sys-apps/sed
 	|| (
 		>=sys-apps/coreutils-6.10-r1
-		sys-apps/toybox[make-hardlinks(+)]
+		sys-apps/toybox[make-hardlinks]
 	)
 	|| ( sys-apps/util-linux app-misc/getopt )
 	sys-apps/which
