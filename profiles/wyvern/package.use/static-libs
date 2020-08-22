@@ -1,0 +1,27 @@
+sys-apps/attr static-libs
+sys-apps/toybox pie static
+dev-libs/popt static-libs
+dev-libs/libressl static-libs
+dev-libs/skalibs static-libs static-pic shared-libs
+dev-lang/execline static-libs static -static-pic -shared-libs
+sys-apps/s6 static-libs static -static-pic -shared-libs
+sys-apps/s6-linux-init static-libs static -static-pic -shared-libs
+sys-apps/s6-rc static-libs static -static-pic -shared-libs
+sys-apps/utmps static-libs static static-pic -shared-libs
+sys-libs/nsss static-libs static static-pic -shared-libs
+net-misc/iputils static
+sys-devel/gettext static-libs
+app-arch/bzip2 static static-libs
+app-arch/libarchive static-libs
+dev-util/cmake static pie
+dev-libs/expat static-libs
+app-crypt/rhash static-libs
+dev-libs/jsoncpp static-libs
+dev-libs/libuv static-libs
+net-misc/curl static-libs
+sys-libs/zlib static-libs
+sys-libs/ncurses static-libs
+net-libs/nghttp2 static-libs
+dev-libs/libedit static-libs
+app-shells/dash static
+sys-libs/readline static-libs

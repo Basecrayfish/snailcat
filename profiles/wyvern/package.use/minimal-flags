@@ -1,0 +1,2 @@
+mail-mta/postfix -pam
+app-admin/sudo -sendmail

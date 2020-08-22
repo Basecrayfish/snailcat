@@ -1,0 +1,2 @@
+# Force the use of utmps on this profile
+sys-libs/musl utmps

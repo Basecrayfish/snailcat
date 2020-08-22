@@ -1,0 +1,5 @@
+net-misc/curl http2
+net-libs/gnutls -tls-heartbeat
+app-crypt/gnupg -smartcard
+net-misc/openssh xmss
+sys-apps/s6-linux-init -sysv-utils

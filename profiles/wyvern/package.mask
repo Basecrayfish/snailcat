@@ -1,0 +1,17 @@
+# Binutils is replaced with LLVM-Core
+sys-devel/binutils
+sys-devel/binutils-libs
+
+# Elfutils is replaced with Elftoolchain
+dev-libs/elfutils
+
+# Libunwind is replaced with LLVM-Libunwind
+sys-libs/libunwind
+
+# Prevent the installation of ISC Software as the codebases are generally non-portable to clang/musl
+net-dns/bind-tools
+net-dns/bind
+net-misc/kea
+
+# Disable Kernel module handling
+sys-apps/kmod
