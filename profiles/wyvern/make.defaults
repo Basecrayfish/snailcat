@@ -13,6 +13,7 @@ USE="${USE} -alsa -cups -luajit git tmux" # General App features
 USE="${USE} zstd bzip2" # Compression algorithm support
 
 # USE_EXTEND flags
+# Broken in profile
 L10N="en_GB en-GB"
 INPUT_DEVICES=""
 CPU_FLAGS_X86="aes avx mmx mmxext pclmul popcnt sse sse2 sse3 ssse3 sse4_1 sse4_2"
@@ -21,6 +22,7 @@ LLVM_TARGETS="X86"
 CURL_SSL="libressl"
 PYTHON_TARGETS="python3_8"
 PYTHON_SINGLE_TARGET="python3_8"
+GRUB_PLATFORMS="efi-64"
 
 # Host Setting
 # ============
@@ -28,7 +30,7 @@ PYTHON_SINGLE_TARGET="python3_8"
 # Please consult https://wiki.gentoo.org/wiki/Changing_the_CHOST_variable before changing.
 CHOST="x86_64-gentoo-linux-musl"
 
-LLVMDIR="/usr/lib/llvm/12/bin"
+LLVMDIR="/usr/lib/llvm/11/bin"
 CC="${LLVMDIR}/clang"
 CXX="${LLVMDIR}/clang++"
 AR="${LLVMDIR}/llvm-ar"
@@ -38,7 +40,7 @@ LD="/usr/bin/ld.lld"
 
 # Host and Optimization settings
 # ==============================
-COMMON_FLAGS="-march=sandybridge -O2 -pipe -fstack-clash-protection -fstack-protector-strong -fcf-protection -D_FORTIFY_SOURCE=2 -fomit-frame-pointer -fPIC"
+COMMON_FLAGS="-march=sandybridge -O2 -pipe -fstack-protector-strong -fcf-protection -D_FORTIFY_SOURCE=2 -fomit-frame-pointer -fPIC"
 CFLAGS="${COMMON_FLAGS} -flto=thin"
 CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++ -flto=thin"
 FCFLAGS="${COMMON_FLAGS}"
