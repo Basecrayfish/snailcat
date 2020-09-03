@@ -40,7 +40,7 @@ LD="/usr/bin/ld.lld"
 
 # Host and Optimization settings
 # ==============================
-COMMON_FLAGS="-march=sandybridge -O2 -pipe -fstack-protector-strong -fcf-protection -D_FORTIFY_SOURCE=2 -fomit-frame-pointer -fPIC"
+COMMON_FLAGS="-O2 -pipe -fstack-protector-strong -fcf-protection -D_FORTIFY_SOURCE=2 -fomit-frame-pointer -fPIC"
 CFLAGS="${COMMON_FLAGS} -flto=thin"
 CXXFLAGS="${COMMON_FLAGS} -stdlib=libc++ -flto=thin"
 FCFLAGS="${COMMON_FLAGS}"
