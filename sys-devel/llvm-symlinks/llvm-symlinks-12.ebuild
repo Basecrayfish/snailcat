@@ -8,7 +8,7 @@ HOMEPAGE="https://replicantprocess.com"
 
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="amd64 ~x86"
+KEYWORDS=""
 IUSE="+lld"
 
 DEPEND="
