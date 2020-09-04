@@ -64,10 +64,10 @@ src_prepare() {
 }
 
 src_configure() {
-	if is-flaq '-flto=thin'; then
+	if is-flagq '-flto=thin'; then
 		filter-flags '-flto=thin'
 		append-cflags -flto
-		appedn-cxxflags -flto
+		append-cxxflags -flto
 	fi
 	# Keep the package from doing silly things #261411
 	export VARTEXFONTS="${T}/fonts"
