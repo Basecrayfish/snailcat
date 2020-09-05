@@ -30,25 +30,35 @@ src_unpack() {
 }
 
 src_install() {
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-ar ar || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-nm nm || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-ranlib ranlib || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-readelf readelf || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-readobj readobj || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-strip strip || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-objdump objdump || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-dlltool dlltool || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-mt mt || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/llvm-strings strings || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/x86_64-gentoo-linux-musl-clang++-11 c++ || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/x86_64-gentoo-linux-musl-clang-11 cc || die
-	ln -s "${ESYSROOT}"/usr/lib/llvm/11/bin/x86_64-gentoo-linux-musl-clang-cpp-11 cpp || die
+	LLVMDIR="${ESYSROOT}/usr/lib/llvm/11/bin"
+	ln -s "${LLVMDIR}"/llvm-ar ar || die
+	ln -s "${LLVMDIR}"/llvm-nm nm || die
+	ln -s "${LLVMDIR}"/llvm-ranlib ranlib || die
+	ln -s "${LLVMDIR}"/llvm-readelf readelf || die
+	ln -s "${LLVMDIR}"/llvm-readobj readobj || die
+	ln -s "${LLVMDIR}"/llvm-strip strip || die
+	ln -s "${LLVMDIR}"/llvm-objdump objdump || die
+	ln -s "${LLVMDIR}"/llvm-dlltool dlltool || die
+	ln -s "${LLVMDIR}"/llvm-mt mt || die
+	ln -s "${LLVMDIR}"/llvm-strings strings || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang++-11 c++ || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang++-11 clang++ || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang++-11 clang++-11 || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang++-11 x86_64-gentoo-linux-musl-clang++-11 || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-11 cc || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-11 clang || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-11 clang-11 || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-11 x86_64-gentoo-linux-musl-clang-11 || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-cpp-11 cpp || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-cpp-11 clang-cpp || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-cpp-11 clang-cpp-11 || die
+	ln -s "${LLVMDIR}"/x86_64-gentoo-linux-musl-clang-cpp-11 x86_64-gentoo-linux-musl-clang-cpp-11 || die
 	if use lld; then
 		ln -s "${ESYSROOT}"/usr/bin/lld ld || die
 	fi
 
 	mkdir -p "${ED}"/usr/bin || die
-	cp -d ar nm ranlib readelf readobj strip objdump dlltool mt strings c++ cc cpp "${ED}"/usr/bin || die
+	cp -d ar nm ranlib readelf readobj strip objdump dlltool mt strings cc clang clang-11 x86_64-gentoo-linux-musl-clang-11 c++ clang++ clang++-11 x86_64-gentoo-linux-musl-clang++-11 cpp clang-cpp clang-cpp-11 x86_64-gentoo-linux-musl-clang-cpp-11 "${ED}"/usr/bin || die
 	if use lld; then
 		cp -d ld "${ED}"/usr/bin || die
 	fi
