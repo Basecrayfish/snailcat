@@ -1,0 +1,13 @@
+diff --git a/build/make/Makefile b/build/make/Makefile
+index be28102..6210069 100644
+--- a/build/make/Makefile
++++ b/build/make/Makefile
+@@ -214,7 +214,7 @@ $(BUILD_PFX)%.asm.S: %.asm
+ 
+ # If we're in debug mode, pretend we don't have GNU strip, to fall back to
+ # the copy implementation
+-HAVE_GNU_STRIP := $(if $(CONFIG_DEBUG),,$(HAVE_GNU_STRIP))
++HAVE_GNU_STRIP := no
+ ifeq ($(HAVE_GNU_STRIP),yes)
+ # Older binutils strip global symbols not needed for relocation processing
+ # when given --strip-unneeded. Using nm and awk to identify globals and

@@ -1,0 +1,13 @@
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index 206b54f..9e2f632 100644
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -38,7 +38,7 @@ log(){
+ 
+ log_file(){
+   log BEGIN $1
+-  cat -n $1 >>$logfile
++  cat $1 | nl >>$logfile
+   log END $1
+ }
+ 
