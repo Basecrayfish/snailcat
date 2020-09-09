@@ -1,0 +1,68 @@
+diff --git a/lib/freebl/Makefile b/lib/freebl/Makefile
+index bc9e0c7..bcb4f7d 100644
+--- a/lib/freebl/Makefile
++++ b/lib/freebl/Makefile
+@@ -690,15 +690,6 @@ ifdef INTEL_GCM
+ # GCM binary needs -mssse3
+ #
+ $(OBJDIR)/$(PROG_PREFIX)intel-gcm-wrap$(OBJ_SUFFIX): CFLAGS += -mssse3
+-
+-# The integrated assembler in Clang 3.2 does not support % in the
+-# expression of a .set directive. intel-gcm.s uses .set to give
+-# symbolic names to registers, for example,
+-#     .set  Htbl, %rdi
+-# So we can't use Clang's integrated assembler with intel-gcm.s.
+-ifdef CC_IS_CLANG
+-$(OBJDIR)/$(PROG_PREFIX)intel-gcm$(OBJ_SUFFIX): CFLAGS += -no-integrated-as
+-endif
+ endif
+ 
+ ifdef INTEL_GCM_CLANG_CL
+diff --git a/lib/freebl/freebl.gyp b/lib/freebl/freebl.gyp
+index d780b22..99a1ffd 100644
+--- a/lib/freebl/freebl.gyp
++++ b/lib/freebl/freebl.gyp
+@@ -16,19 +16,6 @@
+       'dependencies': [
+         '<(DEPTH)/exports.gyp:nss_exports'
+       ],
+-      'conditions': [
+-        [ 'cc_is_clang==1', {
+-          'cflags': [
+-            '-no-integrated-as',
+-          ],
+-          'cflags_mozilla': [
+-            '-no-integrated-as',
+-          ],
+-          'asflags_mozilla': [
+-            '-no-integrated-as',
+-          ],
+-        }],
+-      ],
+     },
+     {
+       'target_name': 'intel-gcm-wrap_c_lib',
+diff --git a/lib/freebl/freebl_base.gypi b/lib/freebl/freebl_base.gypi
+index 63db96d..92f242a 100644
+--- a/lib/freebl/freebl_base.gypi
++++ b/lib/freebl/freebl_base.gypi
+@@ -72,19 +72,6 @@
+             'mpi/mpi_amd64_gas.s',
+             'mpi/mp_comba.c',
+           ],
+-          'conditions': [
+-            [ 'cc_is_clang==1 and fuzz!=1 and coverage!=1', {
+-              'cflags': [
+-                '-no-integrated-as',
+-              ],
+-              'cflags_mozilla': [
+-                '-no-integrated-as',
+-              ],
+-              'asflags_mozilla': [
+-                '-no-integrated-as',
+-              ],
+-            }],
+-          ],
+         }],
+         [ 'target_arch=="ia32"', {
+           'sources': [
