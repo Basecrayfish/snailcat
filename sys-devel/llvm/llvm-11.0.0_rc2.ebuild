@@ -29,7 +29,7 @@ ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA BSD public-domain rc"
 SLOT="$(ver_cut 1)"
 KEYWORDS=""
-IUSE="debug doc exegesis gold libedit +libffi ncurses test xar xml z3
+IUSE="debug doc exegesis gold libedit static-libs +libffi ncurses test xar xml z3
 	kernel_Darwin ${ALL_LLVM_TARGETS[*]}"
 REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
 RESTRICT="!test? ( test )"
@@ -220,6 +220,9 @@ get_distribution_components() {
 		LLVMSupport
 		LLVMTableGen
 	)
+	use static-libs && out+=(
+		LLVM_static
+	)
 
 	if multilib_is_native_abi; then
 		out+=(
@@ -377,6 +380,10 @@ multilib_src_configure() {
 		# libraries with libstdc++ clang, and the other way around.
 		mycmakeargs+=(
 			-DLLVM_VERSION_SUFFIX="libcxx"
+			-DLLVM_ENABLE_LIBCXX=ON
+		)
+		use static-libs && mycmakeargs+=(
+			-DLLVM_STATIC_LINK_CXX_STDLIB=ON
 		)
 	fi
 
@@ -483,6 +490,11 @@ multilib_src_install() {
 	mv "${ED}"/usr/lib/llvm/${SLOT}/include "${ED}"/usr/include || die
 
 	LLVM_LDPATHS+=( "${EPREFIX}/usr/lib/llvm/${SLOT}/$(get_libdir)" )
+
+	# Install static libs
+	if use static-libs; then
+		cp "${WORKDIR}"/${P}_build-abi_x86_64.amd64/lib/*.a "${ED}"/usr/lib/llvm/${SLOT}/lib || die
+	fi
 }
 
 multilib_src_install_all() {
