@@ -109,7 +109,8 @@ src_install() {
 
 pkg_postinst() {
 	if [[ ! -e ${EROOT}/var/spool/nullmailer/trigger ]]; then
-		mkfifo --mode=0660 "${EROOT}/var/spool/nullmailer/trigger" || die
+		mkfifo "${EROOT}/var/spool/nullmailer/trigger" || die
+		chown 0660 "${EROOT}/var/spool/nullmailer/trigger" || die
 	fi
 	chown nullmail:nullmail \
 		"${EROOT}"/var/log/nullmailer \
