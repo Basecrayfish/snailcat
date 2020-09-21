@@ -1,0 +1,12 @@
+diff --git a/configure b/configure
+index 2f48d39..99d7b18 100755
+--- a/configure
++++ b/configure
+@@ -5237,6 +5237,7 @@ do
+ 	   case `"$as_dir/$ac_prog$ac_exec_ext" --version 2>&1` in #(
+ 	     'mkdir (GNU coreutils) '* | \
+ 	     'mkdir (coreutils) '* | \
++	     'toybox '* | \
+ 	     'mkdir (fileutils) '4.1*)
+ 	       ac_cv_path_mkdir=$as_dir/$ac_prog$ac_exec_ext
+ 	       break 3;;

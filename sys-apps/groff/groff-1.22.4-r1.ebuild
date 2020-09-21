@@ -39,6 +39,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-1.19.2-man-unicode-dashes.patch #16108 #17580 #121502
 	"${FILESDIR}"/${PN}-1.22.4-musl.patch
 	"${FILESDIR}"/${PN}-1.22.4-clang-math.patch
+	"${FILESDIR}"/${PN}-1.22.4-toybox-mkdir_p.patch
 )
 
 src_prepare() {
