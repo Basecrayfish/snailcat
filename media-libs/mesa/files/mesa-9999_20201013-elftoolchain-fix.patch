@@ -1,0 +1,13 @@
+diff --git a/src/amd/common/ac_rtld.c b/src/amd/common/ac_rtld.c
+index 8a9cd7c7a6e..04bec403161 100644
+--- a/src/amd/common/ac_rtld.c
++++ b/src/amd/common/ac_rtld.c
+@@ -650,7 +650,7 @@ static bool apply_relocs(const struct ac_rtld_upload_info *u, unsigned part_idx,
+       uint64_t symbol;
+       uint64_t addend;
+ 
+-      if (r_sym == STN_UNDEF) {
++      if (r_sym == SHN_UNDEF) {
+          symbol = 0;
+       } else {
+          report_elf_if(r_sym >= num_symbols);
