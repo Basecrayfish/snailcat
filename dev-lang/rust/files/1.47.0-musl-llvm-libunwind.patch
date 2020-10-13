@@ -1,0 +1,27 @@
+diff --git a/library/unwind/build.rs b/library/unwind/build.rs
+index ab09a6e32..469efd82a 100644
+--- a/library/unwind/build.rs
++++ b/library/unwind/build.rs
+@@ -146,9 +146,6 @@ mod llvm_libunwind {
+         }
+ 
+         if target_env == "musl" {
+-            // use the same C compiler command to compile C++ code so we do not need to setup the
+-            // C++ compiler env variables on the builders
+-            cfg.cpp(false);
+             // linking for musl is handled in lib.rs
+             cfg.cargo_metadata(false);
+             println!("cargo:rustc-link-search=native={}", env::var("OUT_DIR").unwrap());
+diff --git a/library/unwind/src/lib.rs b/library/unwind/src/lib.rs
+index 20a2ca984..13a74ecd0 100644
+--- a/library/unwind/src/lib.rs
++++ b/library/unwind/src/lib.rs
+@@ -39,7 +39,7 @@ cfg_if::cfg_if! {
+ 
+ #[cfg(target_env = "musl")]
+ #[link(name = "unwind", kind = "static", cfg(target_feature = "crt-static"))]
+-#[link(name = "gcc_s", cfg(not(target_feature = "crt-static")))]
++#[link(name = "unwind", cfg(not(target_feature = "crt-static")))]
+ extern "C" {}
+ 
+ #[cfg(target_os = "redox")]
