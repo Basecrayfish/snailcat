@@ -146,9 +146,10 @@ RDEPEND="${RDEPEND}
 # 1. List all the working slots (with min versions) in ||, newest first.
 # 2. Update the := to specify *max* version, e.g. < 10.
 # 3. Specify LLVM_MAX_SLOT, e.g. 9.
-LLVM_MAX_SLOT="10"
+LLVM_MAX_SLOT="11"
 LLVM_DEPSTR="
 	|| (
+		sys-devel/llvm:11[${MULTILIB_USEDEP}]
 		sys-devel/llvm:10[${MULTILIB_USEDEP}]
 		sys-devel/llvm:9[${MULTILIB_USEDEP}]
 	)
@@ -247,6 +248,7 @@ x86? (
 PATCHES=(
 	"${FILESDIR}"/${PN}-20.2.0-add-disable-tls-support.patch
 	"${FILESDIR}"/${PN}-9999_20201013-elftoolchain-fix.patch
+	"${FILESDIR}"/${PN}-9999_20201013-musl-fcntl.patch
 )
 
 llvm_check_deps() {
