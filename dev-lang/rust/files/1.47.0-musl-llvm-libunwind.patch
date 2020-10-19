@@ -1,19 +1,19 @@
 diff --git a/library/unwind/build.rs b/library/unwind/build.rs
-index ab09a6e32..469efd82a 100644
+index ab09a6e..551a7c7 100644
 --- a/library/unwind/build.rs
 +++ b/library/unwind/build.rs
-@@ -146,9 +146,6 @@ mod llvm_libunwind {
+@@ -13,8 +13,7 @@ fn main() {
+         llvm_libunwind::compile();
+     } else if target.contains("linux") {
+         if target.contains("musl") {
+-            // linking for musl is handled in lib.rs
+-            llvm_libunwind::compile();
++            println!("cargo:rustc-link-lib=unwind");
+         } else if !target.contains("android") {
+             println!("cargo:rustc-link-lib=gcc_s");
          }
- 
-         if target_env == "musl" {
--            // use the same C compiler command to compile C++ code so we do not need to setup the
--            // C++ compiler env variables on the builders
--            cfg.cpp(false);
-             // linking for musl is handled in lib.rs
-             cfg.cargo_metadata(false);
-             println!("cargo:rustc-link-search=native={}", env::var("OUT_DIR").unwrap());
 diff --git a/library/unwind/src/lib.rs b/library/unwind/src/lib.rs
-index 20a2ca984..13a74ecd0 100644
+index 20a2ca9..13a74ec 100644
 --- a/library/unwind/src/lib.rs
 +++ b/library/unwind/src/lib.rs
 @@ -39,7 +39,7 @@ cfg_if::cfg_if! {
