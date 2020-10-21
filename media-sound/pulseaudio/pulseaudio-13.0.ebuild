@@ -20,7 +20,7 @@ KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ppc ppc64 sparc x86 ~amd64-linux ~x
 # +alsa-plugin as discussed in bug #519530
 IUSE="+alsa +alsa-plugin +asyncns bluetooth +caps dbus doc equalizer elogind gconf
 +gdbm +glib gtk ipv6 jack libsamplerate libressl lirc native-headset cpu_flags_arm_neon
-ofono-headset +orc oss pipewire qt5 realtime selinux sox ssl systemd system-wide tcpd test
+ofono-headset +orc oss pw-pulse qt5 realtime selinux sox ssl systemd system-wide tcpd test
 +udev +webrtc-aec +X zeroconf"
 
 RESTRICT="!test? ( test )"
@@ -35,7 +35,7 @@ REQUIRED_USE="
 	udev? ( || ( alsa oss ) )
 "
 
-# libpcre needed in some cases, bug #472228
+# libpcre needed in somw-pulse, bug #472228
 CDEPEND="
 	|| (
 		elibc_glibc? ( virtual/libc )
@@ -82,7 +82,6 @@ CDEPEND="
 	systemd? ( sys-apps/systemd:0=[${MULTILIB_USEDEP}] )
 	dev-libs/libltdl:0
 	selinux? ( sec-policy/selinux-pulseaudio )
-	pipewire? ( media-video/pipewire[pulseaudio] )
 " # libltdl is a valid RDEPEND, libltdl.so is used for native abi in pulsecore and daemon
 
 RDEPEND="${CDEPEND}
@@ -106,6 +105,7 @@ DEPEND="${RDEPEND}
 # This is a PDEPEND to avoid a circular dep
 PDEPEND="
 	alsa? ( alsa-plugin? ( >=media-plugins/alsa-plugins-1.0.27-r1[pulseaudio,${MULTILIB_USEDEP}] ) )
+	pw-pulse? ( media-video/pipewire[pw-pulse] )
 "
 
 # alsa-utils dep is for the alsasound init.d script (see bug #155707)
@@ -232,6 +232,11 @@ multilib_src_configure() {
 		fi
 	fi
 
+	# If using pipewire for pulseaudio emulation, install real libs to different directory
+	use pw-pulse && myconf+=(
+		--libdir="${EPREFIX}/usr/$(get_libdir)/pulseaudio"
+	)
+
 	ECONF_SOURCE=${S} \
 	econf "${myconf[@]}"
 }
@@ -272,6 +277,15 @@ multilib_src_install() {
 			install-padsplibLTLIBRARIES \
 			lib_LTLIBRARIES="${targets[*]}" \
 			install-pulseincludeHEADERS
+	fi
+
+	if use pw-pulse; then
+		mkdir -p ${ED}/usr/$(get_libdir)/{pkgconfig,cmake/PulseAudio}
+		cp ${ED}/usr/$(get_libdir)/{pulseaudio/cmake,cmake}/PulseAudio/PulseAudioConfigVersion.cmake
+		sed "s@/usr/$(get_libdir)/pulseaudio@/usr/$(get_libdir)@g" ${ED}/usr/$(get_libdir)/pulseaudio/cmake/PulseAudio/PulseAudioConfig.cmake > ${ED}/usr/$(get_libdir)/cmake/PulseAudio/PulseAudioConfig.cmake
+		for pc in $(ls ${ED}/usr/$(get_libdir)/pulseaudio/pkgconfig); do
+			sed "s@/usr/$(get_libdir)/pulseaudio@/usr/$(get_libdir)@g" ${ED}/usr/$(get_libdir)/pulseaudio/pkgconfig/${pc} > ${ED}/usr/$(get_libdir)/pkgconfig/${pc}
+		done
 	fi
 }
 
@@ -316,7 +330,7 @@ multilib_src_install_all() {
 	use prefix || diropts -o pulse -g pulse -m0755
 
 	find "${ED}" \( -name '*.a' -o -name '*.la' \) -delete || die
-	use pipewire && ( find "${ED}usr/$(get_libdir)" \( -name 'libpulse.s*' -o -name 'libpulse-simple.s*' -o -name 'libpulse-mainloop-glib.s*' \) -delete )
+	#use pipewire && ( find "${ED}usr/$(get_libdir)" \( -name 'libpulse.s*' -o -name 'libpulse-simple.s*' -o -name 'libpulse-mainloop-glib.s*' \) -delete )
 }
 
 pkg_postinst() {
@@ -355,11 +369,6 @@ pkg_postinst() {
 	if use libsamplerate; then
 		elog "The libsamplerate based resamplers are now deprecated, because they offer no"
 		elog "particular advantage over speex. Upstream suggests disabling them."
-	fi
-
-	if use pipewire; then
-		ewarn "!!PIPEWIRE OVERRIDE INSTALLED!!"
-		ewarn "LIBRARIES IN THIS EBUILD HAVE BEEN DISCARDED!"
 	fi
 }
 

@@ -19,7 +19,12 @@ HOMEPAGE="https://pipewire.org/"
 
 LICENSE="LGPL-2.1+"
 SLOT="0/0.3"
-IUSE="bluetooth debug doc ffmpeg gstreamer jack pulseaudio systemd test vulkan X"
+IUSE="bluetooth debug doc ffmpeg gstreamer jack pw-jack pw-pulse pulseaudio systemd test vulkan X"
+
+REQUIRED_USE="
+	pw-jack? ( jack )
+	pw-pulse? ( pulseaudio )
+"
 
 BDEPEND="
 	app-doc/xmltoman
@@ -52,6 +57,7 @@ RDEPEND="
 	X? ( x11-libs/libX11 )
 "
 DEPEND="${RDEPEND}
+	jack? ( media-sound/jack )
 	vulkan? ( dev-util/vulkan-headers )
 "
 
@@ -74,6 +80,11 @@ src_prepare() {
 	spa_use bluetooth bluez5
 	spa_use jack
 	spa_use vulkan
+
+	#if use pw-jack || use pw-pulse; then
+	#	mkdir -p ${S}/../pkgconfig
+	#	cp -r ${EPREFIX}/usr/$(get_libdir)/pkgconfig/* ${S}/../pkgconfig
+	#fi
 }
 
 src_configure() {
@@ -101,12 +112,19 @@ src_configure() {
 		$(meson_use test test)
 		$(meson_use test tests)
 	)
-	use jack && emesonargs+=(
-		-Dlibjack-path=${EPREFIX}/usr/$(get_libdir)
-	)
-	use pulseaudio && emesonargs+=(
-		-Dlibpulse-path=${EPREFIX}/usr/$(get_libdir)
-	)
+	if use pw-jack; then
+		emesonargs+=(
+			-Dlibjack-path=${EPREFIX}/usr/$(get_libdir)
+		)
+		local MESON_EXTRA_BUILD_PKG_CONFIG_PATH="${EPREFIX}/usr/$(get_libdir)/jack/pkgconfig:"
+	fi
+	if use pw-pulse; then
+		emesonargs+=(
+			-Dlibpulse-path=${EPREFIX}/usr/$(get_libdir)
+		)
+		local MESON_EXTRA_BUILD_PKG_CONFIG_PATH="${EPREFIX}/usr/$(get_libdir)/pulseaudio/pkgconfig:${MESON_EXTRA_BUILD_PKG_CONFIG_PATH}"
+	fi
+	local MESON_EXTRA_PKG_CONFIG_PATH=${MESON_EXTRA_BUILD_PKG_CONFIG_PATH}
 	meson_src_configure
 }
 

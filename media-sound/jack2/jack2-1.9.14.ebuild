@@ -5,7 +5,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python3_{6,7,8} )
 PYTHON_REQ_USE="threads(+)"
-inherit python-single-r1 waf-utils multilib-minimal
+inherit multilib python-single-r1 waf-utils multilib-minimal
 
 DESCRIPTION="Jackdmp jack implemention for multi-processor machine"
 HOMEPAGE="https://jackaudio.org/"
@@ -23,7 +23,7 @@ fi
 
 LICENSE="GPL-2"
 SLOT="2"
-IUSE="alsa +classic dbus doc ieee1394 libsamplerate metadata opus pam pipewire readline sndfile"
+IUSE="alsa +classic dbus doc ieee1394 libsamplerate metadata opus pam pw-jack readline sndfile"
 
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
@@ -40,8 +40,7 @@ CDEPEND="${PYTHON_DEPS}
 	)
 	ieee1394? ( media-libs/libffado:=[${MULTILIB_USEDEP}] )
 	metadata? ( sys-libs/db:* )
-	opus? ( media-libs/opus[custom-modes,${MULTILIB_USEDEP}] )
-	pipewire? ( media-video/pipewire[jack] )"
+	opus? ( media-libs/opus[custom-modes,${MULTILIB_USEDEP}] )"
 DEPEND="${CDEPEND}
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )"
@@ -53,6 +52,8 @@ RDEPEND="${CDEPEND}
 	)
 	pam? ( sys-auth/realtime-base )
 	!media-sound/jack-audio-connection-kit:0"
+
+PDEPEND="pw-jack? ( media-video/pipewire[pw-jack] )"
 
 DOCS=( ChangeLog.rst README.rst README_NETJACK2 )
 
@@ -83,7 +84,7 @@ multilib_src_configure() {
 		--sndfile=$(multilib_native_usex sndfile yes no)
 		--winmme=no
 	)
-
+	use pw-jack && export WAF_LIBDIR_SUFFIX="jack"
 	waf-utils_src_configure ${mywafconfargs[@]}
 }
 
@@ -93,9 +94,13 @@ multilib_src_compile() {
 
 multilib_src_install() {
 	WAF_BINARY="${BUILD_DIR}"/waf waf-utils_src_install
-	if use pipewire; then
-		find "${ED}/usr/$(get_libdir)" \( -name 'libjack.s*' -o -name 'libjackserver.s*' \) -delete
+	if use pw-jack; then
+		#find "${ED}/usr/$(get_libdir)" \( -name 'libjack.s*' -o -name 'libjackserver.s*' \) -delete
 		use classic && rm "${ED}/usr/bin/jackd"
+		# Install alternate jack.pc for pipewire emulated libs
+		local pkgconfdir="${ED}/usr/$(get_libdir)/pkgconfig"
+		mkdir -p ${pkgconfdir}
+		sed "s@/usr/$(get_libdir)/jack@/usr/$(get_libdir)@g" ${ED}/usr/$(get_libdir)/jack/pkgconfig/jack.pc > ${pkgconfdir}/jack.pc
 	fi
 }
 
