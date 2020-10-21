@@ -50,6 +50,7 @@ RDEPEND="
 		media-libs/gst-plugins-base:1.0
 	)
 	pulseaudio? (
+		media-sound/pulseaudio
 		dev-libs/glib:2
 	)
 	systemd? ( sys-apps/systemd )
@@ -57,7 +58,7 @@ RDEPEND="
 	X? ( x11-libs/libX11 )
 "
 DEPEND="${RDEPEND}
-	jack? ( media-sound/jack )
+	jack? ( media-sound/jack2 )
 	vulkan? ( dev-util/vulkan-headers )
 "
 
