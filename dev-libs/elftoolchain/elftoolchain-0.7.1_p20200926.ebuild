@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit bsdmk multilib-minimal toolchain-funcs
+inherit multilib-minimal toolchain-funcs portability
 
 DESCRIPTION="Libraries/utilities to handle ELF objects (BSD drop in replacement for libelf)"
 HOMEPAGE="https://wiki.freebsd.org/LibElf"
@@ -31,29 +31,28 @@ DEPEND="${RDEPEND}
 		sys-libs/obstack-standalone
 	)"
 
-PATCHES=( "${FILESDIR}"/${PN}-0.7.1-gelf_symshndx-allow-xndxdata-parameter-to-be-NULL.patch )
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.7.1-elfdefinitions.patch
+	"${FILESDIR}"/${PN}-0.7.1-explicit-signedness-conversions.patch
+)
 
 src_prepare() {
-	cd ${S}
 	if ! use toolchain-progs; then
 		PATCHES+=( "${FILESDIR}"/${PN}-0.7.1-disable-progs.patch )
 	fi
 	default
+	cp "${FILESDIR}"/make-toolchain-version ${S}/libelftc/ || die
 	rm -rf test || die
 	rm -rf documentation || die
-	rm libelf/os.Linux.mk
 }
 
-multilib_src_compile() {
-	cd ${S}
-	bsdmk_src_compile
+src_compile() {
+	$(get_bmake) || die
 }
 
 
-multilib_src_install() {
-	cd ${S}
-	mymakeopts="NO_WERROR=1"
-	bsdmk_src_install
+src_install() {
+	$(get_bmake) DESTDIR=${ED} install || die
 	if use toolchain-progs; then
 		mv ${D}/usr/bin/ld ${D}/usr/bin/ld.elf || die
 	fi

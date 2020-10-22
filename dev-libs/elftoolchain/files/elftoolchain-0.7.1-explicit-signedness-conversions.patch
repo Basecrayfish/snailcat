@@ -1,0 +1,97 @@
+diff --git a/libelf/elf_data.c b/libelf/elf_data.c
+index 6c6acb1..195b68f 100644
+--- a/libelf/elf_data.c
++++ b/libelf/elf_data.c
+@@ -39,7 +39,8 @@ elf_getdata(Elf_Scn *s, Elf_Data *ed)
+ {
+ 	Elf *e;
+ 	unsigned int sh_type;
+-	int elfclass, elftype;
++	int elfclass, elftype_int;
++	Elf_Type elftype;
+ 	size_t count, fsz, msz;
+ 	struct _Libelf_Data *d;
+ 	uint64_t sh_align, sh_offset, sh_size, raw_size;
+@@ -93,12 +94,13 @@ elf_getdata(Elf_Scn *s, Elf_Data *ed)
+ 	}
+ 
+ 	raw_size = (uint64_t) e->e_rawsize;
+-	if ((elftype = _libelf_xlate_shtype(sh_type)) < ELF_T_FIRST ||
+-	    elftype > ELF_T_LAST || (sh_type != SHT_NOBITS &&
++	if ((elftype_int = _libelf_xlate_shtype(sh_type)) < ELF_T_FIRST ||
++	    elftype_int > ELF_T_LAST || (sh_type != SHT_NOBITS &&
+ 	    (sh_offset > raw_size || sh_size > raw_size - sh_offset))) {
+ 		LIBELF_SET_ERROR(SECTION, 0);
+ 		return (NULL);
+ 	}
++	elftype = (Elf_Type) elftype_int;
+ 
+ 	if ((fsz = (elfclass == ELFCLASS32 ? elf32_fsize : elf64_fsize)
+             (elftype, (size_t) 1, e->e_version)) == 0) {
+diff --git a/libelf/elf_update.c b/libelf/elf_update.c
+index d99a7bf..858ae84 100644
+--- a/libelf/elf_update.c
++++ b/libelf/elf_update.c
+@@ -112,7 +112,8 @@ _libelf_compute_section_extents(Elf *e, Elf_Scn *s, off_t rc)
+ {
+ 	Elf_Data *d;
+ 	size_t fsz, msz;
+-	int ec, elftype;
++	int ec, elftype_int;
++	Elf_Type elftype;
+ 	uint32_t sh_type;
+ 	uint64_t d_align;
+ 	Elf32_Shdr *shdr32;
+@@ -141,11 +142,12 @@ _libelf_compute_section_extents(Elf *e, Elf_Scn *s, off_t rc)
+ 
+ 	assert(sh_type != SHT_NULL && sh_type != SHT_NOBITS);
+ 
+-	elftype = _libelf_xlate_shtype(sh_type);
+-	if (elftype < ELF_T_FIRST || elftype > ELF_T_LAST) {
++	elftype_int = _libelf_xlate_shtype(sh_type);
++	if (elftype_int < ELF_T_FIRST || elftype_int > ELF_T_LAST) {
+ 		LIBELF_SET_ERROR(SECTION, 0);
+ 		return (0);
+ 	}
++	elftype = (Elf_Type) elftype_int;
+ 
+ 	if (sh_align == 0)
+ 		sh_align = _libelf_falign(elftype, ec);
+@@ -405,12 +407,13 @@ _libelf_extent_is_unused(struct _Elf_Extent_List *extents,
+  */
+ 
+ static int
+-_libelf_insert_extent(struct _Elf_Extent_List *extents, int type,
++_libelf_insert_extent(struct _Elf_Extent_List *extents, int type_int,
+     uint64_t start, uint64_t size, void *desc)
+ {
+ 	struct _Elf_Extent *ex, *prevt;
+ 
+-	assert(type >= ELF_EXTENT_EHDR && type <= ELF_EXTENT_SHDR);
++	assert(type_int >= ELF_EXTENT_EHDR && type_int <= ELF_EXTENT_SHDR);
++	enum elf_extent type = (enum elf_extent) type_int;
+ 
+ 	prevt = NULL;
+ 
+@@ -721,7 +724,8 @@ _libelf_write_scn(Elf *e, unsigned char *nf, struct _Elf_Extent *ex)
+ 	off_t rc;
+ 	int ec, em;
+ 	Elf_Scn *s;
+-	int elftype;
++	int elftype_int;
++	Elf_Type elftype;
+ 	Elf_Data *d, dst;
+ 	uint32_t sh_type;
+ 	struct _Libelf_Data *ld;
+@@ -747,8 +751,9 @@ _libelf_write_scn(Elf *e, unsigned char *nf, struct _Elf_Extent *ex)
+ 	if (sh_type == SHT_NOBITS || sh_type == SHT_NULL || sh_size == 0)
+ 		return (rc);
+ 
+-	elftype = _libelf_xlate_shtype(sh_type);
+-	assert(elftype >= ELF_T_FIRST && elftype <= ELF_T_LAST);
++	elftype_int = _libelf_xlate_shtype(sh_type);
++	assert(elftype_int >= ELF_T_FIRST && elftype_int <= ELF_T_LAST);
++	elftype = (Elf_Type) elftype_int;
+ 
+ 	sh_off = s->s_offset;
+ 	assert(sh_off % _libelf_falign(elftype, ec) == 0);
