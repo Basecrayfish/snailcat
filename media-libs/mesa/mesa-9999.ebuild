@@ -532,6 +532,7 @@ multilib_src_configure() {
 }
 
 multilib_src_compile() {
+	python3 ${S}/bin/git_sha1_gen.py --output ${S}/src/git_sha1.h || die "Failed to generate git SHA1 file"
 	meson_src_compile
 }
 
