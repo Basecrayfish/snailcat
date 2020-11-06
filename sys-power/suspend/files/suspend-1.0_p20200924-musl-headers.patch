@@ -1,0 +1,17 @@
+diff --git a/swsusp.h b/swsusp.h
+index 5f89902..962f2da 100644
+--- a/swsusp.h
++++ b/swsusp.h
+@@ -13,9 +13,12 @@
+ #include <linux/fs.h>
+ #include <linux/suspend_ioctls.h>
+ #include <errno.h>
++#include <sys/types.h>
+ 
+ #include "encrypt.h"
+ 
++#define loff_t off_t
++
+ #define	LINUX_REBOOT_MAGIC1	0xfee1dead
+ #define	LINUX_REBOOT_MAGIC2	672274793
+ 
