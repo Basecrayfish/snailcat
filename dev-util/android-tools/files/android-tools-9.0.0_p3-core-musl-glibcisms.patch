@@ -1,0 +1,76 @@
+diff --git a/adb/diagnose_usb.cpp b/adb/diagnose_usb.cpp
+index 9f721bf..f828827 100644
+--- a/adb/diagnose_usb.cpp
++++ b/adb/diagnose_usb.cpp
+@@ -28,6 +28,39 @@
+ #include <pwd.h>
+ #endif
+ 
++int group_member (gid_t gid)
++{
++  int n, size;
++  gid_t *groups;
++
++  size = NGROUPS_MAX;
++
++  groups = (gid_t*) malloc (size * sizeof *groups);
++  if (groups == nullptr) {
++    perror("failed to allocate memory for list of groups");
++    return 0;
++  }
++  do
++    {
++      groups = (gid_t*) realloc (groups, size * sizeof *groups);
++      if (groups == nullptr) {
++        perror("failed to allocate memory for list of groups");
++	return 0;
++      }
++      n = getgroups (size, groups);
++      size *= 2;
++    }
++  while (n == size / 2);
++
++  while (n-- > 0)
++    if (groups[n] == gid) {
++      free (groups);
++      return 1;
++    }
++
++  return 0;
++}
++
+ static const char kPermissionsHelpUrl[] = "http://developer.android.com/tools/device.html";
+ 
+ // Returns a message describing any potential problems we find with udev, or an empty string if we
+diff --git a/base/logging.cpp b/base/logging.cpp
+index d746cc4..c74fc62 100644
+--- a/base/logging.cpp
++++ b/base/logging.cpp
+@@ -92,7 +92,7 @@ static thread_id GetThreadId() {
+ }
+ 
+ namespace {
+-#if defined(__GLIBC__)
++#if defined(__linux__)
+ const char* getprogname() {
+   return program_invocation_short_name;
+ }
+diff --git a/fastboot/socket.cpp b/fastboot/socket.cpp
+index e56ffcf..3ec0315 100644
+--- a/fastboot/socket.cpp
++++ b/fastboot/socket.cpp
+@@ -30,6 +30,14 @@
+ 
+ #include <android-base/errors.h>
+ #include <android-base/stringprintf.h>
++#include <sys/select.h>
++
++# define TEMP_FAILURE_RETRY(expression) \
++  (__extension__							      \
++    ({ long int __result;						      \
++       do __result = (long int) (expression);				      \
++       while (__result == -1L && errno == EINTR);			      \
++       __result; }))
+ 
+ Socket::Socket(cutils_socket_t sock) : sock_(sock) {}
+ 
