@@ -187,12 +187,12 @@ multilib_src_configure() {
 		*) myeconfargs+=( ac_cv_prog_RC= ac_cv_prog_ac_ct_RC= ) ;;
 	esac
 
-	PATH="${FILESDIR}:${PATH}" ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
+	PATH="${FILESDIR}/bin:${PATH}" ECONF_SOURCE="${S}" econf "${myeconfargs[@]}"
 }
 
 multilib_src_compile() {
 	local ORIGINAL_PATH=${PATH}
-	export PATH="${FILESDIR}:${PATH}"
+	export PATH="${FILESDIR}/bin:${PATH}"
 	default
 
 	if multilib_is_native_abi && use utils; then
@@ -207,7 +207,7 @@ multilib_src_compile() {
 
 multilib_src_install() {
 	local ORIGINAL_PATH=${PATH}
-	export PATH="${FILESDIR}:${PATH}"
+	export PATH="${FILESDIR}/bin:${PATH}"
 	default
 
 	if multilib_is_native_abi && use utils; then
