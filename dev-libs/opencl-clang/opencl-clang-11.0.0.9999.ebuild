@@ -12,11 +12,11 @@ MY_P="${PN}-${MY_PV}"
 DESCRIPTION="OpenCL-oriented thin wrapper library around clang"
 HOMEPAGE="https://github.com/intel/opencl-clang"
 #SRC_URI="https://github.com/intel/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
-EGIT_REPO_URI="https://github.com/nightspc/opencl-clang"
+EGIT_REPO_URI="https://github.com/intel/${PN}"
 EGIT_BRANCH="ocl-open-110"
 
 LICENSE="UoI-NCSA"
-SLOT="10"
+SLOT="11"
 KEYWORDS="~amd64"
 
 COMMON="sys-devel/clang:11=[static-analyzer,${MULTILIB_USEDEP}]"
