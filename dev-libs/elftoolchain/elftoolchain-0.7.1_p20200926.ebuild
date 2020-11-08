@@ -23,6 +23,7 @@ RDEPEND=">=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
 	!sys-devel/binutils"
 
 DEPEND="${RDEPEND}
+	virtual/pmake
 	virtual/yacc
 	sys-apps/lsb-release
 	elibc_musl? (
