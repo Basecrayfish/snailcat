@@ -5,7 +5,7 @@ EAPI=7
 
 PYTHON_COMPAT=( python3_{6..9} )
 
-inherit autotools python-any-r1
+inherit autotools flag-o-matic multilib python-any-r1
 
 DESCRIPTION="A fast and low-memory footprint OCI Container Runtime fully written in C"
 HOMEPAGE="https://github.com/containers/crun"
@@ -14,14 +14,17 @@ SRC_URI="https://github.com/containers/${PN}/releases/download/${PV}/${P}.tar.gz
 LICENSE="GPL-2+ LGPL-2.1+"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~arm64 ~ppc64"
-IUSE="+bpf +caps criu man +seccomp systemd static-libs static +shared-libs"
+IUSE="+bpf +caps criu man +seccomp systemd static static-pie static-libs +shared-libs"
 REQUIRED_USE="
+	static-pie? ( static !shared-libs )
 	static? ( static-libs )
+	!shared-libs? ( static-libs )
 "
 
 DEPEND="
 	sys-kernel/linux-headers
 	>=dev-libs/yajl-2.0.0[static-libs?]
+	sys-libs/argp-standalone[static-libs?]
 	caps? ( sys-libs/libcap[static-libs?] )
 	criu? ( >=sys-process/criu-3.13[static-libs?] )
 	seccomp? ( sys-libs/libseccomp[static-libs?] )
@@ -42,6 +45,21 @@ RESTRICT="test"
 DOCS=( README.md )
 
 src_configure() {
+	if use static; then
+		if use static-pie; then
+			filter-flags -fpic -fPIC
+			append-cflags -fpie
+			append-cxxflags -fpie
+			append-ldflags -static-pie
+		else
+			append-ldflags -static
+		fi
+		append-cflags -static
+		append-cxxflags -static
+		append-ldflags -all-static
+		export YAJL_LIBS="-lyajl_s"
+		export LIBS="-lyajl_s"
+	fi
 	local myeconfargs=(
 		$(use_enable bpf) \
 		$(use_enable caps) \
@@ -49,7 +67,8 @@ src_configure() {
 		$(use_enable seccomp) \
 		$(use_enable systemd) \
 		$(use_enable static-libs static) \
-		$(use_enable shared-libs shared)
+		$(use_enable shared-libs shared) \
+		$(use_with shared-libs shared)
 	)
 
 	econf "${myeconfargs[@]}"
