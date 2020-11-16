@@ -26,7 +26,10 @@ DEPEND="
 	>=dev-libs/yajl-2.0.0[static-libs?]
 	sys-libs/argp-standalone[static-libs?]
 	caps? ( sys-libs/libcap[static-libs?] )
-	criu? ( >=sys-process/criu-3.13[static-libs?] )
+	criu? (
+		>=sys-process/criu-3.15[static-libs?]
+		static? ( dev-libs/protobuf-c[static-libs] )
+	)
 	seccomp? ( sys-libs/libseccomp[static-libs?] )
 	systemd? ( sys-apps/systemd:=[static-libs?] )
 "
@@ -57,8 +60,9 @@ src_configure() {
 		append-cflags -static
 		append-cxxflags -static
 		append-ldflags -all-static
+		append-libs -lyajl_s
+		use criu && append-libs -lprotobuf-c -lcriu -lz
 		export YAJL_LIBS="-lyajl_s"
-		export LIBS="-lyajl_s"
 	fi
 	local myeconfargs=(
 		$(use_enable bpf) \
