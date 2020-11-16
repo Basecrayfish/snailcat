@@ -144,4 +144,5 @@ src_install() {
 	if ! use static-libs; then
 		find "${D}" -name "*.a" -delete || die
 	fi
+	find "${ED}" -name '*.la' -delete || die
 }
