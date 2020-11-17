@@ -7,16 +7,18 @@ DISTUTILS_USE_SETUPTOOLS=no
 PYTHON_COMPAT=( pypy3 python3_{6..9} )
 PYTHON_REQ_USE='bzip2(+),threads(+)'
 
-inherit distutils-r1 linux-info systemd prefix
+inherit distutils-r1 linux-info tmpfiles prefix
 
 DESCRIPTION="Portage is the package management and distribution system for Gentoo"
 HOMEPAGE="https://wiki.gentoo.org/wiki/Project:Portage"
 
 LICENSE="GPL-2"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ppc64 ~riscv ~s390 sparc x86"
+KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86"
 SLOT="0"
-IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux xattr"
+IUSE="apidoc build doc gentoo-dev +ipc +native-extensions +rsync-verify selinux test xattr"
+RESTRICT="!test? ( test )"
 
+BDEPEND="test? ( dev-vcs/git )"
 DEPEND="!build? ( $(python_gen_impl_dep 'ssl(+)') )
 	>=app-arch/tar-1.27
 	dev-lang/python-exec:2
@@ -35,12 +37,13 @@ RDEPEND="
 	app-arch/zstd
 	>=app-arch/tar-1.27
 	dev-lang/python-exec:2
+	>=sys-apps/findutils-4.4
 	!build? (
 		>=sys-apps/sed-4.0.5
 		app-shells/bash:0[readline]
 		>=app-admin/eselect-1.2
 		rsync-verify? (
-			>=app-portage/gemato-14.4-r1[${PYTHON_USEDEP}]
+			>=app-portage/gemato-14.5[${PYTHON_USEDEP}]
 			>=app-crypt/openpgp-keys-gentoo-release-20180706
 			>=app-crypt/gnupg-2.2.4-r2[ssl(-)]
 		)
@@ -94,9 +97,6 @@ pkg_pretend() {
 
 python_prepare_all() {
 	distutils-r1_python_prepare_all
-
-	# Apply b0ed587308eb3cbfafe9abcb1c59f24f48b97cdc for bug 738766.
-	sed "/scheduler.wait()/d" -i lib/portage/util/futures/iter_completed.py || die
 
 	sed -e "s:^VERSION = \"HEAD\"$:VERSION = \"${PV}\":" -i lib/portage/__init__.py || die
 
@@ -222,7 +222,7 @@ python_install_all() {
 		esetup.py "${targets[@]}"
 	fi
 
-	systemd_dotmpfilesd "${FILESDIR}"/portage-ccache.conf
+	dotmpfiles "${FILESDIR}"/portage-ccache.conf
 
 	# Due to distutils/python-exec limitations
 	# these must be installed to /usr/bin.
