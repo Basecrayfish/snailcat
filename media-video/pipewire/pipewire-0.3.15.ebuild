@@ -65,6 +65,8 @@ DOCS=( {README,INSTALL}.md NEWS )
 
 RESTRICT="!test? ( test )"
 
+PATCHES=( "${FILESDIR}/${PN}-0.3.15-musl-strndupa-hack.patch" )
+
 src_prepare() {
 	spa_use() {
 		if ! in_iuse ${1} || ! use ${1}; then

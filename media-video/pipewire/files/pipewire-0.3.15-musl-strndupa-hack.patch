@@ -1,0 +1,26 @@
+diff --git a/pipewire-pulseaudio/src/stream.c b/pipewire-pulseaudio/src/stream.c
+index 18fff46..b77f0e5 100644
+--- a/pipewire-pulseaudio/src/stream.c
++++ b/pipewire-pulseaudio/src/stream.c
+@@ -966,7 +966,7 @@ static int create_stream(pa_stream_direction_t direction,
+ 
+ 		if (devid == PW_ID_ANY) {
+ 			if (pa_endswith(dev, ".monitor"))
+-				dev = strndupa(dev, strlen(dev) - 8);
++				dev = strndup(dev, strlen(dev) - 8);
+ 		}
+ 	}
+ 
+diff --git a/src/modules/module-protocol-pulse/pulse-server.c b/src/modules/module-protocol-pulse/pulse-server.c
+index 59c0e09..f0cc84e 100644
+--- a/src/modules/module-protocol-pulse/pulse-server.c
++++ b/src/modules/module-protocol-pulse/pulse-server.c
+@@ -3343,7 +3343,7 @@ static int do_get_info(struct client *client, uint32_t command, uint32_t tag, st
+ 
+ 	if (command == COMMAND_GET_SOURCE_INFO &&
+ 	    sel.value != NULL && pw_endswith(sel.value, ".monitor")) {
+-		sel.value = strndupa(sel.value, strlen(sel.value)-8);
++		sel.value = strndup(sel.value, strlen(sel.value)-8);
+ 	}
+ 
+ 	o = select_object(manager, &sel);
