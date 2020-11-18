@@ -28,18 +28,18 @@ IUSE_CPU_FLAGS_X86=" sse2"
 IUSE="acl examples iconv ipv6 libressl lz4 ssl static stunnel system-zlib xattr xxhash zstd"
 IUSE+=" ${IUSE_CPU_FLAGS_X86// / cpu_flags_x86_}"
 
-LIB_DEPEND="acl? ( virtual/acl[static-libs(+)] )
-	lz4? ( app-arch/lz4[static-libs(+)] )
+LIB_DEPEND="acl? ( virtual/acl[static-libs] )
+	lz4? ( app-arch/lz4[static-libs] )
 	ssl? (
-		!libressl? ( dev-libs/openssl:0=[static-libs(+)] )
-		libressl? ( dev-libs/libressl:0=[static-libs(+)] )
+		!libressl? ( dev-libs/openssl:0=[static-libs] )
+		libressl? ( dev-libs/libressl:0=[static-libs] )
 	)
-	system-zlib? ( sys-libs/zlib[static-libs(+)] )
-	xattr? ( kernel_linux? ( sys-apps/attr[static-libs(+)] ) )
-	xxhash? ( dev-libs/xxhash[static-libs(+)] )
-	zstd? ( >=app-arch/zstd-1.4[static-libs(+)] )
-	>=dev-libs/popt-1.5[static-libs(+)]"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs(+)]} )
+	system-zlib? ( sys-libs/zlib[static-libs] )
+	xattr? ( kernel_linux? ( sys-apps/attr[static-libs] ) )
+	xxhash? ( dev-libs/xxhash[static-libs] )
+	zstd? ( >=app-arch/zstd-1.4[static-libs] )
+	>=dev-libs/popt-1.5[static-libs]"
+RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )
 	iconv? ( virtual/libiconv )"
 DEPEND="${RDEPEND}"
 
