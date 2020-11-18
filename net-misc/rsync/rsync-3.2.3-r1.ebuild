@@ -39,9 +39,15 @@ LIB_DEPEND="acl? ( virtual/acl[static-libs] )
 	xxhash? ( dev-libs/xxhash[static-libs] )
 	zstd? ( >=app-arch/zstd-1.4[static-libs] )
 	>=dev-libs/popt-1.5[static-libs]"
-RDEPEND="!static? ( ${LIB_DEPEND//\[static-libs]} )
-	iconv? ( virtual/libiconv )"
-DEPEND="${RDEPEND}"
+
+DEPEND="static? ( ${LIB_DEPEND} )
+	!static? ( ${LIB_DEPEND//\[static-libs]} )
+	iconv? ( virtual/iconv )"
+
+RDEPEND="!static? (
+		${LIB_DEPEND//\[static-libs]}
+		iconv? ( virtual/libiconv )
+	)"
 
 if [[ "${PV}" == *9999 ]] ; then
 	BDEPEND="${PYTHON_DEPS}
