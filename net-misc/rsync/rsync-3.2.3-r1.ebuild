@@ -42,7 +42,7 @@ LIB_DEPEND="acl? ( virtual/acl[static-libs] )
 
 DEPEND="static? ( ${LIB_DEPEND} )
 	!static? ( ${LIB_DEPEND//\[static-libs]} )
-	iconv? ( virtual/iconv )"
+	iconv? ( virtual/libiconv )"
 
 RDEPEND="!static? (
 		${LIB_DEPEND//\[static-libs]}
