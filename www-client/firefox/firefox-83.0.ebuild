@@ -199,7 +199,6 @@ if [[ -z "${MOZ_GMP_PLUGIN_LIST+set}" ]] ; then
 fi
 
 PATCHES=(
-	"${FILESDIR}/${PN}"-80.0.1-musl-if-header.patch
 	"${FILESDIR}/${PN}"-80.0.1-rust-cc-force-libcxx.patch
 )
 
