@@ -50,15 +50,14 @@ RDEPEND="
 		media-libs/gst-plugins-base:1.0
 	)
 	pulseaudio? (
-		media-sound/pulseaudio
 		dev-libs/glib:2
+		>=media-sound/pulseaudio-11.1
 	)
 	systemd? ( sys-apps/systemd )
 	vulkan? ( media-libs/vulkan-loader )
 	X? ( x11-libs/libX11 )
 "
 DEPEND="${RDEPEND}
-	jack? ( media-sound/jack2 )
 	vulkan? ( dev-util/vulkan-headers )
 "
 
@@ -81,18 +80,12 @@ src_prepare() {
 	spa_use bluetooth bluez5
 	spa_use jack
 	spa_use vulkan
-
-	#if use pw-jack || use pw-pulse; then
-	#	mkdir -p ${S}/../pkgconfig
-	#	cp -r ${EPREFIX}/usr/$(get_libdir)/pkgconfig/* ${S}/../pkgconfig
-	#fi
 }
 
 src_configure() {
 	local emesonargs=(
 		-Dexamples=true # contains required pipewire-media-session
 		-Dman=true
-		-Dspa=true
 		-Dspa-plugins=true
 		--buildtype=$(usex debug debugoptimized plain)
 		# alsa plugin and jack/pulseaudio emulation
@@ -109,6 +102,7 @@ src_configure() {
 		# misc
 		$(meson_use doc docs)
 		$(meson_use gstreamer)
+		$(meson_use gstreamer gstreamer-device-provider)
 		$(meson_use systemd)
 		$(meson_use test test)
 		$(meson_use test tests)
@@ -145,15 +139,4 @@ pkg_postinst() {
 	elog "by setting DISABLE_RTKIT env var."
 	elog "To enable rtkit, uncomment the load-module line in /etc/pipewire/pipewire.conf"
 	elog
-	if use jack; then
-		elog "Please note that even though the libraries for JACK emulation have"
-		elog "been installed, this ebuild is not yet wired up to replace a JACK server."
-		elog "... This might have changed now. Testing needed"
-	fi
-	if use pulseaudio; then
-		elog "Please note that even though the libraries for PulseAudio emulation have"
-		elog "been installed, this ebuild is not yet wired up to replace PulseAudio."
-		elog "... This might have changed now. Testing needed"
-	fi
-	elog "Read INSTALL.md for information about ALSA plugin or JACK/PulseAudio emulation."
 }

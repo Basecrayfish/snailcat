@@ -14,6 +14,8 @@
 	</upstream>
 	<use>
 		<flag name="jack">Enable SPA JACK plugin and emulation to be able to run JACK applications on top of PipeWire</flag>
+		<flag name="pw-jack">Use pipewire as the system JACK implementation</flag>
+		<flag name="pw-pulse">Use pipewire as the system PulseAudio implementation</flag>
 		<flag name="pulseaudio">Enable emulation to be able to run PulseAudio applications on top of PipeWire</flag>
 		<flag name="vulkan">Enable vulkan spa plugin integration</flag>
 	</use>
