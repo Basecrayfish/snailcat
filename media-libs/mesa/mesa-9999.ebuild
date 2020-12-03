@@ -74,7 +74,6 @@ REQUIRED_USE="
 
 LIBDRM_DEPSTRING=">=x11-libs/libdrm-2.4.100"
 RDEPEND="
-	!app-eselect/eselect-mesa
 	>=dev-libs/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=media-libs/libglvnd-1.3.2[X?,${MULTILIB_USEDEP}]
 	>=sys-libs/zlib-1.2.8[${MULTILIB_USEDEP}]
@@ -268,8 +267,9 @@ pkg_pretend() {
 	if use vulkan; then
 		if ! use video_cards_i965 &&
 		   ! use video_cards_iris &&
-		   ! use video_cards_radeonsi; then
-			ewarn "Ignoring USE=vulkan     since VIDEO_CARDS does not contain i965, iris, or radeonsi"
+		   ! use video_cards_radeonsi &&
+		   ! use video_cards_v3d; then
+			ewarn "Ignoring USE=vulkan     since VIDEO_CARDS does not contain i965, iris, radeonsi, or v3d"
 		fi
 	fi
 
@@ -487,6 +487,7 @@ multilib_src_configure() {
 		vulkan_enable video_cards_i965 intel
 		vulkan_enable video_cards_iris intel
 		vulkan_enable video_cards_radeonsi amd
+		vulkan_enable video_cards_v3d broadcom
 	fi
 
 	# Disable glx tls support on musl
@@ -545,7 +546,7 @@ multilib_src_install_all() {
 }
 
 multilib_src_test() {
-	meson test -v -C "${BUILD_DIR}" -t 100
+	meson_src_test -t 100
 }
 
 # $1 - VIDEO_CARDS flag (check skipped for "--")
