@@ -1,0 +1,36 @@
+diff --git a/gui/main.cpp b/gui/main.cpp
+index 19aeb14..e3937fc 100644
+--- a/gui/main.cpp
++++ b/gui/main.cpp
+@@ -261,10 +261,12 @@ static void installDebugMessageHandler(const QString &cmdLine)
+ }
+ 
+ #if defined Q_OS_LINUX && defined __GNUC__
+-#include <execinfo.h>
+ #include <unistd.h>
+ #include <signal.h>
+ #include <cxxabi.h>
++#ifdef __GLIBC__
++#include <execinfo.h>
++#endif
+ 
+ static void sigHandler(int i)
+ {
+@@ -279,6 +281,7 @@ static void sigHandler(int i)
+     fprintf(stderr, "Unfortunately Cantata has crashed. Please report a bug at \n"
+                     "https://github.com/CDrummond/cantata/issues/ and include the following stack trace:\n\n");
+     // retrieve current stack addresses
++#ifdef __GLIBC__
+     int addrlen = backtrace(addrlist, sizeof(addrlist) / sizeof(void*));
+     if (!addrlen) {
+         fprintf(stderr, "Failed to produce stack trace!\n");
+@@ -334,6 +337,9 @@ static void sigHandler(int i)
+     }
+ 
+     free(symbolList);
++#else
++    fprintf(stderr, "Backtrace generation is not available!\n");
++#endif
+     _exit(1);
+ }
+ #endif
