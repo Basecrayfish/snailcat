@@ -25,6 +25,7 @@ RDEPEND=">=sys-libs/zlib-1.2.8-r1[${MULTILIB_USEDEP}]
 DEPEND="${RDEPEND}
 	virtual/pmake
 	virtual/yacc
+	!dev-libs/elfutils
 	sys-apps/lsb-release
 	elibc_musl? (
 		sys-libs/argp-standalone
