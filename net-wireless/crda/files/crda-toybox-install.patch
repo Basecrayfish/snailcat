@@ -1,0 +1,36 @@
+diff --git a/Makefile b/Makefile
+index 355f7fd..3e1ed06 100644
+--- a/Makefile
++++ b/Makefile
+@@ -160,9 +160,9 @@ verify: $(REG_BIN) regdbdump
+ install: install-libreg install-libreg-headers crda crda.8 regdbdump.8
+ 	$(NQ) '  INSTALL  crda'
+ 	$(Q)$(MKDIR) $(DESTDIR)/$(SBINDIR)
+-	$(Q)$(INSTALL) -m 755 -t $(DESTDIR)/$(SBINDIR) crda
++	$(Q)$(INSTALL) -m 755 crda $(DESTDIR)/$(SBINDIR)
+ 	$(NQ) '  INSTALL  regdbdump'
+-	$(Q)$(INSTALL) -m 755 -t $(DESTDIR)/$(SBINDIR) regdbdump
++	$(Q)$(INSTALL) -m 755 regdbdump $(DESTDIR)/$(SBINDIR)
+ 	$(NQ) '  INSTALL  $(UDEV_LEVEL)regulatory.rules'
+ 	$(Q)$(MKDIR) $(DESTDIR)/$(UDEV_RULE_DIR)/
+ 	@# This removes the old rule you may have, we were not
+@@ -170,14 +170,14 @@ install: install-libreg install-libreg-headers crda crda.8 regdbdump.8
+ 	$(Q)rm -f $(DESTDIR)/etc/udev/rules.d/regulatory.rules
+ 	$(Q)sed 's:$$(SBINDIR):$(SBINDIR):' udev/regulatory.rules > udev/regulatory.rules.parsed
+ 	$(Q)ln -sf regulatory.rules.parsed udev/$(UDEV_LEVEL)regulatory.rules
+-	$(Q)$(INSTALL) -m 644 -t \
+-		$(DESTDIR)/$(UDEV_RULE_DIR)/ \
+-		udev/$(UDEV_LEVEL)regulatory.rules
++	$(Q)$(INSTALL) -m 644 \
++		udev/$(UDEV_LEVEL)regulatory.rules \
++		$(DESTDIR)/$(UDEV_RULE_DIR)/
+ 	$(NQ) '  INSTALL  crda.8'
+ 	$(Q)$(MKDIR) $(DESTDIR)$(MANDIR)/man8/
+-	$(Q)$(INSTALL) -m 644 -t $(DESTDIR)/$(MANDIR)/man8/ crda.8
++	$(Q)$(INSTALL) -m 644 crda.8 $(DESTDIR)/$(MANDIR)/man8/
+ 	$(NQ) '  INSTALL  regdbdump.8'
+-	$(Q)$(INSTALL) -m 644 -t $(DESTDIR)/$(MANDIR)/man8/ regdbdump.8
++	$(Q)$(INSTALL) -m 644 regdbdump.8 $(DESTDIR)/$(MANDIR)/man8/
+ 
+ clean:
+ 	$(Q)rm -f $(LIBREG) crda regdbdump intersect db2rd optimize \
