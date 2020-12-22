@@ -1,0 +1,12 @@
+diff --git a/src/util/disk_cache_os.c b/src/util/disk_cache_os.c
+index d48fe877c56..f59598032ba 100644
+--- a/src/util/disk_cache_os.c
++++ b/src/util/disk_cache_os.c
+@@ -189,6 +189,7 @@ inflate_cache_data(uint8_t *in_data, size_t in_data_size,
+ 
+ #include <dirent.h>
+ #include <errno.h>
++#include <fcntl.h>
+ #include <pwd.h>
+ #include <stdio.h>
+ #include <string.h>
