@@ -1,8 +1,8 @@
 # Build-time functionality
 # ========================
 # USE flags
-USE="pic jit threads" # General code modifying options
-USE="${USE} system-bootstrap clang -sanitize" # Toolchain options
+USE="pic pie" # General code modifying options
+USE="${USE} system-bootstrap default-lld clang -sanitize" # Toolchain options
 USE="${USE} -acl -consolekit -policykit" # AUX Permissions
 USE="${USE} system-jsoncpp"
 USE="${USE} -kmod" # Kernel provided features
@@ -11,18 +11,11 @@ USE="${USE} ssl libressl -gnupg" # SSL Options
 USE="${USE} -gtk -sdl -sdl2 -qt" # Graphical interfaces
 USE="${USE} -alsa -cups -luajit git tmux" # General App features
 USE="${USE} zstd bzip2" # Compression algorithm support
+USE="${USE} system-harfbuzz system-icu system-jpeg system-jsoncpp system-libevent system-libvpx system-llvm system-sqlite" # Use system libraries
 
-# USE_EXTEND flags
-# Broken in profile
-L10N="en_GB en-GB"
-INPUT_DEVICES=""
-CPU_FLAGS_X86="aes avx mmx mmxext pclmul popcnt sse sse2 sse3 ssse3 sse4_1 sse4_2"
-VIDEO_CARDS=""
-LLVM_TARGETS="X86"
-CURL_SSL="libressl"
-PYTHON_TARGETS="python3_8"
-PYTHON_SINGLE_TARGET="python3_8"
-GRUB_PLATFORMS="efi-64"
+USE="${USE} curl_ssl_libressl" # CURL_SSL="libressl"
+USE="${USE} python_targets_python3_8" # PYTHON_TARGETS="python3_8"
+USE="${USE} python_single_target_python3_8" # PYTHON_SINGLE_TARGET="python3_8"
 
 # Host Setting
 # ============
