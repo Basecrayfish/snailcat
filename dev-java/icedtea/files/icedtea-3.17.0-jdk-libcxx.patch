@@ -1,0 +1,35 @@
+diff --git a/openjdk/hotspot/make/linux/makefiles/gcc.make b/openjdk/hotspot/make/linux/makefiles/gcc.make
+index 7bf780d8..8195d334 100644
+--- openjdk/hotspot/make/linux/makefiles/gcc.make
++++ openjdk/hotspot/make/linux/makefiles/gcc.make
+@@ -282,14 +282,14 @@ endif
+ # Linker flags
+ 
+ # statically link libstdc++.so, work with gcc but ignored by g++
+-STATIC_STDCXX = -Wl,-Bstatic -lstdc++ -Wl,-Bdynamic
++STATIC_STDCXX = -Wl,-Bstatic -lc++ -Wl,-Bdynamic
+ # While the VM needs the above line, adlc needs a separate setting:
+-ADLC_STATIC_STDCXX = -static-libstdc++
++ADLC_STATIC_STDCXX = -static-libc++
+ 
+ ifeq ($(USE_CLANG),)
+   # statically link libgcc and/or libgcc_s, libgcc does not exist before gcc-3.x.
+   ifneq ("${CC_VER_MAJOR}", "2")
+-    STATIC_LIBGCC += -static-libgcc
++    STATIC_LIBGCC += -static-compiler-rt
+   endif
+ 
+   ifeq ($(BUILDARCH), ia64)
+diff --git a/openjdk/hotspot/make/linux/makefiles/vm.make b/openjdk/hotspot/make/linux/makefiles/vm.make
+index a57735be..38e8a941 100644
+--- openjdk/hotspot/make/linux/makefiles/vm.make
++++ openjdk/hotspot/make/linux/makefiles/vm.make
+@@ -296,7 +296,7 @@ else
+     LFLAGS_VM              += $(STATIC_LIBGCC)
+     LIBS_VM                += $(STATIC_STDCXX)
+   else
+-    LIBS_VM                += -lstdc++
++    LIBS_VM                += -lc++
+   endif
+ 
+   LIBS_VM                  += $(LIBS)

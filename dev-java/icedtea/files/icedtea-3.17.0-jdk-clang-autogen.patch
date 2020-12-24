@@ -1,0 +1,10 @@
+diff --git a/openjdk/common/autoconf/autogen.sh b/openjdk/common/autoconf/autogen.sh
+index 073c4444..6498cf57 100644
+--- openjdk/common/autoconf/autogen.sh
++++ openjdk/common/autoconf/autogen.sh
+@@ -83,3 +83,5 @@ if test -e $custom_hook; then
+ else
+   echo "(No custom hook found at $custom_hook)"
+ fi
++
++patch -d $script_dir -p4 < ../patches/icedtea-3.17.0-jdk-clang-autoconf.patch

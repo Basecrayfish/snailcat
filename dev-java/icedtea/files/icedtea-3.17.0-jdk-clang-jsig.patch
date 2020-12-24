@@ -1,0 +1,13 @@
+diff --git b/openjdk/hotspot/make/linux/makefiles/jsig.make a/openjdk/hotspot/make/linux/makefiles/jsig.make
+index 6290db5a..1fe969b0 100644
+--- openjdk/hotspot/make/linux/makefiles/jsig.make
++++ openjdk/hotspot/make/linux/makefiles/jsig.make
+@@ -59,7 +59,7 @@ endif
+ $(LIBJSIG): $(JSIGSRCDIR)/jsig.c $(LIBJSIG_MAPFILE)
+ 	@echo Making signal interposition lib...
+ 	$(QUIETLY) $(CC) $(SYMFLAG) $(ARCHFLAG) $(SHARED_FLAG) $(PICFLAG) \
+-                         $(LFLAGS_JSIG) $(JSIG_DEBUG_CFLAGS) $(JSIG_OPT_FLAGS) $(EXTRA_CFLAGS) -o $@ $< -ldl
++                         $(LFLAGS_JSIG) $(JSIG_DEBUG_CFLAGS) $(JSIG_OPT_FLAGS) $(filter-out -std=gnu++98,$(EXTRA_CFLAGS)) -o $@ $< -ldl
+ ifeq ($(ENABLE_FULL_DEBUG_SYMBOLS),1)
+   ifneq ($(STRIP_POLICY),no_strip)
+ 	$(QUIETLY) $(OBJCOPY) --only-keep-debug $@ $(LIBJSIG_DEBUGINFO)

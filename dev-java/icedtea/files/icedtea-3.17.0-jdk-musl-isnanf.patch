@@ -1,0 +1,13 @@
+diff --git a/openjdk-boot/jdk/src/solaris/native/common/jdk_util_md.h b/openjdk-boot/jdk/src/solaris/native/common/jdk_util_md.h
+index c13bb7794..e2de8035b 100644
+--- openjdk/jdk/src/solaris/native/common/jdk_util_md.h
++++ openjdk/jdk/src/solaris/native/common/jdk_util_md.h
+@@ -37,7 +37,7 @@
+ #define ISNAND(d) isnan(d)
+ #elif defined(__linux__) || defined(_ALLBSD_SOURCE)
+ #include <math.h>
+-#define ISNANF(f) isnanf(f)
++#define ISNANF(f) isnan((double) f)
+ #define ISNAND(d) isnan(d)
+ #elif defined(_AIX)
+ #include <math.h>

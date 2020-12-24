@@ -1,0 +1,142 @@
+diff --git a/openjdk/common/autoconf/generated-configure.sh b/openjdk/common/autoconf/generated-configure.sh
+index d5b7c684..b3d3df2c 100644
+--- a/openjdk/common/autoconf/generated-configure.sh
++++ b/openjdk/common/autoconf/generated-configure.sh
+@@ -27583,7 +27583,8 @@ $as_echo "$as_me: Rewriting CC to \"$new_complete\"" >&6;}
+ 
+   TEST_COMPILER="$CC"
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking resolved symbolic links for CC" >&5
++  if ! echo "$CXX" | grep "clang++" >&5 2>&1 ; then
++    { $as_echo "$as_me:${as_lineno-$LINENO}: checking resolved symbolic links for CC" >&5
+ $as_echo_n "checking resolved symbolic links for CC... " >&6; }
+   SYMLINK_ORIGINAL="$TEST_COMPILER"
+ 
+@@ -27638,8 +27639,9 @@ $as_echo_n "checking resolved symbolic links for CC... " >&6; }
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no symlink" >&5
+ $as_echo "no symlink" >&6; }
+   else
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMLINK_ORIGINAL" >&5
++      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMLINK_ORIGINAL" >&5
+ $as_echo "$SYMLINK_ORIGINAL" >&6; }
++    fi
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CC is disguised ccache" >&5
+ $as_echo_n "checking if CC is disguised ccache... " >&6; }
+     COMPILER_BASENAME=`$BASENAME "$SYMLINK_ORIGINAL"`
+@@ -28173,11 +28175,21 @@ $as_echo "$as_me: The result from running it was: \"$COMPILER_VERSION_OUTPUT\""
+     # Check that this is likely to be GCC.
+     $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP -E "^(gcc|g\+\+|distcc)" >&5 2>&1
+     if test $? -ne 0; then
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&5
+-$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&6;}
++      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the recommended $TOOLCHAIN_TYPE compiler." >&5
++$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the recommended $TOOLCHAIN_TYPE compiler." >&6;}
+       { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION\"" >&5
+ $as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION\"" >&6;}
+-      as_fn_error $? "A $TOOLCHAIN_TYPE compiler is required. Try setting --with-tools-dir." "$LINENO" 5
++      $COMPILER --version 2>&1 | $GREP "clang" >&5 2>&1
++      if test $? -ne 0 ; then
++        { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the Clang compiler either." >&5
++$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the Clang compiler either." >&6;}
++        { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&5
++$as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&6;}
++        as_fn_error $? "GCC or Clang compiler is required. Try setting --with-tools-dir." "$LINENO" 5
++      else
++        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Clang compiler detected. The GCC compiler is recommended." >&5
++$as_echo "$as_me: WARNING: Clang compiler detected. The GCC compiler is recommended." >&2;}
++      fi
+     fi
+     # Remove Copyright and legalese from version string, and
+     # collapse into a single line
+@@ -29324,7 +29336,8 @@ $as_echo "$as_me: Rewriting CXX to \"$new_complete\"" >&6;}
+ 
+   TEST_COMPILER="$CXX"
+ 
+-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking resolved symbolic links for CXX" >&5
++  if ! echo "$CXX" | grep "clang++" >&5 2>&1 ; then
++    { $as_echo "$as_me:${as_lineno-$LINENO}: checking resolved symbolic links for CXX" >&5
+ $as_echo_n "checking resolved symbolic links for CXX... " >&6; }
+   SYMLINK_ORIGINAL="$TEST_COMPILER"
+ 
+@@ -29379,8 +29392,9 @@ $as_echo_n "checking resolved symbolic links for CXX... " >&6; }
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: no symlink" >&5
+ $as_echo "no symlink" >&6; }
+   else
+-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMLINK_ORIGINAL" >&5
++      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $SYMLINK_ORIGINAL" >&5
+ $as_echo "$SYMLINK_ORIGINAL" >&6; }
++    fi
+     { $as_echo "$as_me:${as_lineno-$LINENO}: checking if CXX is disguised ccache" >&5
+ $as_echo_n "checking if CXX is disguised ccache... " >&6; }
+     COMPILER_BASENAME=`$BASENAME "$SYMLINK_ORIGINAL"`
+@@ -29914,11 +29928,21 @@ $as_echo "$as_me: The result from running it was: \"$COMPILER_VERSION_OUTPUT\""
+     # Check that this is likely to be GCC.
+     $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP -E "^(gcc|g\+\+|distcc)" >&5 2>&1
+     if test $? -ne 0; then
+-      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&5
+-$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler." >&6;}
++      { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the recommended $TOOLCHAIN_TYPE compiler." >&5
++$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the recommended $TOOLCHAIN_TYPE compiler." >&6;}
+       { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION\"" >&5
+ $as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION\"" >&6;}
+-      as_fn_error $? "A $TOOLCHAIN_TYPE compiler is required. Try setting --with-tools-dir." "$LINENO" 5
++      $COMPILER --version 2>&1 | $GREP "clang" >&5 2>&1
++      if test $? -ne 0 ; then
++        { $as_echo "$as_me:${as_lineno-$LINENO}: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the Clang compiler either." >&5
++$as_echo "$as_me: The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the Clang compiler either." >&6;}
++        { $as_echo "$as_me:${as_lineno-$LINENO}: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&5
++$as_echo "$as_me: The result from running with --version was: \"$COMPILER_VERSION_TEST\"" >&6;}
++        as_fn_error $? "GCC or Clang compiler is required. Try setting --with-tools-dir." "$LINENO" 5
++      else
++        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Clang compiler detected. The GCC compiler is recommended." >&5
++$as_echo "$as_me: WARNING: Clang compiler detected. The GCC compiler is recommended." >&2;}
++      fi
+     fi
+     # Remove Copyright and legalese from version string, and
+     # collapse into a single line
+diff --git a/openjdk/common/autoconf/toolchain.m4 b/openjdk/common/autoconf/toolchain.m4
+index 28b5538c..8a974655 100644
+--- a/openjdk/common/autoconf/toolchain.m4
++++ b/openjdk/common/autoconf/toolchain.m4
+@@ -424,9 +424,16 @@ AC_DEFUN([TOOLCHAIN_EXTRACT_COMPILER_VERSION],
+     # Check that this is likely to be GCC.
+     $ECHO "$COMPILER_VERSION_OUTPUT" | $GREP -E "(gcc|g\+\+|distcc)" >&AS_MESSAGE_LOG_FD 2>&1
+     if test $? -ne 0; then
+-      AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the required $TOOLCHAIN_TYPE compiler.])
++      AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the recommended $TOOLCHAIN_TYPE compiler.])
+       AC_MSG_NOTICE([The result from running with --version was: "$COMPILER_VERSION"])
+-      AC_MSG_ERROR([A $TOOLCHAIN_TYPE compiler is required. Try setting --with-tools-dir.])
++      $COMPILER --version 2>&1 | $GREP "clang" >&AS_MESSAGE_LOG_FD 2>&1
++      if test $? -ne 0 ; then
++        AC_MSG_NOTICE([The $COMPILER_NAME compiler (located as $COMPILER) does not seem to be the Clang compiler either.])
++        AC_MSG_NOTICE([The result from running with --version was: "$COMPILER_VERSION_TEST"])
++        AC_MSG_ERROR([GCC or Clang compiler is required. Try setting --with-tools-dir.])
++      else
++        AC_MSG_WARN([Clang compiler detected. The GCC compiler is recommended.])
++      fi
+     fi
+     # Remove Copyright and legalese from version string, and
+     # collapse into a single line
+@@ -535,13 +542,15 @@ AC_DEFUN([TOOLCHAIN_FIND_COMPILER],
+   BASIC_FIXUP_EXECUTABLE($1)
+   TEST_COMPILER="[$]$1"
+ 
+-  AC_MSG_CHECKING([resolved symbolic links for $1])
+-  SYMLINK_ORIGINAL="$TEST_COMPILER"
+-  BASIC_REMOVE_SYMBOLIC_LINKS(SYMLINK_ORIGINAL)
+-  if test "x$TEST_COMPILER" = "x$SYMLINK_ORIGINAL"; then
+-    AC_MSG_RESULT([no symlink])
+-  else
+-    AC_MSG_RESULT([$SYMLINK_ORIGINAL])
++  if ! echo "$CXX" | grep "clang++" >&AS_MESSAGE_LOG_FD 2>&1 ; then
++    AC_MSG_CHECKING([resolved symbolic links for $1])
++    SYMLINK_ORIGINAL="$TEST_COMPILER"
++    BASIC_REMOVE_SYMBOLIC_LINKS(SYMLINK_ORIGINAL)
++    if test "x$TEST_COMPILER" = "x$SYMLINK_ORIGINAL"; then
++      AC_MSG_RESULT([no symlink])
++    else
++      AC_MSG_RESULT([$SYMLINK_ORIGINAL])
++    fi
+     AC_MSG_CHECKING([if $1 is disguised ccache])
+     COMPILER_BASENAME=`$BASENAME "$SYMLINK_ORIGINAL"`
+     if test "x$COMPILER_BASENAME" = "xccache"; then
