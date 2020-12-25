@@ -1,2 +1,5 @@
 # Force the use of utmps on this profile
 sys-libs/musl utmps
+
+# Build fails when when pch is off on wyvern
+dev-java/icedtea pch
