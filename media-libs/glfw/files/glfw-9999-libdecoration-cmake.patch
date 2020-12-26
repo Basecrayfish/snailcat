@@ -1,0 +1,30 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3f5ebeb2..eb7687cd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -237,6 +237,14 @@ if (_GLFW_WAYLAND)
+             list(APPEND glfw_LIBRARIES "${EPOLLSHIM_LIBRARIES}")
+         endif()
+     endif()
++
++    if (GLFW_USE_LIBDECORATION)
++        set(WITH_DECORATION 1)
++        pkg_check_modules(Decoration REQUIRED
++            decoration)
++        list(APPEND glfw_INCLUDE_DIRS "${Decoration_INCLUDE_DIRS}")
++        list(APPEND glfw_LIBRARIES "${Decoration_LIBRARIES}")
++    endif()
+ endif()
+ 
+ #--------------------------------------------------------------------
+diff --git a/src/glfw_config.h.in b/src/glfw_config.h.in
+index f4876da2..3d848111 100644
+--- a/src/glfw_config.h.in
++++ b/src/glfw_config.h.in
+@@ -56,3 +56,6 @@
+ // Define this to 1 if the libc supports memfd_create()
+ #cmakedefine HAVE_MEMFD_CREATE
+ 
++// Define this to 1 if using libdecoration to provide Wayland decoration support
++#cmakedefine WITH_DECORATION
++
