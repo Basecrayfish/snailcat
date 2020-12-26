@@ -192,6 +192,11 @@ src_unpack() {
 	unpack ${SRC_PKG}
 }
 
+src_prepare() {
+	tc-is-clang && eapply "${FILESDIR}/${PN}-3.17.0-toolchain-clang.patch"
+	default
+}
+
 src_configure() {
 	# Link MUSL patches into icedtea build tree
 	ln -s "${FILESDIR}/${PN}-3.8.0-autoconf-config.patch" patches || die
@@ -244,11 +249,14 @@ src_configure() {
 	DISTRIBUTION_PATCHES+="patches/${PN}-3.12.0-jdk-fix-ipv6-init.patch "
 	DISTRIBUTION_PATCHES+="patches/${PN}-3.16.0-jdk-includes.patch "
 	# My patches
-	DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-jsig.patch "
-	DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autogen.patch "
 	DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-musl-isnanf.patch "
-	#DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-libcxx.patch "
-	#DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autoconf.patch "
+	# FIXME: Detect libcxx
+	DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-libcxx.patch "
+	if tc-is-clang; then
+		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autogen.patch "
+		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autoconf.patch "
+		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-jsig.patch "
+	fi
 
 	export DISTRIBUTION_PATCHES
 
@@ -342,9 +350,6 @@ src_configure() {
 	config+=" --with-parallel-jobs=$(makeopts_jobs)"
 
 	unset JAVA_HOME JDK_HOME CLASSPATH JAVAC JAVACFLAGS
-	export COMPILER_WARNINGS_FATAL=false
-	export USE_CLANG=true
-	#export LIBCXX="-lc++"
 
 	# force bash for now https://bugs.gentoo.org/722292
 	CONFIG_SHELL="${EPREFIX}/bin/bash" econf ${config} \
@@ -361,8 +366,6 @@ src_configure() {
 		--prefix="${EPREFIX}/usr/$(get_libdir)/icedtea${SLOT}" \
 		--mandir="${EPREFIX}/usr/$(get_libdir)/icedtea${SLOT}/man" \
 		--with-pkgversion="Gentoo ${PF}" \
-		--with-toolchain-type=clang \
-		--enable-native-debuginfo \
 		--disable-ccache \
 		--disable-downloading --disable-Werror --disable-tests \
 		--disable-systemtap-tests --enable-improved-font-rendering \
