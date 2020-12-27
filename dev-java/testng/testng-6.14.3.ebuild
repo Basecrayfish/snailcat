@@ -16,23 +16,22 @@ SLOT="0"
 IUSE="test"
 RESTRICT="test" # Occasionally fail or run *REALLY* slowly.
 
-CDEPEND="dev-java/bsh:0
+CP_DEPEND="dev-java/bsh:0
 	dev-java/guice:4
 	dev-java/junit:4
 	dev-java/ant-core:0
 	dev-java/snakeyaml:0
 	dev-java/jcommander:0"
 
-DEPEND="${CDEPEND}
+DEPEND="${CP_DEPEND}
 	>=virtual/jdk-1.7
 	test? ( dev-java/assertj-core:2 )"
 
-RDEPEND="${CDEPEND}
+RDEPEND="${CP_DEPEND}
 	>=virtual/jre-1.7"
 
 S="${WORKDIR}/${P}"
 JAVA_SRC_DIR="src/main/java"
-JAVA_GENTOO_CLASSPATH="ant-core,bsh,guice-4,jcommander,junit-4,snakeyaml"
 
 src_prepare() {
 	java-pkg_clean ! -path "${S}/src/*"
