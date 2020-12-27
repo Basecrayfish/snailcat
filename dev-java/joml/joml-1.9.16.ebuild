@@ -19,11 +19,15 @@ SLOT="0"
 
 KEYWORDS="~amd64 ~ppc64 ~x86"
 
-RDEPEND=">=virtual/jre-1.8"
-DEPEND=">=virtual/jdk-1.8"
+CP_DEPEND="dev-java/gwt:2.8"
+
+RDEPEND=">=virtual/jre-1.8
+	${CP_DEPEND}"
+
+DEPEND=">=virtual/jdk-1.8
+	${CP_DEPEND}"
 
 JAVA_SRC_DIR="src"
-JAVA_GENTOO_CLASSPATH="gwt-2.8"
 
 S="${WORKDIR}/${MY_P}"
 
