@@ -3,6 +3,8 @@
 
 EAPI=7
 
+inherit java-utils-2
+
 DESCRIPTION="Statically typed programming language for modern multiplatform applications"
 HOMEPAGE="https://kotlinlang.org/"
 SRC_URI="https://github.com/JetBrains/kotlin/releases/download/v${PV}/kotlin-compiler-${PV}.zip"
@@ -24,8 +26,11 @@ src_install() {
 	dodoc license/NOTICE.txt
 	rm -r license || die
 
+	java-pkg_jarinto "/opt/${PN}/lib"
+	java-pkg_dojar lib/* || die
+
 	insinto "/opt/${PN}"
-	doins -r *
+	doins -r bin
 	for i in bin/*; do
 		fperms +x "/opt/${PN}/$i"
 		dosym "${EROOT}/opt/${PN}/$i" "/usr/bin/${i//*\/}"
