@@ -1,0 +1,31 @@
+diff --git a/build.xml b/build.xml
+index fe05c0e..300184d 100644
+--- a/build.xml
++++ b/build.xml
+@@ -280,7 +280,7 @@
+             </classpath>
+ 
+             <jvmarg line="${generator.bindings}"/>
+-            <jvmarg line="-Dfile.encoding=UTF8 -Dline.separator=&#10;"/>
++            <jvmarg line="-Dfile.encoding=UTF8"/>
+ 
+             <arg value="${module.lwjgl}"/>
+         </java>
+@@ -801,7 +801,7 @@
+             <arg line="-Xmaxerrs 1000 -Xmaxwarns 1000"/>
+             <arg line="-notimestamp"/>
+             <arg value="-html5" if:set="jdk9"/>
+-            <arg line="-J-Dfile.encoding=UTF8 -J-Dline.separator=&#10;"/>
++            <arg line="-J-Dfile.encoding=UTF8"/>
+             <arg line="--add-exports jdk.javadoc/com.sun.tools.doclets=ALL-UNNAMED" if:set="jdk9"/>
+         </javadoc>
+         <get-quiet name="favicon" url="https://www.lwjgl.org/favicon.ico" dest="${bin.javadoc}"/>
+@@ -1121,7 +1121,7 @@
+                 <arg line="-Xmaxerrs 1000 -Xmaxwarns 1000"/>
+                 <arg line="-notimestamp"/>
+                 <arg value="-html5" if:set="jdk9"/>
+-                <arg line="-J-Dfile.encoding=UTF8 -J-Dline.separator=&#10;"/>
++                <arg line="-J-Dfile.encoding=UTF8"/>
+                 <arg line="--add-exports jdk.javadoc/com.sun.tools.doclets=ALL-UNNAMED" if:set="jdk9"/>
+             </javadoc>
+             <get-quiet name="favicon" url="https://www.lwjgl.org/favicon.ico" dest="${release}/${module}/javadoc" unless:set="javadoc.skip"/>

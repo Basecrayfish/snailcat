@@ -1,0 +1,28 @@
+diff --git a/modules/lwjgl/core/src/main/c/linux/LinuxConfig.h b/modules/lwjgl/core/src/main/c/linux/LinuxConfig.h
+index c21c198..c2d3e30 100644
+--- a/modules/lwjgl/core/src/main/c/linux/LinuxConfig.h
++++ b/modules/lwjgl/core/src/main/c/linux/LinuxConfig.h
+@@ -7,14 +7,19 @@
+ #include <inttypes.h>
+ 
+ #define DISABLE_WARNINGS() \
+-    _Pragma("GCC diagnostic push")
+-    _Pragma("GCC diagnostic ignored \"-Wunused-parameter\"")
+-    _Pragma("GCC diagnostic ignored \"-Wunused-but-set-variable\"")
+-    _Pragma("GCC diagnostic ignored \"-Wsign-compare\"")
++    _Pragma("GCC diagnostic push") \
++    _Pragma("GCC diagnostic ignored \"-Wall\"") \
++    _Pragma("GCC diagnostic ignored \"-Wextra\"")
++
++#pragma clang diagnostic ignored "-Wunused-parameter"
++#pragma clang diagnostic ignored "-Wsign-compare"
++#pragma clang diagnostic ignored "-Wimplicit-int"
++#pragma clang diagnostic ignored "-Wimplicit-const-int-float-conversion"
+ 
+ #define ENABLE_WARNINGS() \
+     _Pragma("GCC diagnostic pop")
+ 
++
+ // JNIEXPORT_CRITICAL & CRITICAL are used as a workaround for JDK-8167409 on applicable functions.
+ #define JNIEXPORT_CRITICAL static
+ #define CRITICAL(function) _JavaCritical_##function

@@ -1,0 +1,17 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 5218cf1..01e8e25 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -424,7 +424,11 @@
+         </build>
+ 
+         <!-- xxHash -->
+-        <build_simple module="xxhash"/>
++        <build module="xxhash" simple="true" if:true="${binding.xxhash}">
++            <link>
++                <arg value="-lxxhash"/>
++            </link>
++        </build>
+ 
+         <!-- yoga -->
+         <build module="yoga" simple="true" lang="c++" if:true="${binding.yoga}">

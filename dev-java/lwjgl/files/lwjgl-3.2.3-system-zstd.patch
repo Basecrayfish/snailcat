@@ -1,0 +1,14 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 8fabe1c..b24d84e 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -464,6 +464,9 @@
+                 <arg value="-I${src.main.rel}/common"/>
+                 <arg value="-I${src.main.rel}/dictBuilder"/>
+             </source>
++	    <link>
++		<arg value="-lzstd"/>
++	    </link>
+         </build>
+ 
+         </parallel>

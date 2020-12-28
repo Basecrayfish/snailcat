@@ -1,0 +1,16 @@
+diff --git a/modules/lwjgl/core/src/main/c/linux/wrap_memcpy.c b/modules/lwjgl/core/src/main/c/linux/wrap_memcpy.c
+index 239c958..10d4377 100644
+--- a/modules/lwjgl/core/src/main/c/linux/wrap_memcpy.c
++++ b/modules/lwjgl/core/src/main/c/linux/wrap_memcpy.c
+@@ -1,9 +1,6 @@
+ #include <stddef.h>
+-
+-void *old_memcpy(void *, const void *, size_t);
+-
+-__asm__(".symver old_memcpy,memcpy@GLIBC_2.2.5");
++#include <string.h>
+ 
+ void *__wrap_memcpy(void *dest, const void *src, size_t n) {
+-    return old_memcpy(dest, src, n);
++    return memcpy(dest, src, n);
+ }

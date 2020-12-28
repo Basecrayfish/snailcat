@@ -1,0 +1,12 @@
+diff --git a/modules/lwjgl/remotery/src/main/c/Remotery.c b/modules/lwjgl/remotery/src/main/c/Remotery.c
+index 7639ac6..e8d4781 100644
+--- a/modules/lwjgl/remotery/src/main/c/Remotery.c
++++ b/modules/lwjgl/remotery/src/main/c/Remotery.c
+@@ -113,6 +113,7 @@ static rmtBool g_SettingsInitialized = RMT_FALSE;
+ 
+     #ifdef RMT_PLATFORM_LINUX
+         #include <time.h>
++        #include <sys/select.h>
+         #ifdef __FreeBSD__
+             #include <pthread_np.h>
+         #else

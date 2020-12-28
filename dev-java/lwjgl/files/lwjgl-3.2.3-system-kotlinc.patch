@@ -1,0 +1,13 @@
+diff --git a/config/build-definitions.xml b/config/build-definitions.xml
+index 8b71f8f..d6ad1ca 100644
+--- a/config/build-definitions.xml
++++ b/config/build-definitions.xml
+@@ -62,7 +62,7 @@ This script is included in /build.xml and /config/update-dependencies.xml.
+ 
+     <property name="lib" location="bin/libs" relative="true"/>
+ 
+-    <property name="kotlinc" location="${lib}/kotlinc" relative="true"/>
++    <property name="kotlinc" location="${env.KOTLINC_HOME}" relative="false"/>
+ 
+     <property name="module.lwjgl" location="modules/lwjgl" relative="true"/>
+ 

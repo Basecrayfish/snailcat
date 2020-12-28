@@ -1,0 +1,22 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index db3555f..6fe8d45 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -169,7 +169,6 @@
+         <!-- CORE -->
+         <build module="core" flags="-Werror -Wfatal-errors -Wall -Wextra -pedantic">
+             <source>
+-                <arg value="-I${src.main.rel}/dyncall"/>
+                 <fileset dir=".">
+                     <include name="${src.main}/*.c"/>
+                     <include name="${src.generated}/*.c"/>
+@@ -189,6 +188,9 @@
+                     <include name="libdyn*.a"/>
+                 </fileset>
+                 <arg value="-ldl"/>
++                <arg value="-ldyncall_s"/>
++                <arg value="-ldyncallback_s"/>
++                <arg value="-ldynload_s"/>
+             </link>
+         </build>
+ 

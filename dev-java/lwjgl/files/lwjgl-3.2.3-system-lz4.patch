@@ -1,0 +1,14 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 01e8e25..8fabe1c 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -254,6 +254,9 @@
+                     <fileset dir="." includes="${module.lwjgl}/xxhash/src/main/c/*.c"/>
+                 </compile>
+             </beforeCompile>
++	    <link>
++		<arg value="-llz4"/>
++	    </link>
+         </build>
+ 
+         <!-- Meow -->
