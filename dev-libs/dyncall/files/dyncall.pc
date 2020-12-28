@@ -1,0 +1,12 @@
+prefix=%PREFIX%
+exec_prefix=${prefix}
+libdir=${prefix}/%LIB%
+includedir=${prefix}/include
+
+Name: dyncall
+Description: A Generic Dynamic FFI package
+Version:
+
+Cflags: -I${includedir}
+Libs: -L${libdir} -ldyncall_s -ldynload_s -ldyncallback_s
+Libs.private: -ldl
