@@ -1,0 +1,49 @@
+diff --git a/src/main/java/oshi/software/os/windows/nt/CentralProcessor.java b/src/main/java/oshi/software/os/windows/nt/CentralProcessor.java
+index 507d00b..437935f 100644
+--- a/src/main/java/oshi/software/os/windows/nt/CentralProcessor.java
++++ b/src/main/java/oshi/software/os/windows/nt/CentralProcessor.java
+@@ -470,7 +470,7 @@ public class CentralProcessor implements Processor {
+         WinBase.FILETIME lpIdleTime = new WinBase.FILETIME();
+         WinBase.FILETIME lpKernelTime = new WinBase.FILETIME();
+         WinBase.FILETIME lpUserTime = new WinBase.FILETIME();
+-        if (0 == Kernel32.INSTANCE.GetSystemTimes(lpIdleTime, lpKernelTime, lpUserTime)) {
++        if (!Kernel32.INSTANCE.GetSystemTimes(lpIdleTime, lpKernelTime, lpUserTime)) {
+             LOG.error("Failed to update system idle/kernel/user times. Error code: " + Native.getLastError());
+             return;
+         }
+diff --git a/src/main/java/oshi/software/os/windows/nt/Kernel32.java b/src/main/java/oshi/software/os/windows/nt/Kernel32.java
+index 4155639..437707d 100644
+--- a/src/main/java/oshi/software/os/windows/nt/Kernel32.java
++++ b/src/main/java/oshi/software/os/windows/nt/Kernel32.java
+@@ -28,31 +28,4 @@ public interface Kernel32 extends com.sun.jna.platform.win32.Kernel32 {
+     Kernel32 INSTANCE = (Kernel32) Native.loadLibrary("Kernel32", Kernel32.class);
+ 
+     static final long WIN32_TIME_OFFSET = (369L * 365L + 89L) * 24L * 3600L * 1000L;
+-
+-    // TODO: Submit this change to JNA Kernel32 class
+-    /**
+-     * Retrieves system timing information. On a multiprocessor system, the
+-     * values returned are the sum of the designated times across all
+-     * processors.
+-     * 
+-     * Times are offset by {@value #WIN32_TIME_OFFSET}.
+-     * 
+-     * @param lpIdleTime
+-     *            A pointer to a FILETIME structure that receives the amount of
+-     *            time that the system has been idle.
+-     * @param lpKernelTime
+-     *            A pointer to a FILETIME structure that receives the amount of
+-     *            time that the system has spent executing in Kernel mode
+-     *            (including all threads in all processes, on all processors).
+-     *            This time value also includes the amount of time the system
+-     *            has been idle.
+-     * @param lpUserTime
+-     *            A pointer to a FILETIME structure that receives the amount of
+-     *            time that the system has spent executing in User mode
+-     *            (including all threads in all processes, on all processors).
+-     * @return If the function succeeds, the return value is nonzero. If the
+-     *         function fails, the return value is zero and errno is set.
+-     */
+-    int GetSystemTimes(WinBase.FILETIME lpIdleTime, WinBase.FILETIME lpKernelTime, WinBase.FILETIME lpUserTime);
+-
+ }
