@@ -7,8 +7,8 @@ JAVA_PKG_IUSE="doc source"
 
 inherit java-pkg-2 java-pkg-simple
 
-DESCRIPTION="Annotations for the Java Jackson data processor"
-HOMEPAGE="https://github.com/FasterXML/jackson-annotations"
+DESCRIPTION="General data-binding package for Jackson"
+HOMEPAGE="https://github.com/FasterXML/jackson-databind"
 SRC_URI="https://github.com/FasterXML/${PN}/archive/${PN}-${PV}.tar.gz"
 LICENSE="Apache-2.0"
 SLOT="2"
