@@ -1,0 +1,24 @@
+diff --git a/build.xml b/build.xml
+index 22a94f4..0f1a08e 100644
+--- a/build.xml
++++ b/build.xml
+@@ -570,19 +570,4 @@
+ 	    -->
+         </javadoc>
+     </target>
+-
+-    <target name="push-to-maven-prepare" depends="-push-to-maven-init, jar, src"
+-        description="creates an image for the 'push-to-maven' goal">
+-        <delete dir="target/maven-repo" /><!-- clean it -->
+-        <maven-repository-importer
+-		destdir="target/maven-repo" version="${release.version}">
+-            <artifact jar="target/release/mail.jar" pom="mail.pom"
+-		    srczip="target/mail.src.zip" />
+-        </maven-repository-importer>
+-    </target>
+-
+-    <target name="push-to-maven" depends="push-to-maven-prepare"
+-        description="pushes jars to the java.net maven repository">
+-        <cvs-import src="target/maven-repo" dest="glassfish/repo" />
+-    </target>
+ </project>
