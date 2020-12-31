@@ -1,0 +1,13 @@
+diff --git a/compiler/src/org.graalvm.compiler.truffle.options/src/org/graalvm/compiler/truffle/options/PolyglotCompilerOptions.java b/compiler/src/org.graalvm.compiler.truffle.options/src/org/graalvm/compiler/truffle/options/PolyglotCompilerOptions.java
+index 0440efb..3d03463 100644
+--- a/src/org.graalvm.compiler.truffle.options/src/org/graalvm/compiler/truffle/options/PolyglotCompilerOptions.java
++++ b/src/org.graalvm.compiler.truffle.options/src/org/graalvm/compiler/truffle/options/PolyglotCompilerOptions.java
+@@ -513,7 +513,7 @@ public final class PolyglotCompilerOptions {
+     // @formatter:on
+ 
+     public static OptionDescriptors getDescriptors() {
+-        return new PolyglotCompilerOptionsOptionDescriptors();
++        return OptionDescriptors.EMPTY;
+     }
+ 
+ }
