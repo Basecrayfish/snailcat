@@ -23,7 +23,7 @@ RESTRICT="!test? ( test )"
 CP_DEPEND="dev-java/osgi-core-api:0
 	dev-java/stax2-api:0
 	dev-java/msv:0
-	dev-java/relaxng-datatype-java:0
+	dev-java/relaxng-datatype:0
 	dev-java/xsdlib:0"
 
 RDEPEND=">=virtual/jre-1.7
