@@ -31,8 +31,6 @@ JAVA_SRC_DIR="src/main/java"
 
 src_prepare() {
 	mkdir -p ${JAVA_SRC_DIR} || die
-	# FIXME: Only building stubbed api
-	# FIXME: amd64 only
-	cp -r jdk.vm.ci.{code,services,common,meta,runtime,amd64,hotspot,hotspot.amd64}/src/* ${JAVA_SRC_DIR} || die
+	cp -r jdk.vm.ci.{code,services,common,meta,runtime,amd64,aarch64,hotspot,hotspot.amd64,hotspot.aarch64,sparc,hotspot.sparc}/src/* ${JAVA_SRC_DIR} || die
 	java-pkg-2_src_prepare
 }
