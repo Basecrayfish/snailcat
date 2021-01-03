@@ -1,0 +1,134 @@
+diff --git a/build.xml b/build.xml
+index 2a08ad8..db06da1 100644
+--- a/build.xml
++++ b/build.xml
+@@ -31,6 +31,10 @@
+   <condition property="ivy.xml.name" value="ivy-pure-java.xml" else="ivy.xml">
+     <istrue value="${lz4-pure-java}"/>
+   </condition>
++  <property name="lz4-pure-java" value="true" />
++  <property name="ivy.revision" value="1.7.1" />
++  <property name="ivy.module" value="lz4" />
++
+   <condition property="pom.template.name" value="pom-pure-java.template" else="pom.template">
+     <istrue value="${lz4-pure-java}"/>
+   </condition>
+@@ -79,38 +83,28 @@
+   </target>
+ 
+   <target name="install-cpptasks" unless="cpptasks.available">
+-    <ivy:cachepath organisation="ant-contrib" module="cpptasks" revision="1.0b5"
+-      inline="true" conf="default" transitive="true" pathid="cpptasks.classpath"/>
+     <taskdef uri="antlib:net.sf.antcontrib.cpptasks" resource="net/sf/antcontrib/cpptasks/antlib.xml" classpathref="cpptasks.classpath"/>
+     <property name="cpptasks.available" value="true"/>
+   </target>
+ 
+   <target name="install-maven-ant-tasks" unless="maven-ant-tasks.available">
+-    <ivy:cachepath organisation="org.apache.maven" module="maven-ant-tasks" revision="2.1.3"
+-      inline="true" conf="default" transitive="true" pathid="maven-ant-tasks.classpath"/>
+     <taskdef uri="antlib:org.apache.maven.artifact.ant" resource="org/apache/maven/artifact/ant/antlib.xml" classpathref="maven-ant-tasks.classpath"/>
+     <property name="maven-ant-tasks.available" value="true"/>
+   </target>
+ 
+   <target name="install-forbidden-apis" unless="forbidden-apis.available">
+-    <ivy:cachepath organisation="de.thetaphi" module="forbiddenapis" revision="1.3"
+-      inline="true" conf="default" transitive="true" pathid="forbidden-apis.classpath"/>
+     <taskdef name="forbidden-apis" classname="de.thetaphi.forbiddenapis.AntTask" classpathref="forbidden-apis.classpath"/>
+     <property name="forbidden-apis.available" value="true"/>
+   </target>
+ 
+   <target name="install-bnd" unless="bnd.available">
+     <!-- using bnd 1.50.0 because more recent versions have broken JAR wrapping -->
+-    <ivy:cachepath organisation="biz.aQute" module="bnd" revision="1.50.0"
+-      inline="true" conf="default" transitive="true" pathid="bnd.classpath"/>
+     <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="bnd.classpath"/>
+     <property name="bnd.available" value="true"/> 
+   </target>
+ 
+   <target name="init">
+     <tstamp />
+-    <ivy:resolve file="${ivy.xml.name}" conf="test" />
+-    <ivy:retrieve />
+   </target>
+ 
+   <target name="install-junit4" depends="init" unless="junit4.available">
+@@ -123,13 +117,11 @@
+   </target>
+ 
+   <target name="generate-sources" depends="init">
+-    <ivy:cachepath organisation="org.mvel" module="mvel2" revision="2.3.2.Final"
+-      inline="true" conf="default" transitive="true" pathid="mvel.classpath"/>
+     <mkdir dir="${build}/java" />
+     <java
+       fork="true"
+       failonerror="true"
+-      classpathref="mvel.classpath"
++      classpath="${gentoo.classpath}"
+       classname="org.mvel2.sh.Main"
+       dir="${src}/build/source_templates">
+       <sysproperty key="out.dir" value="${build}/java"/>
+@@ -195,7 +187,7 @@
+     </javah>
+   </target>
+ 
+-  <target name="compile-jni" depends="install-cpptasks,generate-headers" unless="${skip.jni}">
++  <target name="compile-jni" depends="generate-headers" unless="${skip.jni}">
+     <mkdir dir="${build}/objects" />
+     <mkdir dir="${build}/jni/net/jpountz/util/${platform}/${os.arch}" />
+     <cpptasks:cc
+@@ -274,7 +266,7 @@
+     <antcall target="-test" />
+   </target>
+ 
+-  <target name="-test" depends="compile-tests, install-junit4">
++  <target name="-test" depends="compile-tests">
+     <mkdir dir="${build}/tests" />
+     <junit4:junit4
+       dir="${java.io.tmpdir}"
+@@ -373,7 +365,7 @@
+     </jar>
+   </target>
+ 
+-  <target name="bundle" description="makes the JAR a valid OSGi bundle" depends="install-bnd, jar">
++  <target name="bundle" description="makes the JAR a valid OSGi bundle" depends="jar">
+     <taskdef resource="aQute/bnd/ant/taskdef.properties" classpathref="bnd.classpath"/>
+     <property name="packages.version" value="${ivy.revision}"/>
+     <!-- We need to remove potential -SNAPSHOT qualifiers as package versions... -->
+@@ -392,18 +384,7 @@
+     <delete file="${dist}/${ivy.module}.jar"/>
+   </target>
+ 
+-  <target name="makepom" description="generate a pom file">
+-    <ivy:makepom
+-        ivyfile="${basedir}/${ivy.xml.name}"
+-        pomfile="${dist}/${ivy.module}-${ivy.revision}.pom"
+-        templatefile="${src}/build/${pom.template.name}">
+-      <mapping conf="default" scope="compile" />
+-      <mapping conf="test" scope="test" />
+-    </ivy:makepom>
+-  </target>
+-
+-  <target name="dist" description="package" depends="bundle,docs,sources,makepom" />
+-
++  <target name="dist" description="package" depends="jar,docs,sources" />
+   <target name="dist-skip-jni" description="package without building native libraries">
+     <property name="skip.jni" value="true" />
+     <antcall target="dist" />
+@@ -427,17 +408,6 @@
+     <attribute name="repositoryid" />
+     <attribute name="repositoryurl" />
+     <sequential>
+-      <mvn:mvn>
+-        <arg value="org.apache.maven.plugins:maven-gpg-plugin:1.4:sign-and-deploy-file" />
+-        <arg value="-Durl=@{repositoryurl}" />
+-        <arg value="-DrepositoryId=@{repositoryid}" />
+-        <arg value="-DpomFile=${dist}/${ivy.module}-${ivy.revision}.pom" />
+-        <arg value="-Dfile=${dist}/${ivy.module}-${ivy.revision}.jar" />
+-        <arg value="-Dfiles=${dist}/${ivy.module}-${ivy.revision}-sources.jar,${dist}/${ivy.module}-${ivy.revision}-javadoc.jar" />
+-        <arg value="-Dclassifiers=sources,javadoc" />
+-        <arg value="-Dtypes=jar,jar" />
+-        <arg value="-Pgpg" />
+-      </mvn:mvn>
+     </sequential>
+   </macrodef>
+ 
