@@ -17,7 +17,7 @@ MY_P="${MY_PN}-${MY_PV}"
 SRC_URI="https://github.com/mvel/${PN}/archive/${MY_P}.tar.gz"
 
 LICENSE="Apache-2.0"
-SLOT="2"
+SLOT="2.3"
 KEYWORDS="~amd64"
 RESTRICT="test"
 
