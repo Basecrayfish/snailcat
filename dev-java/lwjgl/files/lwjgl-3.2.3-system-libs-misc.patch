@@ -1,0 +1,46 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 459e1bd..bffe900 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -320,10 +320,21 @@
+         </build>
+ 
+         <!-- OpenGL -->
+-        <build_simple module="opengl"/>
++        <build module="opengl" simple="true" if:true="${binding.opengl}">
++            <link>
++		<arg value="-lrt"/>
++		<arg value="-lm"/>
++		<arg value="-ldl"/>
++                <arg value="-lGL"/>
++            </link>
++        </build>
+ 
+         <!-- OpenGL ES -->
+-        <build_simple module="opengles"/>
++        <build module="opengles" simple="true" if:true="${binding.opengles}">
++            <link>
++                <arg value="-lGLESv2"/>
++            </link>
++        </build>
+ 
+         <!-- OpenVR -->
+         <build_simple module="openvr"/>
+@@ -368,6 +379,7 @@
+         <build module="stb" if:true="${binding.stb}">
+             <source>
+                 <arg value="-isystem${src.main.rel}"/>
++                <arg value="-I/usr/include/stb"/>
+                 <fileset dir="." includes="${src.generated}/*.c"/>
+             </source>
+             <link>
+@@ -393,6 +405,9 @@
+                     <fileset dir="." includes="${src.main}/*.c"/>
+                 </compile>
+             </beforeCompile>
++            <link>
++                <arg value="-ltinyfd"/>
++            </link>
+         </build>
+ 
+         <!-- AMD Tootle -->

@@ -21,6 +21,19 @@ MY_P="${MY_PN}-${PV}"
 
 S="${WORKDIR}/${MY_P}"
 
+# FIXME: Need dep on EGL
+# FIXME: LLVM 11 forced
+COMMON_DEPEND="sys-devel/llvm:11
+	sys-devel/clang:11
+	virtual/opengl
+	media-libs/glfw
+	media-libs/openal
+	media-libs/opus
+	media-libs/vulkan-loader
+	dev-libs/stb
+	dev-libs/tiny-file-descriptors
+	dev-libs/remotery"
+
 #GWT provides some javax annotations until i figure out how to use the real ones
 CP_DEPEND="
 	dev-java/commons-math:0
@@ -39,10 +52,11 @@ DEPEND="${CP_DEPEND}
 	app-arch/zstd[static-libs(+)]
 	dev-libs/dyncall
 	dev-libs/xxhash[static-libs(+)]
-	sci-physics/bullet"
+	${COMMON_DEPEND}"
 
 # Runtime deps are optional
-RDEPEND=">=virtual/jre-1.8"
+RDEPEND=">=virtual/jre-1.8
+	${COMMON_DEPEND}"
 
 #JAVA_PKG_STRICT=true
 JAVA_ANT_REWRITE_CLASSPATH="true"
@@ -75,12 +89,21 @@ src_prepare() {
 	# zstd
 	eapply "${FILESDIR}/${PN}-3.2.3-system-zstd.patch" || die
 	rm -r ${S}/modules/lwjgl/zstd/src/main/c || die
+	# remotery
+	# FIXME: Remotery needs to be installed in source code form. NOT AS A STATIC LIB
+	#eapply "${FILESDIR}/${PN}-3.2.3-system-remotery.patch" || die
+	#rm -r ${S}/modules/lwjgl/remotery/src/main/c || die
+	# LLVM
+	eapply "${FILESDIR}/${PN}-3.2.3-system-llvm.patch" || die
+	rm -r ${S}/modules/lwjgl/llvm/src/main/c || die
 	# nfd
 	# rpmalloc
 	# stb
 	# tinyfd
 	# tootle
 	# yoga
+	eapply "${FILESDIR}/${PN}-3.2.3-system-libs-misc.patch" || die
+	eapply "${FILESDIR}/${PN}-3.2.3-disable-misc.patch"
 	eapply "${FILESDIR}/${PN}-3.2.3-accept_old_jdk.patch" || die
 	default
 }

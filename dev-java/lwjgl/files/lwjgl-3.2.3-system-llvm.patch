@@ -1,0 +1,19 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 2f47a34..459e1bd 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -231,7 +231,13 @@
+         <build_simple module="libdivide"/>
+ 
+         <!-- LLVM -->
+-        <build_simple module="llvm"/>
++        <build module="llvm" simple="true" if:true="${binding.llvm}" flags="-Werror -Wfatal-errors -I/usr/lib/llvm/11/include">
++            <link>
++                <arg value="-L/usr/lib/llvm/11/lib"/>
++                <arg value="-lLLVM-11libcxx"/>
++                <arg value="-lclang"/>
++            </link>
++        </build>
+ 
+         <!-- LMDB -->
+         <build module="lmdb" simple="true" if:true="${binding.lmdb}">

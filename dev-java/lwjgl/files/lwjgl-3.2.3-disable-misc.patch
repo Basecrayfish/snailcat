@@ -1,0 +1,80 @@
+diff --git a/config/build-bindings.xml b/config/build-bindings.xml
+index 9204a2c..316bbfa 100644
+--- a/config/build-bindings.xml
++++ b/config/build-bindings.xml
+@@ -22,54 +22,54 @@ This script is included in /config/build-definitions.xml.
+         </or>
+     </condition>
+ 
+-    <property name="binding.assimp" value="true"/>
+-    <property name="binding.bgfx" value="true"/>
++    <property name="binding.assimp" value="false"/>
++    <property name="binding.bgfx" value="false"/>
+     <property name="binding.bullet" value="false"/>
+-    <property name="binding.cuda" value="true"/>
++    <property name="binding.cuda" value="false"/>
+     <property name="binding.egl" value="true"/>
+     <property name="binding.glfw" value="true"/>
+     <property name="binding.jawt" value="true"/>
+-    <property name="binding.jemalloc" value="true"/>
+-    <property name="binding.libdivide" value="true"/>
++    <property name="binding.jemalloc" value="false"/>
++    <property name="binding.libdivide" value="false"/>
+     <property name="binding.llvm" value="true"/>
+-    <property name="binding.lmdb" value="true"/>
++    <property name="binding.lmdb" value="false"/>
+     <property name="binding.lz4" value="true"/>
+-    <condition property="binding.meow" value="true" else="false">
++    <condition property="binding.meow" value="false" else="false">
+         <or>
+             <isset property="notARM"/>
+             <isset property="build.arch.arm64"/>
+         </or>
+     </condition>
+-    <property name="binding.nanovg" value="true"/>
+-    <condition property="binding.nfd" value="true" else="false"><isset property="notARM"/></condition>
+-    <property name="binding.nuklear" value="true"/>
+-    <property name="binding.odbc" value="true"/>
++    <property name="binding.nanovg" value="false"/>
++    <condition property="binding.nfd" value="false" else="false"><isset property="notARM"/></condition>
++    <property name="binding.nuklear" value="false"/>
++    <property name="binding.odbc" value="false"/>
+     <property name="binding.openal" value="true"/>
+     <property name="binding.opencl" value="true"/>
+     <property name="binding.opengl" value="true"/>
+     <property name="binding.opengles" value="true"/>
+-    <condition property="binding.openvr" value="true" else="false"><isset property="notARM"/></condition>
++    <condition property="binding.openvr" value="false" else="false"><isset property="notARM"/></condition>
+     <property name="binding.opus" value="true"/>
+-    <property name="binding.par" value="true"/>
++    <property name="binding.par" value="false"/>
+     <property name="binding.remotery" value="true"/>
+-    <property name="binding.rpmalloc" value="true"/>
+-    <property name="binding.shaderc" value="true"/>
++    <property name="binding.rpmalloc" value="false"/>
++    <property name="binding.shaderc" value="false"/>
+     <condition property="binding.sse" value="true" else="false"><isset property="notARM"/></condition>
+     <property name="binding.stb" value="true"/>
+-    <property name="binding.tinyexr" value="true"/>
++    <property name="binding.tinyexr" value="false"/>
+     <property name="binding.tinyfd" value="true"/>
+-    <condition property="binding.tootle" value="true" else="false"><isset property="notARM"/></condition>
+-    <property name="binding.vma" value="true"/>
++    <condition property="binding.tootle" value="false" else="false"><isset property="notARM"/></condition>
++    <property name="binding.vma" value="false"/>
+     <property name="binding.vulkan" value="true"/>
+     <property name="binding.xxhash" value="true"/>
+-    <property name="binding.yoga" value="true"/>
++    <property name="binding.yoga" value="false"/>
+     <property name="binding.zstd" value="true"/>
+ 
+     <!-- TODO: automate -->
+-    <property name="java-only.binding.cuda" value="true"/>
++    <property name="java-only.binding.cuda" value="false"/>
+     <property name="java-only.binding.egl" value="true"/>
+     <property name="java-only.binding.jawt" value="true"/>
+-    <property name="java-only.binding.odbc" value="true"/>
++    <property name="java-only.binding.odbc" value="false"/>
+     <property name="java-only.binding.opencl" value="true"/>
+ 
+     <!-- Set the path to the Oculus SDK to enable. -->
