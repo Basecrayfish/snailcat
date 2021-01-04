@@ -1,0 +1,26 @@
+diff --git a/src/wl_platform.h b/src/wl_platform.h
+index 6d1e29d7..c48184d1 100644
+--- a/src/wl_platform.h
++++ b/src/wl_platform.h
+@@ -59,7 +59,7 @@ typedef VkBool32 (APIENTRY *PFN_vkGetPhysicalDeviceWaylandPresentationSupportKHR
+ #include "wayland-idle-inhibit-unstable-v1-client-protocol.h"
+ 
+ #ifdef WITH_DECORATION
+-#include <libdecoration/libdecoration.h>
++#include <libdecor-0/libdecor.h>
+ #else
+ #include "wayland-xdg-shell-client-protocol.h"
+ #include "wayland-xdg-decoration-client-protocol.h"
+diff --git a/src/wl_window.c b/src/wl_window.c
+index e684d1a1..0b2d1abf 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -41,7 +41,7 @@
+ #include <poll.h>
+ 
+ #ifdef WITH_DECORATION
+-#include <libdecoration/libdecoration.h>
++#include <libdecor-0/libdecor.h>
+ #endif
+ 
+ 

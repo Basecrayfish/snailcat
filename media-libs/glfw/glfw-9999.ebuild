@@ -40,7 +40,10 @@ BDEPEND="
 	wayland? ( kde-frameworks/extra-cmake-modules )
 "
 
-PATCHES=( "${FILESDIR}/${PN}-9999-libdecoration-cmake.patch" )
+PATCHES=(
+	"${FILESDIR}/${PN}-9999-libdecoration-cmake.patch"
+	"${FILESDIR}/${PN}-9999-libdecor-0-rename.patch"
+)
 
 pkg_pretend() {
 	if use libdecoration && ! use wayland; then

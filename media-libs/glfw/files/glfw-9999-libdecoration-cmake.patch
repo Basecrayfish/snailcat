@@ -10,7 +10,7 @@ index 3f5ebeb2..eb7687cd 100644
 +    if (GLFW_USE_LIBDECORATION)
 +        set(WITH_DECORATION 1)
 +        pkg_check_modules(Decoration REQUIRED
-+            decoration)
++            libdecor-0)
 +        list(APPEND glfw_INCLUDE_DIRS "${Decoration_INCLUDE_DIRS}")
 +        list(APPEND glfw_LIBRARIES "${Decoration_LIBRARIES}")
 +    endif()
