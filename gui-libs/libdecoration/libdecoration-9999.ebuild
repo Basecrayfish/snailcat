@@ -11,6 +11,7 @@ if [[ ${PV} != *9999* ]]; then
 else
 	inherit git-r3
 	EGIT_REPO_URI="https://gitlab.gnome.org/jadahl/libdecoration.git"
+	EGIT_BRANCH="wip/api-versions"
 fi
 
 DESCRIPTION="Helps Wayland clients handle window decorations"
