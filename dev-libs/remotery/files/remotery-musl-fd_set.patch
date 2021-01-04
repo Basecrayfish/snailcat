@@ -1,0 +1,12 @@
+diff --git a/lib/Remotery.c b/lib/Remotery.c
+index 84adf91..5db5c59 100644
+--- a/lib/Remotery.c
++++ b/lib/Remotery.c
+@@ -113,6 +113,7 @@ static rmtBool g_SettingsInitialized = RMT_FALSE;
+ 
+     #ifdef RMT_PLATFORM_LINUX
+         #include <time.h>
++        #include <sys/select.h>
+         #if defined(__FreeBSD__) || defined(__OpenBSD__)
+             #include <pthread_np.h>
+         #else
