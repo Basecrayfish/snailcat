@@ -23,6 +23,7 @@ S="${WORKDIR}/${MY_P}"
 
 # FIXME: Need dep on EGL
 # FIXME: LLVM 11 forced
+# FIXME: Disabled system remotery
 COMMON_DEPEND="sys-devel/llvm:11
 	sys-devel/clang:11
 	virtual/opengl
@@ -31,8 +32,7 @@ COMMON_DEPEND="sys-devel/llvm:11
 	media-libs/opus
 	media-libs/vulkan-loader
 	dev-libs/stb
-	dev-libs/tiny-file-descriptors
-	dev-libs/remotery"
+	dev-libs/tiny-file-dialogs"
 
 #GWT provides some javax annotations until i figure out how to use the real ones
 CP_DEPEND="
