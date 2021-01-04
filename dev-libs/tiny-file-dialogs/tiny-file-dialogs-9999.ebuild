@@ -19,10 +19,10 @@ RDEPEND=""
 
 src_compile() {
 	$(tc-getCC) ${CFLAGS} -c -I. -o tinyfd.o tinyfiledialogs.c || die
-	$(tc-getAR) rcs tinyfd.a tinyfd.o || die
+	$(tc-getAR) rcs libtinyfd.a tinyfd.o || die
 }
 
 src_install() {
-	dolib.a ${S}/tinyfd.a
+	dolib.a ${S}/libtinyfd.a
 	doheader ${S}/tinyfiledialogs.h
 }
