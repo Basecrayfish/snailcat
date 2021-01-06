@@ -1,7 +1,7 @@
 sys-apps/attr static-libs
 sys-apps/toybox pie static
 dev-libs/popt static-libs
-dev-libs/libressl static-libs
+dev-libs/openssl static-libs
 dev-libs/skalibs static-libs static-pic shared-libs
 dev-lang/execline static-libs static -static-pic -shared-libs
 sys-apps/s6 static-libs static -static-pic -shared-libs

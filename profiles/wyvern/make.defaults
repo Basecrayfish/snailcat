@@ -7,13 +7,12 @@ USE="${USE} -acl -consolekit -policykit" # AUX Permissions
 USE="${USE} system-jsoncpp"
 USE="${USE} -kmod" # Kernel provided features
 USE="${USE} -pam sockets udev -udisk icu hwloc utmps nsss libedit" # System level app features
-USE="${USE} ssl libressl -gnupg" # SSL Options
+USE="${USE} ssl -gnupg" # SSL Options
 USE="${USE} -gtk -sdl -sdl2 -qt" # Graphical interfaces
 USE="${USE} -alsa -cups -luajit git tmux" # General App features
 USE="${USE} zstd bzip2" # Compression algorithm support
 USE="${USE} system-harfbuzz system-icu system-jpeg system-jsoncpp system-libevent system-libvpx system-llvm system-sqlite" # Use system libraries
 
-USE="${USE} curl_ssl_libressl" # CURL_SSL="libressl"
 USE="${USE} python_targets_python3_8" # PYTHON_TARGETS="python3_8"
 USE="${USE} python_single_target_python3_8" # PYTHON_SINGLE_TARGET="python3_8"
 

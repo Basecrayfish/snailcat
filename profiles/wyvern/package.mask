@@ -18,6 +18,3 @@ sys-apps/kmod
 
 # Coreutils is replaced with toybox
 sys-apps/coreutils
-
-# Openssl is replaced with libressl or alternatives
-dev-libs/openssl
