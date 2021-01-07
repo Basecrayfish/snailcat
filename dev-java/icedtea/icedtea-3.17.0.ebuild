@@ -192,11 +192,6 @@ src_unpack() {
 	unpack ${SRC_PKG}
 }
 
-src_prepare() {
-	tc-is-clang && eapply "${FILESDIR}/${PN}-3.17.0-toolchain-clang.patch"
-	default
-}
-
 src_configure() {
 	# Link MUSL patches into icedtea build tree
 	ln -s "${FILESDIR}/${PN}-3.8.0-autoconf-config.patch" patches || die
@@ -254,7 +249,7 @@ src_configure() {
 	DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-libcxx.patch "
 	if tc-is-clang; then
 		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autogen.patch "
-		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autoconf.patch "
+		#DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-autoconf.patch "
 		DISTRIBUTION_PATCHES+="patches/${PN}-3.17.0-jdk-clang-jsig.patch "
 	fi
 
@@ -350,6 +345,8 @@ src_configure() {
 	config+=" --with-parallel-jobs=$(makeopts_jobs)"
 
 	unset JAVA_HOME JDK_HOME CLASSPATH JAVAC JAVACFLAGS
+	export COMPILER_WARNINGS_FATAL=false
+	export USE_CLANG=true
 
 	# force bash for now https://bugs.gentoo.org/722292
 	CONFIG_SHELL="${EPREFIX}/bin/bash" econf ${config} \
