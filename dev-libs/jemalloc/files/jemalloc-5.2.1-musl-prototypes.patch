@@ -1,0 +1,130 @@
+diff --git a/include/jemalloc/jemalloc_protos.h.in b/include/jemalloc/jemalloc_protos.h.in
+index a78414b..20c1e67 100644
+--- a/include/jemalloc/jemalloc_protos.h.in
++++ b/include/jemalloc/jemalloc_protos.h.in
+@@ -8,22 +8,21 @@ extern JEMALLOC_EXPORT void		(*@je_@malloc_message)(void *cbopaque,
+     const char *s);
+ 
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@malloc(size_t size)
+-    JEMALLOC_CXX_THROW JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE(1);
++    void			*@je_@malloc(size_t size)
++    JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE(1);
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@calloc(size_t num, size_t size)
+-    JEMALLOC_CXX_THROW JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE2(1, 2);
+-JEMALLOC_EXPORT int JEMALLOC_NOTHROW	@je_@posix_memalign(void **memptr,
+-    size_t alignment, size_t size) JEMALLOC_CXX_THROW JEMALLOC_ATTR(nonnull(1));
++    void			*@je_@calloc(size_t num, size_t size)
++    JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE2(1, 2);
++JEMALLOC_EXPORT int		@je_@posix_memalign(void **memptr,
++    size_t alignment, size_t size) JEMALLOC_ATTR(nonnull(1));
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@aligned_alloc(size_t alignment,
+-    size_t size) JEMALLOC_CXX_THROW JEMALLOC_ATTR(malloc)
++    void			*@je_@aligned_alloc(size_t alignment,
++    size_t size) JEMALLOC_ATTR(malloc)
+     JEMALLOC_ALLOC_SIZE(2);
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@realloc(void *ptr, size_t size)
+-    JEMALLOC_CXX_THROW JEMALLOC_ALLOC_SIZE(2);
+-JEMALLOC_EXPORT void JEMALLOC_NOTHROW	@je_@free(void *ptr)
+-    JEMALLOC_CXX_THROW;
++    void			*@je_@realloc(void *ptr, size_t size)
++    JEMALLOC_ALLOC_SIZE(2);
++JEMALLOC_EXPORT void		@je_@free(void *ptr);
+ 
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+     void JEMALLOC_NOTHROW	*@je_@mallocx(size_t size, int flags)
+@@ -55,12 +54,12 @@ JEMALLOC_EXPORT size_t JEMALLOC_NOTHROW	@je_@malloc_usable_size(
+ 
+ #ifdef JEMALLOC_OVERRIDE_MEMALIGN
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@memalign(size_t alignment, size_t size)
+-    JEMALLOC_CXX_THROW JEMALLOC_ATTR(malloc);
++    void				*@je_@memalign(size_t alignment, size_t size)
++    JEMALLOC_ATTR(malloc);
+ #endif
+ 
+ #ifdef JEMALLOC_OVERRIDE_VALLOC
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-    void JEMALLOC_NOTHROW	*@je_@valloc(size_t size) JEMALLOC_CXX_THROW
++    void				*@je_@valloc(size_t size)
+     JEMALLOC_ATTR(malloc);
+ #endif
+diff --git a/src/jemalloc.c b/src/jemalloc.c
+index ed13718..c738165 100644
+--- a/src/jemalloc.c
++++ b/src/jemalloc.c
+@@ -2318,7 +2318,7 @@ malloc_default(size_t size) {
+  * tail-call to the slowpath if they fire.
+  */
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE(1)
+ je_malloc(size_t size) {
+ 	LOG("core.malloc.entry", "size: %zu", size);
+@@ -2388,7 +2388,7 @@ je_malloc(size_t size) {
+ 	return malloc_default(size);
+ }
+ 
+-JEMALLOC_EXPORT int JEMALLOC_NOTHROW
++JEMALLOC_EXPORT int
+ JEMALLOC_ATTR(nonnull(1))
+ je_posix_memalign(void **memptr, size_t alignment, size_t size) {
+ 	int ret;
+@@ -2428,7 +2428,7 @@ je_posix_memalign(void **memptr, size_t alignment, size_t size) {
+ }
+ 
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE(2)
+ je_aligned_alloc(size_t alignment, size_t size) {
+ 	void *ret;
+@@ -2469,7 +2469,7 @@ je_aligned_alloc(size_t alignment, size_t size) {
+ }
+ 
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ATTR(malloc) JEMALLOC_ALLOC_SIZE2(1, 2)
+ je_calloc(size_t num, size_t size) {
+ 	void *ret;
+@@ -2648,7 +2648,7 @@ isfree(tsd_t *tsd, void *ptr, size_t usize, tcache_t *tcache, bool slow_path) {
+ }
+ 
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ALLOC_SIZE(2)
+ je_realloc(void *ptr, size_t arg_size) {
+ 	void *ret;
+@@ -2859,7 +2859,7 @@ bool free_fastpath(void *ptr, size_t size, bool size_hint) {
+ 	return true;
+ }
+ 
+-JEMALLOC_EXPORT void JEMALLOC_NOTHROW
++JEMALLOC_EXPORT void
+ je_free(void *ptr) {
+ 	LOG("core.free.entry", "ptr: %p", ptr);
+ 
+@@ -2880,7 +2880,7 @@ je_free(void *ptr) {
+ 
+ #ifdef JEMALLOC_OVERRIDE_MEMALIGN
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ATTR(malloc)
+ je_memalign(size_t alignment, size_t size) {
+ 	void *ret;
+@@ -2919,7 +2919,7 @@ je_memalign(size_t alignment, size_t size) {
+ 
+ #ifdef JEMALLOC_OVERRIDE_VALLOC
+ JEMALLOC_EXPORT JEMALLOC_ALLOCATOR JEMALLOC_RESTRICT_RETURN
+-void JEMALLOC_NOTHROW *
++void *
+ JEMALLOC_ATTR(malloc)
+ je_valloc(size_t size) {
+ 	void *ret;
