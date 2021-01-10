@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -9,7 +9,7 @@ inherit autotools flag-o-matic multiprocessing pax-utils \
 
 MY_P="Python-${PV}"
 PYVER=$(ver_cut 1-2)
-PATCHSET="python-gentoo-patches-${PV}"
+PATCHSET="python-gentoo-patches-${PV}-r1"
 
 DESCRIPTION="An interpreted, interactive, object-oriented programming language"
 HOMEPAGE="https://www.python.org/"
@@ -19,7 +19,7 @@ S="${WORKDIR}/${MY_P}"
 
 LICENSE="PSF-2"
 SLOT="${PYVER}"
-KEYWORDS="~alpha amd64 arm arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv s390 sparc x86"
 IUSE="bluetooth build examples gdbm hardened ipv6 libressl +ncurses +readline sqlite +ssl test tk wininst +xml"
 RESTRICT="!test? ( test )"
 
@@ -119,8 +119,21 @@ src_configure() {
 	fi
 
 	# https://bugs.gentoo.org/700012
-	# LTO completely broken on clang
-	filter-flags -flto*
+	# python runs a modified version of https://www.gnu.org/software/autoconf-archive/ax_c_float_words_bigendian.html
+	# to detect the endianness of floating point words but if LTO is enabled it fails unless -ffat-lto-objects is specified.
+	# Since -ffat-lto-objects is unsupported on clang, just manually test here
+	if is-flagq -flto || is-flagq '-flto=*' || is-flagq '-flto=thin'; then
+		$(tc-getCC) ${CFLAGS} ${LDFLAGS} -fno-lto -c -o "${T}/float_words_endiantest" "${FILESDIR}/float_words_endiantest.c"
+		if grep noonsees "${T}/float_words_endiantest" > /dev/null; then
+			einfo "Big-Endian floating point words detected"
+			export ax_cv_c_float_words_bigendian=yes
+		elif grep seesnoon "${T}/float_words_endiantest" > /dev/null; then
+			einfo "Little-Endian floating point words detected"
+			export ax_cv_c_float_words_bigendian=no
+		else
+			ewarn "Unable to determine floating point word endianness"
+		fi
+	fi
 
 	# Export CXX so it ends up in /usr/lib/python3.X/config/Makefile.
 	tc-export CXX
