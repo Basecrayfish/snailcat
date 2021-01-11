@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -102,9 +102,6 @@ BDEPEND="${PYTHON_DEPS}
 			)
 		)
 	)
-	lto? (
-		!clang? ( sys-devel/binutils[gold] )
-	)
 	amd64? ( >=dev-lang/yasm-1.1 )
 	x86? ( >=dev-lang/yasm-1.1 )
 	!system-av1? (
@@ -113,7 +110,7 @@ BDEPEND="${PYTHON_DEPS}
 	)"
 
 CDEPEND="
-	>=dev-libs/nss-3.59
+	>=dev-libs/nss-3.59.1
 	>=dev-libs/nspr-4.29
 	dev-libs/atk
 	dev-libs/expat
@@ -521,6 +518,7 @@ src_prepare() {
 src_configure() {
 	# Show flags set at the beginning
 	einfo "Current CFLAGS:    ${CFLAGS}"
+	einfo "Current CXXFLAGS:  ${CXXFLAGS}"
 	einfo "Current LDFLAGS:   ${LDFLAGS}"
 	einfo "Current RUSTFLAGS: ${RUSTFLAGS}"
 
@@ -572,6 +570,7 @@ src_configure() {
 	export MOZILLA_OFFICIAL=1
 
 	# Override the cc crate's c++ stdlib detection if using libc++
+	# FIXME: Assumes host is also using libc++
 	if is-flagq "-stdlib=libc++"; then
 		einfo "Found -stdlib=libc++ in flags. Overriding the CC crate's stdlib detection"
 		export CXXSTDLIB="c++"
@@ -670,9 +669,6 @@ src_configure() {
 
 			mozconfig_add_options_ac '+lto' --enable-lto=cross
 		else
-			# Linking only works when using ld.gold when LTO is enabled
-			mozconfig_add_options_ac "forcing ld=gold due to USE=lto" --enable-linker=gold
-
 			# ThinLTO is currently broken, see bmo#1644409
 			mozconfig_add_options_ac '+lto' --enable-lto=full
 		fi
@@ -690,8 +686,6 @@ src_configure() {
 		if use clang ; then
 			# This is upstream's default
 			mozconfig_add_options_ac "forcing ld=lld due to USE=clang" --enable-linker=lld
-		elif tc-ld-is-gold ; then
-			mozconfig_add_options_ac "linker is set to gold" --enable-linker=gold
 		else
 			mozconfig_add_options_ac "linker is set to bfd" --enable-linker=bfd
 		fi
@@ -774,6 +768,11 @@ src_configure() {
 		if [[ -n ${disable_elf_hack} ]] ; then
 			mozconfig_add_options_ac 'elf-hack is broken when using Clang' --disable-elf-hack
 		fi
+	elif tc-is-gcc ; then
+		if ver_test $(gcc-fullversion) -ge 10 ; then
+			einfo "Forcing -fno-tree-loop-vectorize to workaround GCC bug, see bug 758446 ..."
+			append-cxxflags -fno-tree-loop-vectorize
+		fi
 	fi
 
 	# Additional ARCH support
@@ -820,6 +819,7 @@ src_configure() {
 
 	# Show flags we will use
 	einfo "Build CFLAGS:    ${CFLAGS}"
+	einfo "Build CXXFLAGS:  ${CXXFLAGS}"
 	einfo "Build LDFLAGS:   ${LDFLAGS}"
 	einfo "Build RUSTFLAGS: ${RUSTFLAGS}"
 
