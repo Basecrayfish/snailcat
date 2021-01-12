@@ -43,6 +43,6 @@ multilib_src_configure() {
 }
 
 src_install() {
-	default
 	find "${ED}" -name '.la' -delete || die
+	multilib-minimal_src_install
 }
