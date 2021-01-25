@@ -1,0 +1,32 @@
+diff --git a/meson.build b/meson.build
+index 918f5bb..197e822 100644
+--- a/meson.build
++++ b/meson.build
+@@ -231,8 +231,14 @@ threads = dependency('threads')
+ librt = cc.find_library('rt')
+ libm = cc.find_library('m')
+ 
+-libcap = dependency('libcap', required: false)
+-have_libcap = libcap.found()
++want_caps = get_option('caps')
++if want_caps != 'false'
++	libcap = dependency('libcap', required: false)
++	have_libcap = libcap.found()
++else
++	have_libcap = false
++	libcap = []
++endif
+ conf.set10('HAVE_LIBCAP', have_libcap)
+ 
+ want_audit = get_option('audit')
+diff --git a/meson_options.txt b/meson_options.txt
+index 8cf3a33..2515722 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -14,3 +14,6 @@ option('system-bus-address', type : 'string',
+ 
+ option('audit', type : 'combo', choices : ['auto', 'true', 'false'],
+        description : 'libaudit support')
++
++option('caps', type : 'combo', choices : ['auto', 'true', 'false'],
++       description : 'libcap support')
