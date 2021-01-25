@@ -1,0 +1,13 @@
+diff --git a/source/modules/juce_core/native/juce_linux_SystemStats.cpp b/source/modules/juce_core/native/juce_linux_SystemStats.cpp
+index 3fe5a83..e25fa8b 100644
+--- a/source/modules/juce_core/native/juce_linux_SystemStats.cpp
++++ b/source/modules/juce_core/native/juce_linux_SystemStats.cpp
+@@ -139,6 +139,8 @@ static String getLocaleValue (nl_item key)
+     return result;
+ }
+ 
++#define _NL_IDENTIFICATION_LANGUAGE 786439
++#define _NL_IDENTIFICATION_TERRITORY 786440
+ String SystemStats::getUserLanguage()     { return getLocaleValue (_NL_IDENTIFICATION_LANGUAGE); }
+ String SystemStats::getUserRegion()       { return getLocaleValue (_NL_IDENTIFICATION_TERRITORY); }
+ String SystemStats::getDisplayLanguage()  { return getUserLanguage() + "-" + getUserRegion(); }

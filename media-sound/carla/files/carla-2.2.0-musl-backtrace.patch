@@ -1,0 +1,35 @@
+diff --git a/source/modules/juce_core/juce_core.cpp b/source/modules/juce_core/juce_core.cpp
+index 914cae6..4b1f20b 100644
+--- a/source/modules/juce_core/juce_core.cpp
++++ b/source/modules/juce_core/juce_core.cpp
+@@ -90,10 +90,6 @@
+  #include <sys/time.h>
+  #include <net/if.h>
+  #include <sys/ioctl.h>
+-
+- #if ! JUCE_ANDROID
+-  #include <execinfo.h>
+- #endif
+ #endif
+ 
+ #if JUCE_MAC || JUCE_IOS
+diff --git a/source/modules/juce_core/system/juce_SystemStats.cpp b/source/modules/juce_core/system/juce_SystemStats.cpp
+index 8471271..d8087f2 100644
+--- a/source/modules/juce_core/system/juce_SystemStats.cpp
++++ b/source/modules/juce_core/system/juce_SystemStats.cpp
+@@ -173,14 +173,7 @@ String SystemStats::getStackBacktrace()
+     }
+ 
+    #else
+-    void* stack[128];
+-    int frames = backtrace (stack, numElementsInArray (stack));
+-    char** frameStrings = backtrace_symbols (stack, frames);
+-
+-    for (int i = 0; i < frames; ++i)
+-        result << frameStrings[i] << newLine;
+-
+-    ::free (frameStrings);
++    jassertfalse; // sorry, not implemented yet!
+    #endif
+ 
+     return result;
