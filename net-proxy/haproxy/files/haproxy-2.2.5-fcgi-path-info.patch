@@ -1,0 +1,50 @@
+diff --git a/src/mux_fcgi.c b/src/mux_fcgi.c
+index 8a34fa1..813b6dc 100644
+--- a/src/mux_fcgi.c
++++ b/src/mux_fcgi.c
+@@ -1330,14 +1330,6 @@ static int fcgi_set_default_param(struct fcgi_conn *fconn, struct fcgi_strm *fst
+ 				params->qs = istnext(qs);
+ 		}
+ 
+-		/* If the script_name is set, don't try to deduce the path_info
+-		 * too. The opposite is not true.
+-		 */
+-		if (params->mask & FCGI_SP_SCRIPT_NAME) {
+-			params->mask |= FCGI_SP_PATH_INFO;
+-			goto end;
+-		}
+-
+ 		/* Decode the path. it must first be copied to keep the URI
+ 		 * untouched.
+ 		 */
+@@ -1348,8 +1340,9 @@ static int fcgi_set_default_param(struct fcgi_conn *fconn, struct fcgi_strm *fst
+ 			goto error;
+ 		path.len = len;
+ 
+-		/* script_name not set, preset it with the path for now */
+-		params->scriptname = path;
++		/* If script_name not set, preset it with the path for now */
++		if (!(params->mask & FCGI_SP_SCRIPT_NAME))
++			params->scriptname = path;
+ 
+ 		/* If there is no regex to match the pathinfo, just to the last
+ 		 * part and see if the index must be used.
+@@ -1380,13 +1373,16 @@ static int fcgi_set_default_param(struct fcgi_conn *fconn, struct fcgi_strm *fst
+ 
+ 		/* Finally we can set the script_name and the path_info. The
+ 		 * path_info is set if not already defined, and if it was
+-		 * captured
++		 * captured as is the script_name
+ 		 */
+-		params->scriptname = ist2(path.ptr + pmatch[1].rm_so, pmatch[1].rm_eo - pmatch[1].rm_so);
++		if (!(params->mask & FCGI_SP_SCRIPT_NAME))
++			params->scriptname = ist2(path.ptr + pmatch[1].rm_so, pmatch[1].rm_eo - pmatch[1].rm_so);
+ 		if (!(params->mask & FCGI_SP_PATH_INFO) &&  (pmatch[2].rm_so == -1 || pmatch[2].rm_eo == -1))
+ 			params->pathinfo = ist2(path.ptr + pmatch[2].rm_so, pmatch[2].rm_eo - pmatch[2].rm_so);
+ 
+ 	  check_index:
++		if (params->mask & FCGI_SP_SCRIPT_NAME)
++			goto end;
+ 		len = params->scriptname.len;
+ 		/* the script_name if finished by a '/' so we can add the index
+ 		 * part, if any.
