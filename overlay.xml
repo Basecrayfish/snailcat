@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE repositories SYSTEM "/dtd/repositories.dtd">
+<!DOCTYPE repositories SYSTEM "repositories.dtd">
 <repositories xmlns="" version="1.0">
     <repo priority="50" quality="experimental" status="unofficial">
         <name>snailcat</name>
-        <description>snailcat, an overlay with random stuff</description>
-        <homepage>https://github.com/Basecrayfish/snailcat</homepage>
+        <description lang="en">Overlay providing patches for a musl/clang/libc++ toolchain using toybox. Also contains misc packages such as java libs, wayland tools and android stuff</description>
+        <homepage>https://github.com/nightspc/snailcat</homepage>
         <owner type="person">
-            <email>calumac22@gmail.com</email>
+            <email>me@nightspc.dev</email>
             <name>Calum</name>
         </owner>
-        <source type="git">https://github.com/Basecrayfish/snailcat.git</source>
+        <source type="git">https://github.com/nightspc/snailcat.git</source>
+        <source type="git">https://anongit.nightspc.dev/snailcat</source>
+        <source type="git">ssh://git@git.nightspc.dev/srv/repos/locomotive</source>
+        <feed>https://github.com/nightspc/snailcat/commits/master.atom</feed>
     </repo>
 </repositories>
